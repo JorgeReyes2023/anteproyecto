@@ -13,6 +13,7 @@ yarn-error.log
 
 /frontend/node_modules
 /sensor-service/node_modules
+/sensor-service/.env
 
 # IDEs and editors
 .idea/
