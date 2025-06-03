@@ -8,6 +8,7 @@ class UserModel {
           name: data.name,
           email: data.email,
           password: data.password, // Asegúrate de hashear la contraseña antes de guardarla
+          
         },
       });
       return user;
