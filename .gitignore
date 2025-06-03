@@ -15,6 +15,7 @@ yarn-error.log
 /backend/node_modules
 /sensor-service/node_modules
 /sensor-service/.env
+/backend/.env
 
 # IDEs and editors
 .idea/

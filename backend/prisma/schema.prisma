@@ -1,0 +1,99 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model alerts {
+  id         Int       @id @default(autoincrement())
+  message    String
+  level      String?   @db.VarChar(50)
+  sensor_id  Int?
+  created_at DateTime? @default(now()) @db.Timestamp(6)
+  sensors    sensors?  @relation(fields: [sensor_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model companies {
+  id         Int        @id @default(autoincrement())
+  name       String     @db.VarChar(255)
+  address    String?
+  created_at DateTime?  @default(now()) @db.Timestamp(6)
+  projects   projects[]
+  users      users[]
+}
+
+model nodes {
+  id         Int       @id @default(autoincrement())
+  name       String    @db.VarChar(255)
+  location   String?   @db.VarChar(255)
+  project_id Int?
+  created_at DateTime? @default(now()) @db.Timestamp(6)
+  projects   projects? @relation(fields: [project_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  sensors    sensors[]
+}
+
+model projects {
+  id          Int        @id @default(autoincrement())
+  name        String     @db.VarChar(255)
+  description String?
+  company_id  Int?
+  created_at  DateTime?  @default(now()) @db.Timestamp(6)
+  nodes       nodes[]
+  companies   companies? @relation(fields: [company_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model sensor_readings {
+  id        Int       @id @default(autoincrement())
+  sensor_id Int?
+  value     Float
+  timestamp DateTime? @default(now()) @db.Timestamp(6)
+  sensors   sensors?  @relation(fields: [sensor_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model sensor_types {
+  id      Int       @id @default(autoincrement())
+  name    String    @db.VarChar(100)
+  unit    String    @db.VarChar(50)
+  sensors sensors[]
+}
+
+model sensors {
+  id              Int               @id @default(autoincrement())
+  name            String            @db.VarChar(255)
+  type_id         Int?
+  node_id         Int?
+  created_at      DateTime?         @default(now()) @db.Timestamp(6)
+  alerts          alerts[]
+  sensor_readings sensor_readings[]
+  nodes           nodes?            @relation(fields: [node_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  sensor_types    sensor_types?     @relation(fields: [type_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  thresholds      thresholds[]
+}
+
+model thresholds {
+  id        Int      @id @default(autoincrement())
+  sensor_id Int?
+  min_value Float?
+  max_value Float?
+  sensors   sensors? @relation(fields: [sensor_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model user_roles {
+  id          Int     @id @default(autoincrement())
+  name        String  @db.VarChar(50)
+  description String?
+}
+
+model users {
+  id         Int        @id @default(autoincrement())
+  name       String     @db.VarChar(255)
+  email      String     @unique @db.VarChar(255)
+  password   String     @db.VarChar(255)
+  role       String     @default("user") @db.VarChar(50)
+  company_id Int?
+  created_at DateTime?  @default(now()) @db.Timestamp(6)
+  companies  companies? @relation(fields: [company_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
