@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AuthService } from '../../services/general.service';  
+import { GeneralService } from '../../services/general.service';  
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule} from '@angular/material/card';
@@ -18,10 +18,10 @@ export class LoginComponent {
   email = '';
   password = '';
 
-  constructor(private router: Router, private authService: AuthService) {}
+  constructor(private router: Router, private generalService: GeneralService) {}
 
   login() {
-    this.authService.postData('login',{email:this.email, password:this.password}).subscribe({
+    this.generalService.postData('users/login',{email:this.email, password:this.password}).subscribe({
       next: (res: any) => {
         console.log('Response from API:', res);
       },

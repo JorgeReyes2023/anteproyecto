@@ -15,9 +15,9 @@ const httpOptions = {
 @Injectable({
   providedIn: 'root'
 })
-export class AuthService {
+export class GeneralService {
 
-  private apiUrl = 'http://localhost:3000/api/users'; // Cambia esta URL por la de tu backend
+  private apiUrl = 'http://localhost:3000/api/'; // Cambia esta URL por la de tu backend
 
   constructor(private http: HttpClient) { }
 
@@ -27,16 +27,16 @@ export class AuthService {
       }
       // Ejemplo de método POST
       postData(endpoint: string, data: any): Observable<any> {
-          return this.http.post<any>(`${this.apiUrl}/${endpoint}`, data);
+          return this.http.post<any>(`${this.apiUrl}/${endpoint}`, data, httpOptions);
       }
 
       // Ejemplo de método PUT
       putData(endpoint: string, data: any): Observable<any> {
-          return this.http.put<any>(`${this.apiUrl}/${endpoint}`, data);
+          return this.http.put<any>(`${this.apiUrl}/${endpoint}`, data, httpOptions);
       }
   
       // Ejemplo de método DELETE
       deleteData(endpoint: string): Observable<any> {
-          return this.http.delete<any>(`${this.apiUrl}/${endpoint}`);
+          return this.http.delete<any>(`${this.apiUrl}/${endpoint}`, httpOptions);
       }
 }
