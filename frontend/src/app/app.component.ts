@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { MyTestService } from '../services/my-test.service';
 import { AlertComponent } from './_alert/alert.component';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
@@ -14,6 +13,6 @@ import { MatTabsModule } from '@angular/material/tabs';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  constructor(private mytest: MyTestService) {}
+  constructor() {}
   title = 'frontend';
 }

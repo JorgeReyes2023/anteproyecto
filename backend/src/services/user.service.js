@@ -2,15 +2,7 @@ const { UserModel } = require("../models/user.model");
 const {Bcrypt} = require("bcryptjs");
 
 class UserService {
-  static async createUser(data) {
-    try {
-      const user = await UserModel.createUser(data);
-      return user;
-    } catch (error) {
-      throw new Error(`Error creating user: ${error.message}`);
-    }
-  }
-  
+ 
   static async hashPassword(password) {
     try {
       const salt = await Bcrypt.genSalt(10);
