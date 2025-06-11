@@ -1,12 +1,12 @@
 const { UserModel } = require("../models/user.model");
-const {Bcrypt} = require("bcryptjs");
+const bcrypt = require("bcryptjs");
 
 class UserService {
  
   static async hashPassword(password) {
     try {
-      const salt = await Bcrypt.genSalt(10);
-      const hashedPassword = await Bcrypt.hash(password, salt);
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(password, salt);
       return hashedPassword;
     } catch (error) {
       throw new Error(`Error hashing password: ${error.message}`);
@@ -32,20 +32,18 @@ class UserService {
   static async checkPassword(password, hashedPassword) {
     try {
       console.log("Checking password:", password, hashedPassword);
-      const isMatch = await Bcrypt.compare(password, hashedPassword);
+      const isMatch = await bcrypt.compare(password, hashedPassword);
       return isMatch;
     } catch (error) {
       throw new Error(`Error checking password: ${error.message}`);
     }
   }
 
-  static async createUser(email, password) {
+  static async createUser(username, email, password, role = "user") {
     try {
-      if (!email || !password) {
-        throw new Error("Email and password are required");
-      }
+      console.log("Creating user en el servicio:", username, email, role);
       const hashedPassword = await this.hashPassword(password);
-      const user = await UserModel.createUser({ email, password: hashedPassword });
+      const user = await UserModel.createUser( username, email, hashedPassword, role );
       return user;
     } catch (error) {
       throw new Error(`Error creating user: ${error.message}`);

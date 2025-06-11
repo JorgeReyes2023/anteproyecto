@@ -17,7 +17,7 @@ const httpOptions = {
 })
 export class GeneralService {
 
-  private apiUrl = 'http://localhost:3000/api/'; // Cambia esta URL por la de tu backend
+  private apiUrl = 'http://localhost:3000/api'; // Cambia esta URL por la de tu backend
 
   constructor(private http: HttpClient) { }
 

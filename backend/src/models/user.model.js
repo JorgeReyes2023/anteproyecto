@@ -1,13 +1,19 @@
 const prisma = require('../prisma');
 
 class UserModel {
-  static async createUser(email, password, role) {
+  static async createUser(username, email, password, role) {
+    //get roleId from role name
+    const roleId = await prisma.user_roles.findFirst({
+      where: { name: role }
+    }).then(role => role ? role.id : null);
+
     return prisma.users.create({
       data: {
+        name: username,
         email: email,
         password: password,
         user_roles: {
-          connect: { name: role || 'user' }
+          connect: { id: roleId }
         }
       }
     });

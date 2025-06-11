@@ -6,7 +6,12 @@ const userRoutes = Router();
 // Ruta para crear un usuario
 userRoutes.post('/register', async (req, res) => {
   try {
-    const user = await UserService.createUser(req.body);
+    console.log(req.body);
+    const { username, email, password, role } = req.body;
+    if (!username || !email || !password) {
+      return res.status(400).json({ error: 'Faltan datos requeridos' });
+    }
+    const user = await UserService.createUser(username, email, password, role);
     res.status(201).json(user);
   } catch (error) {
     res.status(500).json({ error: error.message });
