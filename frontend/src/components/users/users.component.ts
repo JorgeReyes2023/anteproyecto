@@ -44,8 +44,6 @@ export class UsersComponent {
       return;
     }
 
-    
-
     console.log('User Data:', userData);
   }
 }
