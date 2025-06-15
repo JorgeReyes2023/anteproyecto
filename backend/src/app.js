@@ -7,6 +7,7 @@ const { projectRoutes } = require('./routes/project.routes.js');
 const { nodeRoutes}  = require('./routes/node.routes.js');
 const { alertRoutes } = require('./routes/alert.routes.js');
 const { sensorRoutes } = require('./routes/sensor.routes.js');
+const { thresholdRoutes } = require('./routes/threshold.routes.js');
 
 dotenv.config();
 
@@ -21,6 +22,8 @@ app.use('/api/projects', projectRoutes);
 app.use('/api/nodes', nodeRoutes);
 app.use('/api/alerts', alertRoutes);
 app.use('/api/sensors', sensorRoutes);
+app.use('/api/thresholds', thresholdRoutes);
+
 // Manejo de errores
 app.use((err, req, res, next) => {
     console.error(err.stack);
