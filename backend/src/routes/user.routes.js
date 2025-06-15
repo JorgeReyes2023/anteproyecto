@@ -34,4 +34,4 @@ userRoutes.post('/login', async (req, res) => {
   }
 });
 
-module.exports = userRoutes;
+module.exports = { userRoutes };

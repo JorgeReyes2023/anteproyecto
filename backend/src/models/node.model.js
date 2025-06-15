@@ -36,4 +36,4 @@ const NodeModel = {
     return prisma.nodes.findMany();
   }
 };
-module.exports = NodeModel;
+module.exports = { NodeModel };
