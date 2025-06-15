@@ -4,6 +4,7 @@ const dotenv = require('dotenv');
 const userRoutes = require('./routes/user.routes.js');
 const companyRoutes = require('./routes/company.routes.js');
 const projectRoutes = require('./routes/project.routes.js');
+const nodeRoutes = require('./routes/node.routes.js');
 
 dotenv.config();
 
@@ -15,6 +16,7 @@ app.use(express.json());
 app.use('/api/users', userRoutes);
 app.use('/api/companies', companyRoutes);
 app.use('/api/projects', projectRoutes);
+app.use('/api/nodes', nodeRoutes);
 // Manejo de errores
 app.use((err, req, res, next) => {
     console.error(err.stack);
