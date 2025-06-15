@@ -42,5 +42,27 @@ class ProjectModel {
       throw new Error(`Error fetching projects: ${error.message}`);
     }
   }
+
+  static async getProjectById(id) {
+    try {
+      const project = await prisma.projects.findUnique({
+        where: { id: id },
+      });
+      return project;
+    } catch (error) {
+      throw new Error(`Error fetching project by ID: ${error.message}`);
+    }
+  }
+
+  static async getProjectByName(name) {
+    try {
+      const project = await prisma.projects.findUnique({
+        where: { name: name },
+      });
+      return project;
+    } catch (error) {
+      throw new Error(`Error fetching project by name: ${error.message}`);
+    }
+  }
 }
 module.exports = { ProjectModel };
