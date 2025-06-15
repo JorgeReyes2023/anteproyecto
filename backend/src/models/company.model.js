@@ -19,11 +19,13 @@ class CompanyModel {
       }
     });
   }
+
   static async deleteCompany(id) {
     return prisma.companies.delete({
       where: { id: id },
     });
   }
+
   static async getAllCompanies() {
     try {
       const companies = await prisma.companies.findMany();
@@ -43,5 +45,33 @@ class CompanyModel {
       throw new Error(`Error fetching company by ID: ${error.message}`);
     }
   }
+
+    static async getCompanyByName(name) {
+        try {
+        const company = await prisma.companies.findUnique({
+            where: { name: name },
+        });
+        return company;
+        } catch (error) {
+        throw new Error(`Error fetching company by name: ${error.message}`);
+        }
+    }
+
+    static async getCompanyByUserId(userId) {
+        try {
+            const company = await prisma.companies.findFirst({
+                where: {
+                    users: {
+                        some: {
+                            id: userId
+                        }
+                    }
+                }
+            });
+            return company;
+        } catch (error) {
+            throw new Error(`Error fetching company by user ID: ${error.message}`);
+        }
+    }
 }
 module.exports = { CompanyModel };
