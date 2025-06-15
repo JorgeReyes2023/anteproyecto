@@ -1,11 +1,12 @@
 const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
-const {userRoutes} = require('./routes/user.routes.js');
+const { userRoutes} = require('./routes/user.routes.js');
 const {companyRoutes} = require('./routes/company.routes.js');
-const {projectRoutes} = require('./routes/project.routes.js');
-const {nodeRoutes} = require('./routes/node.routes.js');
-const {alertRoutes} = require('./routes/alert.routes.js');
+const { projectRoutes } = require('./routes/project.routes.js');
+const { nodeRoutes}  = require('./routes/node.routes.js');
+const { alertRoutes } = require('./routes/alert.routes.js');
+const { sensorRoutes } = require('./routes/sensor.routes.js');
 
 dotenv.config();
 
@@ -19,6 +20,7 @@ app.use('/api/companies', companyRoutes);
 app.use('/api/projects', projectRoutes);
 app.use('/api/nodes', nodeRoutes);
 app.use('/api/alerts', alertRoutes);
+app.use('/api/sensors', sensorRoutes);
 // Manejo de errores
 app.use((err, req, res, next) => {
     console.error(err.stack);
