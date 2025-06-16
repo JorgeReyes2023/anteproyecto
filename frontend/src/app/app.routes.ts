@@ -1,15 +1,16 @@
 import { Routes } from '@angular/router';
+import { roleGuard } from '../interceptors/auth.guard';
 import { LoginComponent } from '../components/login/login.component';
-import { UsersComponent } from '../components/users/users.component';
+import { createUserComponent } from '../components/create-user/create-user.component';
 import { DashboardComponent } from '../components/dashboard/dashboard.component';
 import { UserInfoComponent } from '../components/user-info/user-info.component';
-import { roleGuard } from '../interceptors/auth.guard';
+import { UsersDataComponent } from '../components/users-data/users-data.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
   {
-    path: 'users',
-    component: UsersComponent,
+    path: 'users/create',
+    component: createUserComponent,
     canActivate: [roleGuard(['admin'])],
   },
   {
@@ -21,6 +22,11 @@ export const routes: Routes = [
     path: 'info',
     component: UserInfoComponent,
     canActivate: [roleGuard(['user', 'admin'])],
+  },
+  {
+    path: 'users',
+    component: UsersDataComponent,
+    canActivate: [roleGuard(['admin'])],
   },
   { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
   { path: '**', redirectTo: '/login' },
