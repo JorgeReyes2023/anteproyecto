@@ -7,6 +7,8 @@ import { MatListModule } from '@angular/material/list';
 import { MatCardModule } from '@angular/material/card';
 import { AlertComponent } from './_alert/alert.component';
 import { isPlatformBrowser } from '@angular/common';
+import { AuthService } from '../services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   standalone: true,
@@ -25,8 +27,18 @@ import { isPlatformBrowser } from '@angular/common';
 })
 export class AppComponent {
   isBrowser: boolean;
-  constructor(@Inject(PLATFORM_ID) private platformId: Object) {
+  constructor(
+    @Inject(PLATFORM_ID) private platformId: Object,
+    private authService: AuthService,
+    private router: Router
+  ) {
     this.isBrowser = isPlatformBrowser(this.platformId);
   }
+
+  logout() {
+    this.authService.logout();
+    this.router.navigate(['/login']);
+  }
+
   title = 'frontend';
 }
