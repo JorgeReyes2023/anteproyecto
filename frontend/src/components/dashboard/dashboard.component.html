@@ -1,72 +1,64 @@
 <div class="dashboard-container" style="padding: 24px;">
-    <h2>Dashboard Overview</h2>
-    <div class="dashboard-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 24px;">
-        <!-- Card 1: Line Chart -->
-        <mat-card>
-            <mat-card-header>
-                <mat-card-title>Parte 1 linechart</mat-card-title>
-            </mat-card-header>
-            <mat-card-content *ngIf="isBrowser">
-                <canvas baseChart
-                    [datasets]="lineChartData"
-                    [labels]="lineChartLabels"
-                    [options]="lineChartOptions"
-                    [legend]="true"
-                    [chartType]="'line'">
-                </canvas>
-            </mat-card-content>
-        </mat-card>
+  <h2>Dashboard Overview</h2>
+  <div class="dashboard-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 24px;">
+    
+    <!-- Card 1: Line Chart -->
+    <mat-card  *ngIf="isBrowser">
+      <mat-card-header>
+        <mat-card-title>Parte 1 linechart</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <canvas baseChart
+                [data]="lineChartData"
+                [options]="lineChartOptions"
+                [type]="'line'"
+                [legend]="true">
+        </canvas>
+      </mat-card-content>
+    </mat-card>
 
-        <!-- Card 2: Bar Chart -->
-        <mat-card>
-            <mat-card-header>
-                <mat-card-title>Parte 2 barchart</mat-card-title>
-            </mat-card-header>
-            <mat-card-content *ngIf="isBrowser">
-                <canvas baseChart
-                    [datasets]="barChartData"
-                    [labels]="barChartLabels"
-                    [options]="barChartOptions"
-                    [legend]="true"
-                    [chartType]="'bar'">
-                </canvas>
-            </mat-card-content>
-        </mat-card>
+    <!-- Card 2: Bar Chart -->
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Parte 2 barchart</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <canvas baseChart
+                [data]="barChartData"
+                [options]="barChartOptions"
+                [type]="'bar'"
+                [legend]="true">
+        </canvas>
+      </mat-card-content>
+    </mat-card>
 
-        <!-- Card 3: Pie Chart -->
-        <mat-card>
-            <mat-card-header>
-                <mat-card-title>Parte 3 piechart</mat-card-title>
-            </mat-card-header>
-            <mat-card-content *ngIf="isBrowser">
-                <canvas baseChart
-                    [data]="pieChartData"
-                    [labels]="pieChartLabels"
-                    [options]="pieChartOptions"
-                    [legend]="true"
-                    [chartType]="'pie'">
-                </canvas>
-            </mat-card-content>
-        </mat-card>
+    <!-- Card 3: Pie Chart -->
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Parte 3 piechart</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <canvas baseChart
+                [data]="pieChartData"
+                [options]="pieChartOptions"
+                [type]="'pie'"
+                [legend]="true">
+        </canvas>
+      </mat-card-content>
+    </mat-card>
 
-        <!-- Card 4: Stats -->
-        <mat-card>
-            <mat-card-header>
-                <mat-card-title>Parte 4: Estadísticas</mat-card-title>
-            </mat-card-header>
-            <mat-card-content>
-                <div style="display: flex; flex-direction: column; gap: 12px;">
-                    <div>
-                        <strong>Total Users:</strong> {{ totalUsers }}
-                    </div>
-                    <div>
-                        <strong>Active Sessions:</strong> {{ activeSessions }}
-                    </div>
-                    <div>
-                        <strong>Conversion Rate:</strong> {{ conversionRate }}%
-                    </div>
-                </div>
-            </mat-card-content>
-        </mat-card>
-    </div>
+    <!-- Card 4: Stats -->
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Parte 4: Estadísticas</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div style="display: flex; flex-direction: column; gap: 12px;">
+          <div><strong>Total Users:</strong> {{ totalUsers }}</div>
+          <div><strong>Active Sessions:</strong> {{ activeSessions }}</div>
+          <div><strong>Conversion Rate:</strong> {{ conversionRate }}%</div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
 </div>
