@@ -16,19 +16,26 @@ export class AuthService {
   login(email: string, password: string) {
     return this.generalService.postData('auth/login', { email, password }).pipe(
       tap((response) => {
-        localStorage.setItem('token', response.token);
-        localStorage.setItem('user', JSON.stringify(response.user));
+        if (typeof window !== 'undefined' && window.localStorage) {
+          localStorage.setItem('token', response.token);
+          localStorage.setItem('user', JSON.stringify(response.user));
+        }
       })
     );
   }
 
   logout() {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
+    if (typeof window !== 'undefined' && window.localStorage) {
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+    }
   }
 
   getToken() {
-    return localStorage.getItem('token');
+    if (typeof window !== 'undefined' && window.localStorage) {
+      return localStorage.getItem('token');
+    }
+    return null;
   }
 
   isLoggedIn(): boolean {
@@ -36,7 +43,9 @@ export class AuthService {
   }
 
   getCurrentUser() {
-    const user = localStorage.getItem('user');
-    return user ? JSON.parse(user) : null;
+    if (typeof window !== 'undefined' && window.localStorage) {
+      return JSON.parse(localStorage.getItem('user') || 'null');
+    }
+    return null;
   }
 }
