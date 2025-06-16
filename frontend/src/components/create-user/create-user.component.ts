@@ -22,10 +22,10 @@ import { AlertService } from '../../app/_alert/alert.service';
     MatFormFieldModule,
     MatSelectModule,
   ],
-  templateUrl: './users.component.html',
-  styleUrls: ['./users.component.css'],
+  templateUrl: './create-user.component.html',
+  styleUrls: ['./create-user.component.css'],
 })
-export class UsersComponent {
+export class createUserComponent {
   username = '';
   email = '';
   password = '';
