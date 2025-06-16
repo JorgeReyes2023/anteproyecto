@@ -11,6 +11,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { AlertService } from '../../app/_alert/alert.service';
 
 @Component({
+  standalone: true,
   selector: 'app-users',
   imports: [CommonModule, FormsModule, MatInputModule, MatButtonModule, MatCardModule, MatFormFieldModule, MatSelectModule],
   templateUrl: './users.component.html',

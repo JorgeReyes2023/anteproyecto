@@ -1,9 +1,37 @@
+<!-- Barra de presentación ARRIBA -->
+<div style="width: 100%; background: #bb4d4d; padding: 16px 24px; box-sizing: border-box; color: white;">
+  <h2 style="margin: 0; font-weight: 500;">Presentación de la página</h2>
+  <p style="margin: 4px 0 0 0; color: #f0f0f0;">Bienvenido a esta página. Aquí encontrará una visión general e información importante sobre la aplicación.</p>
+</div>
 
-<!-- main app container avec une carte Material -->
-<mat-card class="mx-3 my-3" color="primary">
-  <mat-card-content>
-    <app-alert></app-alert> <!-- composant alert -->
-    <router-outlet></router-outlet> <!-- contenu dynamique -->
-  </mat-card-content>
-</mat-card>
+<!-- Layout Angular Material -->
+<mat-sidenav-container style="height: calc(100vh - 100px); display: block;">
+  <!-- Sidebar -->
+  <mat-sidenav mode="side" opened style="width: 250px;">
+    <mat-toolbar>Navegación</mat-toolbar>
+    <mat-nav-list>
+      <!-- TODO : cambiar -->
+      <a mat-list-item routerLink="/dasboard">Dashboard</a>
+      <a mat-list-item routerLink="/stats">Estadísticas</a>
+      <a mat-list-item routerLink="/contact">Contacto</a>
+      <a mat-list-item routerLink="/logout">Cerrar sesión</a>
+      <a mat-list-item routerLink="/login">Iniciar sesión</a>
+      <a mat-list-item routerLink="/register">Registrarse</a>
+      <a mat-list-item routerLink="/users">Crear usuario</a>
+    </mat-nav-list>
+  </mat-sidenav>
 
+  <!-- Contenido principal -->
+  <mat-sidenav-content>
+    <mat-toolbar color="primary">
+      <span>{{ title }}</span>
+    </mat-toolbar>
+
+    <mat-card class="m-3">
+      <mat-card-content>
+        <app-alert></app-alert>
+        <router-outlet></router-outlet>
+      </mat-card-content>
+    </mat-card>
+  </mat-sidenav-content>
+</mat-sidenav-container>
