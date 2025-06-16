@@ -1,17 +1,26 @@
-// auth.service.ts
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { tap } from 'rxjs/operators';
 import { GeneralService } from './general.service';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  constructor(
-    private http: HttpClient,
-    private generalService: GeneralService
-  ) {}
+  private userSubject: BehaviorSubject<any | null>;
+  public user$: Observable<any | null>;
+
+  constructor(private generalService: GeneralService) {
+    let userJson: string | null = null;
+    if (typeof window !== 'undefined' && window.localStorage) {
+      userJson = localStorage.getItem('user');
+    }
+    this.userSubject = new BehaviorSubject<any | null>(
+      userJson ? JSON.parse(userJson) : null
+    );
+    this.user$ = this.userSubject.asObservable();
+  }
 
   login(email: string, password: string) {
     return this.generalService.postData('auth/login', { email, password }).pipe(
@@ -19,6 +28,7 @@ export class AuthService {
         if (typeof window !== 'undefined' && window.localStorage) {
           localStorage.setItem('token', response.token);
           localStorage.setItem('user', JSON.stringify(response.user));
+          this.userSubject.next(response.user);
         }
       })
     );
@@ -28,6 +38,7 @@ export class AuthService {
     if (typeof window !== 'undefined' && window.localStorage) {
       localStorage.removeItem('token');
       localStorage.removeItem('user');
+      this.userSubject.next(null);
     }
   }
 

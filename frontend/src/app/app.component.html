@@ -22,13 +22,23 @@
     <mat-toolbar>Navegación</mat-toolbar>
     <mat-nav-list>
       <!-- TODO : cambiar con rutas -->
-      <a mat-list-item routerLink="/dashboard">Dashboard</a>
-      <a mat-list-item routerLink="/stats">Estadísticas</a>
-      <a mat-list-item routerLink="/contact">Contacto</a>
-      <a mat-list-item routerLink="/login">Iniciar sesión</a>
-      <a mat-list-item routerLink="/register">Registrarse</a>
-      <a mat-list-item routerLink="/users">Crear usuario</a>
-      <a mat-list-item (click)="logout()">Cerrar sesión</a>
+      <mat-nav-list>
+        <!-- Utilisateur connecté (admin ou non) -->
+        <ng-container *ngIf="user$ | async as user; else guest">
+          <a mat-list-item routerLink="/dashboard">Dashboard</a>
+          <a mat-list-item routerLink="/stats">Estadísticas</a>
+          <a mat-list-item *ngIf="user.role === 'admin'" routerLink="/users"
+            >Crear usuario</a
+          >
+          <a mat-list-item (click)="logout()">Cerrar sesión</a>
+        </ng-container>
+
+        <!-- Utilisateur invité -->
+        <ng-template #guest>
+          <a mat-list-item routerLink="/login">Iniciar sesión</a>
+          <a mat-list-item routerLink="/register">Registrarse</a>
+        </ng-template>
+      </mat-nav-list>
     </mat-nav-list>
   </mat-sidenav>
 

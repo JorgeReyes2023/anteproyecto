@@ -6,7 +6,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatListModule } from '@angular/material/list';
 import { MatCardModule } from '@angular/material/card';
 import { AlertComponent } from './_alert/alert.component';
-import { isPlatformBrowser } from '@angular/common';
+import { isPlatformBrowser, NgIf, AsyncPipe } from '@angular/common';
 import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
 
@@ -21,18 +21,23 @@ import { Router } from '@angular/router';
     MatToolbarModule,
     MatListModule,
     MatCardModule,
+    NgIf,
+    AsyncPipe,
   ],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
 })
 export class AppComponent {
   isBrowser: boolean;
+  public user$: typeof this.authService.user$;
+
   constructor(
     @Inject(PLATFORM_ID) private platformId: Object,
     private authService: AuthService,
     private router: Router
   ) {
     this.isBrowser = isPlatformBrowser(this.platformId);
+    this.user$ = this.authService.user$;
   }
 
   logout() {
