@@ -1,14 +1,15 @@
-import express from "express";
-import cors from "cors";
-import dotenv from "dotenv";
-import { authRoutes } from "./routes/auth.routes.js";
-import { userRoutes } from "./routes/user.routes.js";
-import { companyRoutes } from "./routes/company.routes.js";
-import { projectRoutes } from "./routes/project.routes.js";
-import { nodeRoutes } from "./routes/node.routes.js";
-import { alertRoutes } from "./routes/alert.routes.js";
-import { sensorRoutes } from "./routes/sensor.routes.js";
-import { thresholdRoutes } from "./routes/threshold.routes.js";
+const express = require("express");
+const cors = require("cors");
+const dotenv = require("dotenv");
+
+const authRoutes = require("./routes/auth.routes");
+const userRoutes = require("./routes/user.routes");
+const companyRoutes = require("./routes/company.routes");
+const projectRoutes = require("./routes/project.routes");
+const nodeRoutes = require("./routes/node.routes");
+const alertRoutes = require("./routes/alert.routes");
+const sensorRoutes = require("./routes/sensor.routes");
+const thresholdRoutes = require("./routes/threshold.routes");
 
 dotenv.config();
 
@@ -31,6 +32,7 @@ app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).json({ error: "Algo salió mal" });
 });
+
 // Puerto del servidor
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Servidor corriendo en puerto ${PORT}`));

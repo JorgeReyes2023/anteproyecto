@@ -109,4 +109,4 @@ sensorRoutes.delete("/:id", async (req, res) => {
   }
 });
 
-module.exports = { sensorRoutes };
+module.exports = sensorRoutes;
