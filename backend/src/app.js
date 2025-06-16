@@ -1,14 +1,15 @@
 const express = require("express");
 const cors = require("cors");
 const dotenv = require("dotenv");
-const { authRoutes } = require("./routes/auth.routes.js");
-const { userRoutes } = require("./routes/user.routes.js");
-const { companyRoutes } = require("./routes/company.routes.js");
-const { projectRoutes } = require("./routes/project.routes.js");
-const { nodeRoutes } = require("./routes/node.routes.js");
-const { alertRoutes } = require("./routes/alert.routes.js");
-const { sensorRoutes } = require("./routes/sensor.routes.js");
-const { thresholdRoutes } = require("./routes/threshold.routes.js");
+
+const authRoutes = require("./routes/auth.routes");
+const userRoutes = require("./routes/user.routes");
+const companyRoutes = require("./routes/company.routes");
+const projectRoutes = require("./routes/project.routes");
+const nodeRoutes = require("./routes/node.routes");
+const alertRoutes = require("./routes/alert.routes");
+const sensorRoutes = require("./routes/sensor.routes");
+const thresholdRoutes = require("./routes/threshold.routes");
 
 dotenv.config();
 
@@ -27,10 +28,11 @@ app.use("/api/sensors", sensorRoutes);
 app.use("/api/thresholds", thresholdRoutes);
 
 // Manejo de errores
-app.use((err, req, res) => {
+app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).json({ error: "Algo salió mal" });
 });
+
 // Puerto del servidor
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Servidor corriendo en puerto ${PORT}`));

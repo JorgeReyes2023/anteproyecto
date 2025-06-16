@@ -44,4 +44,4 @@ authRoutes.get("/verify", async (req, res) => {
     res.status(401).json({ error: "Token inválido o expirado" });
   }
 });
-module.exports = { authRoutes };
+module.exports = authRoutes;

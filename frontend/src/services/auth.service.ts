@@ -1,34 +1,53 @@
-// auth.service.ts
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { tap } from 'rxjs/operators';
 import { GeneralService } from './general.service';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { User } from '../models/user';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  constructor(
-    private http: HttpClient,
-    private generalService: GeneralService
-  ) {}
+  private userSubject: BehaviorSubject<User | null>;
+  public user$: Observable<User | null>;
+
+  constructor(private generalService: GeneralService) {
+    let userJson: string | null = null;
+    if (typeof window !== 'undefined' && window.localStorage) {
+      userJson = localStorage.getItem('user');
+    }
+    this.userSubject = new BehaviorSubject<User | null>(
+      userJson ? JSON.parse(userJson) : null
+    );
+    this.user$ = this.userSubject.asObservable();
+  }
 
   login(email: string, password: string) {
     return this.generalService.postData('auth/login', { email, password }).pipe(
       tap((response) => {
-        localStorage.setItem('token', response.token);
-        localStorage.setItem('user', JSON.stringify(response.user));
+        if (typeof window !== 'undefined' && window.localStorage) {
+          localStorage.setItem('token', response.token);
+          localStorage.setItem('user', JSON.stringify(response.user));
+          this.userSubject.next(response.user);
+        }
       })
     );
   }
 
   logout() {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
+    if (typeof window !== 'undefined' && window.localStorage) {
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      this.userSubject.next(null);
+    }
   }
 
   getToken() {
-    return localStorage.getItem('token');
+    if (typeof window !== 'undefined' && window.localStorage) {
+      return localStorage.getItem('token');
+    }
+    return null;
   }
 
   isLoggedIn(): boolean {
@@ -36,7 +55,6 @@ export class AuthService {
   }
 
   getCurrentUser() {
-    const user = localStorage.getItem('user');
-    return user ? JSON.parse(user) : null;
+    return this.userSubject.value;
   }
 }

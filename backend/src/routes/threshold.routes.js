@@ -63,4 +63,4 @@ thresholdRoutes.get("/:id", async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
-module.exports = { thresholdRoutes };
+module.exports = thresholdRoutes;

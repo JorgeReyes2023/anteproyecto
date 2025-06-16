@@ -58,16 +58,18 @@ class UserService {
       throw new Error(`Error deleting user: ${error.message}`);
     }
   }
-  static async changePassword(id, oldPassword, newPassword) {
+  static async changePassword(id, currentPassword, newPassword) {
     try {
-      if (!id || !oldPassword || !newPassword) {
-        throw new Error("User ID, old password, and new password are required");
+      if (!id || !currentPassword || !newPassword) {
+        throw new Error(
+          "User ID, current password, and new password are required",
+        );
       }
       const user = await UserModel.getUserById(id);
       if (!user) {
         throw new Error("User not found");
       }
-      const isMatch = await bcrypt.compare(oldPassword, user.password);
+      const isMatch = await bcrypt.compare(currentPassword, user.password);
       if (!isMatch) {
         throw new Error("Old password is incorrect");
       }
@@ -76,7 +78,16 @@ class UserService {
       const updatedUser = await UserModel.updateUser(id, {
         password: hashedNewPassword,
       });
-      return updatedUser;
+
+      return {
+        message: "Password changed successfully",
+        user: {
+          id: updatedUser.id,
+          name: updatedUser.name,
+          email: updatedUser.email,
+          role: updatedUser.user_roles.name, // Assuming user_roles is included in the model
+        },
+      };
     } catch (error) {
       throw new Error(`Error changing password: ${error.message}`);
     }
