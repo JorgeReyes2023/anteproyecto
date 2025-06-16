@@ -8,9 +8,19 @@ describe('UserInfoComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [UserInfoComponent]
-    })
-    .compileComponents();
+      imports: [UserInfoComponent],
+      providers: [
+        {
+          provide: 'AuthService',
+          useValue: {
+            getCurrentUser: () => ({
+              name: 'Test User',
+              email: 'test@example.com',
+            }),
+          },
+        },
+      ],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(UserInfoComponent);
     component = fixture.componentInstance;

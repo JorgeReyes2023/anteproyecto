@@ -1,14 +1,14 @@
-const express = require("express");
-const cors = require("cors");
-const dotenv = require("dotenv");
-const { authRoutes } = require("./routes/auth.routes.js");
-const { userRoutes } = require("./routes/user.routes.js");
-const { companyRoutes } = require("./routes/company.routes.js");
-const { projectRoutes } = require("./routes/project.routes.js");
-const { nodeRoutes } = require("./routes/node.routes.js");
-const { alertRoutes } = require("./routes/alert.routes.js");
-const { sensorRoutes } = require("./routes/sensor.routes.js");
-const { thresholdRoutes } = require("./routes/threshold.routes.js");
+import express from "express";
+import cors from "cors";
+import dotenv from "dotenv";
+import { authRoutes } from "./routes/auth.routes.js";
+import { userRoutes } from "./routes/user.routes.js";
+import { companyRoutes } from "./routes/company.routes.js";
+import { projectRoutes } from "./routes/project.routes.js";
+import { nodeRoutes } from "./routes/node.routes.js";
+import { alertRoutes } from "./routes/alert.routes.js";
+import { sensorRoutes } from "./routes/sensor.routes.js";
+import { thresholdRoutes } from "./routes/threshold.routes.js";
 
 dotenv.config();
 
@@ -27,7 +27,7 @@ app.use("/api/sensors", sensorRoutes);
 app.use("/api/thresholds", thresholdRoutes);
 
 // Manejo de errores
-app.use((err, req, res) => {
+app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).json({ error: "Algo salió mal" });
 });

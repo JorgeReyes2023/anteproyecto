@@ -3,20 +3,21 @@ import { Injectable } from '@angular/core';
 import { tap } from 'rxjs/operators';
 import { GeneralService } from './general.service';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { User } from '../models/user';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private userSubject: BehaviorSubject<any | null>;
-  public user$: Observable<any | null>;
+  private userSubject: BehaviorSubject<User | null>;
+  public user$: Observable<User | null>;
 
   constructor(private generalService: GeneralService) {
     let userJson: string | null = null;
     if (typeof window !== 'undefined' && window.localStorage) {
       userJson = localStorage.getItem('user');
     }
-    this.userSubject = new BehaviorSubject<any | null>(
+    this.userSubject = new BehaviorSubject<User | null>(
       userJson ? JSON.parse(userJson) : null
     );
     this.user$ = this.userSubject.asObservable();
@@ -54,9 +55,6 @@ export class AuthService {
   }
 
   getCurrentUser() {
-    if (typeof window !== 'undefined' && window.localStorage) {
-      return JSON.parse(localStorage.getItem('user') || 'null');
-    }
-    return null;
+    return this.userSubject.value;
   }
 }

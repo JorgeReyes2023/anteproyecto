@@ -9,6 +9,8 @@ import { AlertComponent } from './_alert/alert.component';
 import { isPlatformBrowser, NgIf, AsyncPipe } from '@angular/common';
 import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
+import { Observable } from 'rxjs';
+import { User } from '../models/user';
 
 @Component({
   standalone: true,
@@ -29,14 +31,14 @@ import { Router } from '@angular/router';
 })
 export class AppComponent {
   isBrowser: boolean;
-  public user$: typeof this.authService.user$;
+  public user$: Observable<User | null>;
 
   constructor(
-    @Inject(PLATFORM_ID) private platformId: Object,
+    @Inject(PLATFORM_ID) private platformId: unknown,
     private authService: AuthService,
     private router: Router
   ) {
-    this.isBrowser = isPlatformBrowser(this.platformId);
+    this.isBrowser = isPlatformBrowser(this.platformId as Object);
     this.user$ = this.authService.user$;
   }
 

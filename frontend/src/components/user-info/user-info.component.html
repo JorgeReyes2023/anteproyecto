@@ -7,7 +7,6 @@
     <mat-card-content>
       <p><strong>Nombre:</strong> {{ user.name }}</p>
       <p><strong>Correo electrónico:</strong> {{ user.email }}</p>
-      <!-- Agrega más campos de usuario si es necesario -->
     </mat-card-content>
   </mat-card>
 
@@ -15,8 +14,8 @@
     <mat-card-title>Cambiar Contraseña</mat-card-title>
     <mat-card-content>
       <form
+        [formGroup]="passwordForm"
         (ngSubmit)="changePassword()"
-        #passwordForm="ngForm"
         autocomplete="off"
       >
         <mat-form-field
@@ -27,13 +26,12 @@
           <input
             matInput
             type="password"
-            id="currentPassword"
-            name="currentPassword"
-            [(ngModel)]="passwordData.currentPassword"
+            formControlName="currentPassword"
             required
             autocomplete="current-password"
           />
         </mat-form-field>
+
         <mat-form-field
           appearance="outline"
           style="width: 100%; margin-bottom: 16px"
@@ -42,13 +40,12 @@
           <input
             matInput
             type="password"
-            id="newPassword"
-            name="newPassword"
-            [(ngModel)]="passwordData.newPassword"
+            formControlName="newPassword"
             required
             autocomplete="new-password"
           />
         </mat-form-field>
+
         <mat-form-field
           appearance="outline"
           style="width: 100%; margin-bottom: 24px"
@@ -57,20 +54,14 @@
           <input
             matInput
             type="password"
-            id="confirmPassword"
-            name="confirmPassword"
-            [(ngModel)]="passwordData.confirmPassword"
+            formControlName="confirmPassword"
             required
             autocomplete="new-password"
           />
         </mat-form-field>
+
         <div style="text-align: right">
-          <button
-            mat-raised-button
-            color="primary"
-            type="submit"
-            [disabled]="!passwordForm.form.valid"
-          >
+          <button mat-raised-button color="primary" type="submit">
             Cambiar Contraseña
           </button>
         </div>

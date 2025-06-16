@@ -23,7 +23,9 @@ userRoutes.put("/:id", async (req, res) => {
     const userId = req.params.id;
     const updates = req.body;
     if (!userId || !updates) {
-      return res.status(400).json({ error: "User ID and updates are required" });
+      return res
+        .status(400)
+        .json({ error: "User ID and updates are required" });
     }
     const updatedUser = await UserService.updateUser(userId, updates);
     res.status(200).json(updatedUser);
@@ -49,23 +51,25 @@ userRoutes.put("/:id/password", async (req, res) => {
   try {
     const userId = req.params.id;
     const { currentPassword, newPassword } = req.body;
+    console.log(
+      `Updating password for user ID: ${userId}, currentPassword: ${currentPassword}, newPassword: ${newPassword}`,
+    );
     if (!userId || !currentPassword || !newPassword) {
-      return res.status(400).json({ error: "User ID, current password and new password are required" });
-    }
-    const user = await UserService.getUserById(userId);
-    if (!user) {
-      return res.status(404).json({ error: "User not found" });
-    }
-
-    const isMatch = await AuthService.checkPassword(currentPassword, user.password);
-    if (!isMatch) {
-      return res.status(401).json({ error: "Current password is incorrect" });
+      return res.status(400).json({
+        error: "User ID, current password and new password are required",
+      });
     }
 
     const hashedNewPassword = await AuthService.hashPassword(newPassword);
-    const updatedUser = await UserService.updateUser(userId, { password: hashedNewPassword });
-    
-    res.status(200).json({ message: "Password updated successfully", user: updatedUser });
+    const updatedUser = await UserService.changePassword(
+      userId,
+      currentPassword,
+      hashedNewPassword,
+    );
+
+    res
+      .status(200)
+      .json({ message: "Password updated successfully", user: updatedUser });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
