@@ -26,7 +26,7 @@
         <!-- Utilisateur connecté (admin ou non) -->
         <ng-container *ngIf="user$ | async as user; else guest">
           <a mat-list-item routerLink="/dashboard">Dashboard</a>
-          <a mat-list-item routerLink="/stats">Estadísticas</a>
+          <a mat-list-item routerLink="/info">Información del usuario</a>
           <a mat-list-item *ngIf="user.role === 'admin'" routerLink="/users"
             >Crear usuario</a
           >
