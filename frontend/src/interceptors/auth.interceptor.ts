@@ -1,18 +1,35 @@
 import { Injectable } from '@angular/core';
-import { CanActivate, Router } from '@angular/router';
+import {
+  HttpEvent,
+  HttpInterceptor,
+  HttpHandler,
+  HttpRequest,
+  HttpErrorResponse
+} from '@angular/common/http';
+import { Observable, throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 
-@Injectable({
-    providedIn: 'root'
-})
-export class AuthInterceptor implements CanActivate {
-    constructor(private router: Router) {}
+@Injectable()
+export class AuthInterceptor implements HttpInterceptor {
 
-    canActivate(): boolean {
-        const isLoggedIn = !!localStorage.getItem('token');
-        if (!isLoggedIn) {
-            this.router.navigate(['/login']);
-            return false;
+  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+    const token = localStorage.getItem('token');
+
+    const cloned = token
+      ? req.clone({
+          setHeaders: {
+            Authorization: `Bearer ${token}`
+          }
+        })
+      : req;
+
+    return next.handle(cloned).pipe(
+      catchError((error: HttpErrorResponse) => {
+        if (error.status === 401) {
+          // redirection, logout, ou message d'erreur global
         }
-        return true;
-    }
+        return throwError(() => error);
+      })
+    );
+  }
 }
