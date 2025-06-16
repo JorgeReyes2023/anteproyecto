@@ -6,6 +6,9 @@
   "scripts": {
     "start": "node src/app.js",
     "dev": "nodemon src/app.js",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
     "mqtt": "node src/mqtt/mqttServer.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -18,12 +21,19 @@
     "cors": "^2.8.5",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
     "mqtt": "^5.13.1",
     "pg": "^8.16.0"
   },
   "devDependencies": {
+    "@eslint/js": "^9.29.0",
     "@types/node": "^22.15.29",
+    "eslint": "^9.29.0",
+    "eslint-config-prettier": "^10.1.5",
+    "eslint-plugin-prettier": "^5.4.1",
+    "globals": "^16.2.0",
     "nodemon": "^3.1.10",
+    "prettier": "^3.5.3",
     "prisma": "^6.9.0"
   }
 }

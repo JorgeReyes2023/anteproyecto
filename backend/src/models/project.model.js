@@ -1,4 +1,4 @@
-const prisma = require('../prisma');
+const prisma = require("../prisma");
 
 class ProjectModel {
   static async createProject(name, description, companyId, nodes = []) {
@@ -8,9 +8,9 @@ class ProjectModel {
         description: description,
         companyId: companyId,
         nodes: {
-          create: nodes
-        }
-      }
+          create: nodes,
+        },
+      },
     });
   }
 
@@ -22,9 +22,9 @@ class ProjectModel {
         description: description,
         companyId: companyId,
         nodes: {
-          create: nodes
-        }
-      }
+          create: nodes,
+        },
+      },
     });
   }
 

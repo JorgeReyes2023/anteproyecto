@@ -1,14 +1,14 @@
-const { Router } = require('express');
+const { Router } = require("express");
 
-const { NodeService } = require('../services/node.service');
+const { NodeService } = require("../services/node.service");
 const nodeRoutes = Router();
 
 // Ruta para crear un nodo
-nodeRoutes.post('/', async (req, res) => {
+nodeRoutes.post("/", async (req, res) => {
   try {
     const { name, type, projectId } = req.body;
     if (!name || !type || !projectId) {
-      return res.status(400).json({ error: 'Faltan datos requeridos' });
+      return res.status(400).json({ error: "Faltan datos requeridos" });
     }
     const node = await NodeService.createNode(name, type, projectId);
     res.status(201).json(node);
@@ -17,12 +17,12 @@ nodeRoutes.post('/', async (req, res) => {
   }
 });
 // Ruta para actualizar un nodo
-nodeRoutes.put('/:id', async (req, res) => {
+nodeRoutes.put("/:id", async (req, res) => {
   try {
     const { id } = req.params;
     const { name, type } = req.body;
     if (!name || !type) {
-      return res.status(400).json({ error: 'Faltan datos requeridos' });
+      return res.status(400).json({ error: "Faltan datos requeridos" });
     }
     const node = await NodeService.updateNode(id, name, type);
     res.status(200).json(node);
@@ -31,7 +31,7 @@ nodeRoutes.put('/:id', async (req, res) => {
   }
 });
 // Ruta para eliminar un nodo
-nodeRoutes.delete('/:id', async (req, res) => {
+nodeRoutes.delete("/:id", async (req, res) => {
   try {
     const { id } = req.params;
     await NodeService.deleteNode(id);
@@ -41,7 +41,7 @@ nodeRoutes.delete('/:id', async (req, res) => {
   }
 });
 // Ruta para obtener todos los nodos
-nodeRoutes.get('/', async (req, res) => {
+nodeRoutes.get("/", async (req, res) => {
   try {
     const nodes = await NodeService.getAllNodes();
     res.status(200).json(nodes);
@@ -50,12 +50,12 @@ nodeRoutes.get('/', async (req, res) => {
   }
 });
 // Ruta para obtener un nodo por ID
-nodeRoutes.get('/:id', async (req, res) => {
+nodeRoutes.get("/:id", async (req, res) => {
   try {
     const { id } = req.params;
     const node = await NodeService.getNodeById(id);
     if (!node) {
-      return res.status(404).json({ error: 'Nodo no encontrado' });
+      return res.status(404).json({ error: "Nodo no encontrado" });
     }
     res.status(200).json(node);
   } catch (error) {

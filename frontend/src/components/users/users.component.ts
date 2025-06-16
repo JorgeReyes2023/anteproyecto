@@ -44,7 +44,7 @@ export class UsersComponent {
       this.alertService.error('Se requiere completar todos los campos.');
       return;
     }
-    this.generalService.postData('users/register', userData).subscribe({
+    this.generalService.postData('auth/register', userData).subscribe({
       next: (res: any) => {
         console.log('Response from API:', res);
         this.alertService.success('Usuario creado exitosamente.');

@@ -1,15 +1,15 @@
-const prisma = require('../prisma');
+const prisma = require("../prisma");
 
 class AlertModel {
   static async createAlert(alertData) {
     return prisma.alerts.create({
-      data: alertData
+      data: alertData,
     });
   }
 
   static async getAlertById(id) {
     return prisma.alerts.findUnique({
-      where: { id: id }
+      where: { id: id },
     });
   }
 
@@ -20,13 +20,13 @@ class AlertModel {
   static async updateAlert(id, alertData) {
     return prisma.alerts.update({
       where: { id: id },
-      data: alertData
+      data: alertData,
     });
   }
 
   static async deleteAlert(id) {
     return prisma.alerts.delete({
-      where: { id: id }
+      where: { id: id },
     });
   }
 }

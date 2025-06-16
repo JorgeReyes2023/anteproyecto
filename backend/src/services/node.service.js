@@ -1,4 +1,4 @@
-const { NodeModel } = require('../models/node.model');
+const { NodeModel } = require("../models/node.model");
 
 class NodeService {
   static async createNode(name, type, projectId) {

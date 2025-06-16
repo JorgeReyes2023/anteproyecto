@@ -26,7 +26,8 @@ export class AuthInterceptor implements HttpInterceptor {
     return next.handle(cloned).pipe(
       catchError((error: HttpErrorResponse) => {
         if (error.status === 401) {
-          // redirection, logout, ou message d'erreur global
+          // redirection, logout, o mensaje de error
+          console.error('Unauthorized request - redirecting to login');
         }
         return throwError(() => error);
       })

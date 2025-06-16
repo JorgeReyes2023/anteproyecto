@@ -1,11 +1,13 @@
-const prisma = require('../prisma');
+const prisma = require("../prisma");
 
 class UserModel {
   static async createUser(username, email, password, role) {
     //get roleId from role name
-    const roleId = await prisma.user_roles.findFirst({
-      where: { name: role }
-    }).then(role => role ? role.id : null);
+    const roleId = await prisma.user_roles
+      .findFirst({
+        where: { name: role },
+      })
+      .then((role) => (role ? role.id : null));
 
     return prisma.users.create({
       data: {
@@ -13,9 +15,9 @@ class UserModel {
         email: email,
         password: password,
         user_roles: {
-          connect: { id: roleId }
-        }
-      }
+          connect: { id: roleId },
+        },
+      },
     });
   }
 
@@ -23,8 +25,11 @@ class UserModel {
     try {
       const user = await prisma.users.findUnique({
         where: { email: email },
-        });
-        return user;
+        include: {
+          user_roles: true, // Include the user role information
+        },
+      });
+      return user;
     } catch (error) {
       throw new Error(`Error fetching user by email: ${error.message}`);
     }

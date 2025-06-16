@@ -1,13 +1,13 @@
-const { Router } = require('express');
-const { AlertService } = require('../services/alert.service');
+const { Router } = require("express");
+const { AlertService } = require("../services/alert.service");
 
 const alertRoutes = Router();
 // Ruta para crear una alerta
-alertRoutes.post('/', async (req, res) => {
+alertRoutes.post("/", async (req, res) => {
   try {
     const alertData = req.body;
     if (!alertData.name || !alertData.type) {
-      return res.status(400).json({ error: 'Faltan datos requeridos' });
+      return res.status(400).json({ error: "Faltan datos requeridos" });
     }
     const alert = await AlertService.createAlert(alertData);
     res.status(201).json(alert);
@@ -16,12 +16,12 @@ alertRoutes.post('/', async (req, res) => {
   }
 });
 // Ruta para actualizar una alerta
-alertRoutes.put('/:id', async (req, res) => {
+alertRoutes.put("/:id", async (req, res) => {
   try {
     const { id } = req.params;
     const alertData = req.body;
     if (!alertData.name || !alertData.type) {
-      return res.status(400).json({ error: 'Faltan datos requeridos' });
+      return res.status(400).json({ error: "Faltan datos requeridos" });
     }
     const alert = await AlertService.updateAlert(id, alertData);
     res.status(200).json(alert);
@@ -30,7 +30,7 @@ alertRoutes.put('/:id', async (req, res) => {
   }
 });
 // Ruta para eliminar una alerta
-alertRoutes.delete('/:id', async (req, res) => {
+alertRoutes.delete("/:id", async (req, res) => {
   try {
     const { id } = req.params;
     await AlertService.deleteAlert(id);
@@ -40,7 +40,7 @@ alertRoutes.delete('/:id', async (req, res) => {
   }
 });
 // Ruta para obtener todas las alertas
-alertRoutes.get('/', async (req, res) => {
+alertRoutes.get("/", async (req, res) => {
   try {
     const alerts = await AlertService.getAllAlerts();
     res.status(200).json(alerts);
@@ -49,12 +49,12 @@ alertRoutes.get('/', async (req, res) => {
   }
 });
 // Ruta para obtener una alerta por ID
-alertRoutes.get('/:id', async (req, res) => {
+alertRoutes.get("/:id", async (req, res) => {
   try {
     const { id } = req.params;
     const alert = await AlertService.getAlertById(id);
     if (!alert) {
-      return res.status(404).json({ error: 'Alerta no encontrada' });
+      return res.status(404).json({ error: "Alerta no encontrada" });
     }
     res.status(200).json(alert);
   } catch (error) {

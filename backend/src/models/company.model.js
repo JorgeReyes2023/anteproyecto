@@ -1,12 +1,12 @@
-const prisma = require('../prisma');
+const prisma = require("../prisma");
 
 class CompanyModel {
   static async createCompany(name, address) {
     return prisma.companies.create({
       data: {
         name: name,
-        address: address
-      }
+        address: address,
+      },
     });
   }
 
@@ -15,8 +15,8 @@ class CompanyModel {
       where: { id: id },
       data: {
         name: name,
-        address: address
-      }
+        address: address,
+      },
     });
   }
 
@@ -46,32 +46,32 @@ class CompanyModel {
     }
   }
 
-    static async getCompanyByName(name) {
-        try {
-        const company = await prisma.companies.findUnique({
-            where: { name: name },
-        });
-        return company;
-        } catch (error) {
-        throw new Error(`Error fetching company by name: ${error.message}`);
-        }
+  static async getCompanyByName(name) {
+    try {
+      const company = await prisma.companies.findUnique({
+        where: { name: name },
+      });
+      return company;
+    } catch (error) {
+      throw new Error(`Error fetching company by name: ${error.message}`);
     }
+  }
 
-    static async getCompanyByUserId(userId) {
-        try {
-            const company = await prisma.companies.findFirst({
-                where: {
-                    users: {
-                        some: {
-                            id: userId
-                        }
-                    }
-                }
-            });
-            return company;
-        } catch (error) {
-            throw new Error(`Error fetching company by user ID: ${error.message}`);
-        }
+  static async getCompanyByUserId(userId) {
+    try {
+      const company = await prisma.companies.findFirst({
+        where: {
+          users: {
+            some: {
+              id: userId,
+            },
+          },
+        },
+      });
+      return company;
+    } catch (error) {
+      throw new Error(`Error fetching company by user ID: ${error.message}`);
     }
+  }
 }
 module.exports = { CompanyModel };
