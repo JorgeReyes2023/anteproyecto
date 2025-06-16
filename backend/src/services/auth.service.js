@@ -16,7 +16,6 @@ class AuthService {
 
   static async checkPassword(password, hashedPassword) {
     try {
-      console.log("Checking password:", password, hashedPassword);
       const isMatch = await bcrypt.compare(password, hashedPassword);
       return isMatch;
     } catch (error) {
@@ -30,7 +29,6 @@ class AuthService {
         throw new Error("Email and password are required");
       }
       const user = await UserModel.getUserByEmail(email);
-      console.log(user);
       if (!user || !this.checkPassword(password, user.password)) {
         throw new Error("Invalid email or password");
       }
@@ -39,7 +37,7 @@ class AuthService {
         id: user.id,
         name: user.name,
         email: user.email,
-        role: user.user_roles.name
+        role: user.user_roles.name,
       };
 
       // generar token
