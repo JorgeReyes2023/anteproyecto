@@ -2,10 +2,10 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { GeneralService } from '../../services/general.service';  
+import { GeneralService } from '../../services/general.service';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule} from '@angular/material/card';
+import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { AlertService } from '../../app/_alert/alert.service';
@@ -13,12 +13,19 @@ import { AlertService } from '../../app/_alert/alert.service';
 @Component({
   standalone: true,
   selector: 'app-users',
-  imports: [CommonModule, FormsModule, MatInputModule, MatButtonModule, MatCardModule, MatFormFieldModule, MatSelectModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    MatInputModule,
+    MatButtonModule,
+    MatCardModule,
+    MatFormFieldModule,
+    MatSelectModule,
+  ],
   templateUrl: './users.component.html',
-  styleUrls: ['./users.component.css']
+  styleUrls: ['./users.component.css'],
 })
 export class UsersComponent {
-
   username = '';
   email = '';
   password = '';
@@ -28,34 +35,40 @@ export class UsersComponent {
     { value: 'admin', viewValue: 'Administrador' },
     { value: 'user', viewValue: 'Usuario' },
   ];
-  constructor(private router: Router, private generalService: GeneralService, private alertService: AlertService) {}
-  
+  constructor(
+    private router: Router,
+    private generalService: GeneralService,
+    private alertService: AlertService
+  ) {}
+
   createUser() {
     const userData = {
       username: this.username,
       email: this.email,
       password: this.password,
-      role: this.role
+      role: this.role,
     };
-    console.log('User Data:', userData);
 
-    if (!userData.username || !userData.email || !userData.password || !userData.role) {
+    if (
+      !userData.username ||
+      !userData.email ||
+      !userData.password ||
+      !userData.role
+    ) {
       console.error('All fields are required.');
       this.alertService.error('Se requiere completar todos los campos.');
       return;
     }
     this.generalService.postData('auth/register', userData).subscribe({
       next: (res: any) => {
-        console.log('Response from API:', res);
         this.alertService.success('Usuario creado exitosamente.');
         this.router.navigate(['/users']);
       },
       error: (err: any) => {
-        console.error('Error creating user:', err);
-        this.alertService.error('Error al crear el usuario. Inténtalo de nuevo.');
-      }
+        this.alertService.error(
+          'Error al crear el usuario. Inténtalo de nuevo.'
+        );
+      },
     });
-
-    console.log('User Data:', userData);
   }
 }

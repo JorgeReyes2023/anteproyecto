@@ -51,20 +51,16 @@ userRoutes.put("/:id/password", async (req, res) => {
   try {
     const userId = req.params.id;
     const { currentPassword, newPassword } = req.body;
-    console.log(
-      `Updating password for user ID: ${userId}, currentPassword: ${currentPassword}, newPassword: ${newPassword}`,
-    );
     if (!userId || !currentPassword || !newPassword) {
       return res.status(400).json({
         error: "User ID, current password and new password are required",
       });
     }
 
-    const hashedNewPassword = await AuthService.hashPassword(newPassword);
     const updatedUser = await UserService.changePassword(
       userId,
       currentPassword,
-      hashedNewPassword,
+      newPassword,
     );
 
     res
