@@ -5,8 +5,10 @@
   <mat-card>
     <mat-card-title>Información del Usuario</mat-card-title>
     <mat-card-content>
-      <p><strong>Nombre:</strong> {{ user.name }}</p>
-      <p><strong>Correo electrónico:</strong> {{ user.email }}</p>
+      <p><strong>Nombre:</strong> {{ user?.name || "Desconocido" }}</p>
+      <p>
+        <strong>Correo electrónico:</strong> {{ user?.email || "Desconocido" }}
+      </p>
     </mat-card-content>
   </mat-card>
 

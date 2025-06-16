@@ -14,6 +14,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { AuthService } from '../../services/auth.service';
 import { GeneralService } from '../../services/general.service';
 import { AlertService } from '../../app/_alert/alert.service';
+import { User } from '../../models/user';
 
 @Component({
   selector: 'app-user-info',
@@ -29,7 +30,7 @@ import { AlertService } from '../../app/_alert/alert.service';
   styleUrls: ['./user-info.component.css'],
 })
 export class UserInfoComponent {
-  user: any;
+  user: User | null = null;
   passwordForm: FormGroup;
 
   constructor(
@@ -63,13 +64,13 @@ export class UserInfoComponent {
 
   changePassword() {
     const error = this.passwordMatchValidator(this.passwordForm);
-    if (error) {
+    if (this.passwordForm.invalid || error) {
       this.alertService.error('Las contraseñas no coinciden.');
       return;
     }
     const { currentPassword, newPassword } = this.passwordForm.value;
     this.generalService
-      .putData(`users/${this.user.id}/password`, {
+      .putData(`users/${this.user?.id}/password`, {
         currentPassword,
         newPassword,
       })

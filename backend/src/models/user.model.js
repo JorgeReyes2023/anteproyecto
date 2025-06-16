@@ -37,8 +37,12 @@ class UserModel {
 
   static async getUserById(id) {
     try {
+      const numericId = parseInt(id, 10);
+      if (isNaN(numericId)) {
+        throw new Error("Invalid user ID");
+      }
       const user = await prisma.users.findUnique({
-        where: { id: parseInt(id, 10) },
+        where: { id: numericId },
         include: {
           user_roles: true, // Include the user role information
         },

@@ -22,6 +22,6 @@ export const routes: Routes = [
     component: UserInfoComponent,
     canActivate: [roleGuard(['user', 'admin'])],
   },
+  { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
   { path: '**', redirectTo: '/login' },
-  { path: '', redirectTo: '/users', pathMatch: 'full' },
 ];
