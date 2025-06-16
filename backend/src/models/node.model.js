@@ -1,4 +1,4 @@
-const prisma = require('../prisma');
+const prisma = require("../prisma");
 
 const NodeModel = {
   async createNode(name, type, projectId) {
@@ -7,9 +7,9 @@ const NodeModel = {
         name: name,
         type: type,
         project: {
-          connect: { id: projectId }
-        }
-      }
+          connect: { id: projectId },
+        },
+      },
     });
   },
 
@@ -34,6 +34,6 @@ const NodeModel = {
 
   async getAllNodes() {
     return prisma.nodes.findMany();
-  }
+  },
 };
 module.exports = { NodeModel };

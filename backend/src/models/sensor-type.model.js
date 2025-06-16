@@ -1,9 +1,9 @@
-const prisma = require('../prisma');
+const prisma = require("../prisma");
 
 class SensorTypeModel {
   static async createSensorType(sensorTypeData) {
     return prisma.sensor_types.create({
-      data: sensorTypeData
+      data: sensorTypeData,
     });
   }
 
@@ -14,13 +14,13 @@ class SensorTypeModel {
   static async updateSensorType(id, sensorTypeData) {
     return prisma.sensor_types.update({
       where: { id: id },
-      data: sensorTypeData
+      data: sensorTypeData,
     });
   }
 
   static async deleteSensorType(id) {
     return prisma.sensor_types.delete({
-      where: { id: id }
+      where: { id: id },
     });
   }
 }

@@ -2,51 +2,83 @@ const { UserModel } = require("../models/user.model");
 const bcrypt = require("bcryptjs");
 
 class UserService {
- 
-  static async hashPassword(password) {
+  static async getUserById(id) {
     try {
-      const salt = await bcrypt.genSalt(10);
-      const hashedPassword = await bcrypt.hash(password, salt);
-      return hashedPassword;
-    } catch (error) {
-      throw new Error(`Error hashing password: ${error.message}`);
-    }
-  }
-
-  static async loginUser(email, password) {
-    try {
-      if (!email || !password) {
-        throw new Error("Email and password are required");
+      if (!id) {
+        throw new Error("User ID is required");
       }
-      const user = await UserModel.getUserByEmail(email);
-      console.log(user);
-      if (user && this.checkPassword(password, user.password)) {
-        return user;
+      const user = await UserModel.getUserById(id);
+      if (!user) {
+        throw new Error("User not found");
       }
-      return null; // Credenciales inválidas
-    } catch (error) {
-      throw new Error(`Error logging in user: ${error.message}`);
-    }
-  }
-
-  static async checkPassword(password, hashedPassword) {
-    try {
-      console.log("Checking password:", password, hashedPassword);
-      const isMatch = await bcrypt.compare(password, hashedPassword);
-      return isMatch;
-    } catch (error) {
-      throw new Error(`Error checking password: ${error.message}`);
-    }
-  }
-
-  static async createUser(username, email, password, role = "user") {
-    try {
-      console.log("Creating user en el servicio:", username, email, role);
-      const hashedPassword = await this.hashPassword(password);
-      const user = await UserModel.createUser( username, email, hashedPassword, role );
       return user;
     } catch (error) {
-      throw new Error(`Error creating user: ${error.message}`);
+      throw new Error(`Error fetching user by ID: ${error.message}`);
+    }
+  }
+  static async getUserByEmail(email) {
+    try {
+      if (!email) {
+        throw new Error("Email is required");
+      }
+      const user = await UserModel.getUserByEmail(email);
+      if (!user) {
+        throw new Error("User not found");
+      }
+      return user;
+    } catch (error) {
+      throw new Error(`Error fetching user by email: ${error.message}`);
+    }
+  }
+  static async updateUser(id, updates) {
+    try {
+      if (!id || !updates) {
+        throw new Error("User ID and updates are required");
+      }
+      const user = await UserModel.updateUser(id, updates);
+      if (!user) {
+        throw new Error("User not found or update failed");
+      }
+      return user;
+    } catch (error) {
+      throw new Error(`Error updating user: ${error.message}`);
+    }
+  }
+  static async deleteUser(id) {
+    try {
+      if (!id) {
+        throw new Error("User ID is required");
+      }
+      const result = await UserModel.deleteUser(id);
+      if (!result) {
+        throw new Error("User not found or deletion failed");
+      }
+      return { message: "User deleted successfully" };
+    } catch (error) {
+      throw new Error(`Error deleting user: ${error.message}`);
+    }
+  }
+  static async changePassword(id, oldPassword, newPassword) {
+    try {
+      if (!id || !oldPassword || !newPassword) {
+        throw new Error("User ID, old password, and new password are required");
+      }
+      const user = await UserModel.getUserById(id);
+      if (!user) {
+        throw new Error("User not found");
+      }
+      const isMatch = await bcrypt.compare(oldPassword, user.password);
+      if (!isMatch) {
+        throw new Error("Old password is incorrect");
+      }
+      const salt = await bcrypt.genSalt(10);
+      const hashedNewPassword = await bcrypt.hash(newPassword, salt);
+      const updatedUser = await UserModel.updateUser(id, {
+        password: hashedNewPassword,
+      });
+      return updatedUser;
+    } catch (error) {
+      throw new Error(`Error changing password: ${error.message}`);
     }
   }
 }
