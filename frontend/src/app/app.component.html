@@ -43,6 +43,13 @@
           routerLinkActive="active"
           >Crear usuario</a
         >
+        <a
+          mat-list-item
+          *ngIf="user.role === 'admin'"
+          routerLink="/nodes"
+          routerLinkActive="active"
+          >Lista de nodos</a
+        >
         <a mat-list-item (click)="logout()">Cerrar sesión</a>
       </ng-container>
 
