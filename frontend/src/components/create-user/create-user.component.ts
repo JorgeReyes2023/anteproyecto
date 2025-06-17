@@ -9,10 +9,11 @@ import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { AlertService } from '../../app/_alert/alert.service';
+import { UserCreate } from '../../models/user';
 
 @Component({
   standalone: true,
-  selector: 'app-users',
+  selector: 'app-create-user',
   imports: [
     CommonModule,
     FormsModule,
@@ -22,19 +23,23 @@ import { AlertService } from '../../app/_alert/alert.service';
     MatFormFieldModule,
     MatSelectModule,
   ],
-  templateUrl: './users.component.html',
-  styleUrls: ['./users.component.css'],
+  templateUrl: './create-user.component.html',
+  styleUrls: ['./create-user.component.css'],
 })
-export class UsersComponent {
-  username = '';
-  email = '';
-  password = '';
-  role = '';
+export class createUserComponent {
+  user: UserCreate = {
+    name: '',
+    email: '',
+    password: '',
+    role: '',
+    company: undefined,
+  };
 
   roles = [
     { value: 'admin', viewValue: 'Administrador' },
     { value: 'user', viewValue: 'Usuario' },
   ];
+
   constructor(
     private router: Router,
     private generalService: GeneralService,
@@ -43,14 +48,15 @@ export class UsersComponent {
 
   createUser() {
     const userData = {
-      username: this.username,
-      email: this.email,
-      password: this.password,
-      role: this.role,
+      name: this.user.name,
+      email: this.user.email,
+      password: this.user.password,
+      role: this.user.role,
+      company: this.user.company,
     };
 
     if (
-      !userData.username ||
+      !userData.name ||
       !userData.email ||
       !userData.password ||
       !userData.role
