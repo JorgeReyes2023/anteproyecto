@@ -1,58 +1,92 @@
-<div class="update-user-dialog">
-  <h2>Update User</h2>
-  <form #updateUserForm="ngForm" (ngSubmit)="onSubmit(updateUserForm)">
-    <div class="form-group">
-      <label for="username">Username</label>
+<h2 mat-dialog-title>Actualizar Usuario</h2>
+
+<mat-dialog-content>
+  <form
+    #updateUserForm="ngForm"
+    (ngSubmit)="onSubmit(updateUserForm)"
+    autocomplete="off"
+  >
+    <!-- Nombre -->
+    <mat-form-field appearance="outline" class="w-100 mb-3">
+      <mat-label>Nombre de usuario <span class="required"></span></mat-label>
       <input
+        matInput
         id="username"
         name="username"
         type="text"
         [(ngModel)]="user.name"
         required
-        class="form-control"
-        placeholder="Enter username"
+        placeholder="Ej. juanperez"
+        autocomplete="off"
       />
-    </div>
+      <mat-error *ngIf="updateUserForm.submitted && !user.name"
+        >El nombre de usuario es obligatorio</mat-error
+      >
+    </mat-form-field>
 
-    <div class="form-group">
-      <label for="email">Email</label>
+    <!-- Email -->
+    <mat-form-field appearance="outline" class="w-100 mb-3">
+      <mat-label>Correo electrónico <span class="required"></span></mat-label>
       <input
+        matInput
         id="email"
         name="email"
         type="email"
         [(ngModel)]="user.email"
         required
-        class="form-control"
-        placeholder="Enter email"
+        placeholder="Ej. usuario@dominio.com"
+        autocomplete="off"
       />
-    </div>
-
-    <div class="form-group">
-      <label for="role">Role</label>
-      <select
-        id="role"
-        name="role"
-        [(ngModel)]="user.role"
-        required
-        class="form-control"
+      <mat-error *ngIf="updateUserForm.submitted && !user.email"
+        >El correo electrónico es obligatorio</mat-error
       >
-        <option value="" disabled>Select role</option>
-        <option value="admin">Admin</option>
-        <option value="user">User</option>
-      </select>
-    </div>
+    </mat-form-field>
 
-    <div class="dialog-actions">
-      <button type="button" class="btn btn-secondary" (click)="onCancel()">
-        Cancel
+    <!-- Compania -->
+    <mat-form-field
+      appearance="outline"
+      class="w-100 mb-3"
+      *ngIf="user.role === 'user'"
+    >
+      <mat-label>Compañía <span class="required"></span></mat-label>
+      <input
+        matInput
+        id="company"
+        name="company"
+        type="text"
+        [(ngModel)]="user.company"
+        required
+        placeholder="Ej. Mi Empresa S.A."
+        autocomplete="off"
+      />
+      <mat-error
+        *ngIf="
+          user.role === 'user' && updateUserForm.submitted && !user.company
+        "
+        >La compañía es obligatoria</mat-error
+      >
+    </mat-form-field>
+
+    <!-- Actions -->
+    <mat-dialog-actions align="end">
+      <button
+        mat-stroked-button
+        color="warn"
+        type="button"
+        (click)="onCancel()"
+        aria-label="Cancelar edición"
+      >
+        Cancelar
       </button>
       <button
+        mat-flat-button
+        color="primary"
         type="submit"
-        class="btn btn-primary"
         [disabled]="!updateUserForm.form.valid"
+        aria-label="Actualizar usuario"
       >
-        Update
+        Actualizar
       </button>
-    </div>
+    </mat-dialog-actions>
   </form>
-</div>
+</mat-dialog-content>
