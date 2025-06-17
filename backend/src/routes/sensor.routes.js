@@ -3,6 +3,44 @@ const { Router } = require("express");
 const { SensorService } = require("../services/sensor.service");
 
 const sensorRoutes = Router();
+// Ruta para obtener lecturas recientes de un sensor
+sensorRoutes.get("/readings/recent/:sensorId", async (req, res) => {
+  try {
+    const { sensorId } = req.params;
+    if (!sensorId) {
+      return res.status(400).json({ error: "Falta el ID del sensor" });
+    }
+
+    const readings = await SensorService.fetchRecentSensorReadings(
+      parseInt(sensorId),
+    );
+    res.status(200).json(readings);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Ruta para obtener lecturas de un sensor en un rango de fechas
+sensorRoutes.get("/readings/:sensorId", async (req, res) => {
+  try {
+    const { sensorId } = req.params;
+    const { startDate, endDate } = req.query;
+
+    if (!startDate || !endDate) {
+      return res.status(400).json({ error: "Faltan parámetros de fecha" });
+    }
+
+    const readings = await SensorService.fetchSensorReadings(
+      sensorId,
+      startDate,
+      endDate,
+    );
+    res.status(200).json(readings);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 // Ruta para crear un sensor type
 sensorRoutes.post("/types", async (req, res) => {
   try {
@@ -16,6 +54,7 @@ sensorRoutes.post("/types", async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+
 // Ruta para obtener todos los sensor types
 sensorRoutes.get("/types", async (req, res) => {
   try {
@@ -25,6 +64,7 @@ sensorRoutes.get("/types", async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+
 // Ruta para actualizar un sensor type
 sensorRoutes.put("/types/:id", async (req, res) => {
   try {
@@ -39,6 +79,7 @@ sensorRoutes.put("/types/:id", async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+
 // Ruta para eliminar un sensor type
 sensorRoutes.delete("/types/:id", async (req, res) => {
   try {
@@ -49,6 +90,7 @@ sensorRoutes.delete("/types/:id", async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+
 // Ruta para crear un sensor
 sensorRoutes.post("/", async (req, res) => {
   try {
@@ -62,6 +104,7 @@ sensorRoutes.post("/", async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+
 // Ruta para obtener un sensor por ID
 sensorRoutes.get("/:id", async (req, res) => {
   try {
@@ -75,6 +118,7 @@ sensorRoutes.get("/:id", async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+
 // Ruta para obtener todos los sensores
 sensorRoutes.get("/", async (req, res) => {
   try {
@@ -84,6 +128,7 @@ sensorRoutes.get("/", async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+
 // Ruta para actualizar un sensor
 sensorRoutes.put("/:id", async (req, res) => {
   try {
@@ -98,6 +143,7 @@ sensorRoutes.put("/:id", async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+
 // Ruta para eliminar un sensor
 sensorRoutes.delete("/:id", async (req, res) => {
   try {

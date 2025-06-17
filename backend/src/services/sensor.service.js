@@ -1,8 +1,10 @@
-// gestion de sensores (types y data)
+// gestion de sensores (types y objeto y readings)
 const { SensorModel } = require("../models/sensor.model.js");
 const { SensorTypeModel } = require("../models/sensor-type.model.js");
+const { SensorReadingModel } = require("../models/sensor-reading.model.js");
 
 class SensorService {
+  // Sensors ////////////////////////////
   static async createSensor(sensorData) {
     try {
       return await SensorModel.createSensor(sensorData);
@@ -43,6 +45,8 @@ class SensorService {
     }
   }
 
+  // Sensor Types ////////////////////////////
+
   static async createSensorType(sensorTypeData) {
     try {
       return await SensorTypeModel.createSensorType(sensorTypeData);
@@ -73,6 +77,40 @@ class SensorService {
     } catch (error) {
       throw new Error(`Error deleting sensor type: ${error.message}`);
     }
+  }
+
+  // Sensor Readings ////////////////////////////
+
+  static async fetchRecentSensorReadings(sensorId) {
+    try {
+      const now = new Date();
+      const twentyFourHoursAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+
+      return await SensorReadingModel.fetchSensorReadings(
+        sensorId,
+        twentyFourHoursAgo,
+        now,
+      );
+    } catch (error) {
+      throw new Error(
+        `Error fetching recent sensor readings: ${error.message}`,
+      );
+    }
+  }
+
+  // générique : récupère entre deux dates
+  static async fetchSensorReadings(sensorId, startDate, endDate) {
+    const readings = await prisma.sensor_readings.findMany({
+      where: {
+        sensorId: sensorId,
+        timestamp: {
+          gte: new Date(startDate),
+          lte: new Date(endDate),
+        },
+      },
+      orderBy: { timestamp: "desc" },
+    });
+    return readings;
   }
 }
 module.exports = { SensorService };
