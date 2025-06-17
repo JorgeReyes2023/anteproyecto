@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatListModule } from '@angular/material/list';
 import { FormsModule } from '@angular/forms';
@@ -65,5 +65,9 @@ export class UsersDataComponent {
   onDelete(user: User) {
     this.users = this.users.filter((u) => u.id !== user.id);
     console.log('Delete user:', user);
+  }
+
+  trackByUserId(index: number, user: User): number {
+    return user.id;
   }
 }
