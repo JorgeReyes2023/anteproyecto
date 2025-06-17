@@ -87,7 +87,7 @@ class SensorService {
       const twentyFourHoursAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000);
 
       return await SensorReadingModel.fetchSensorReadings(
-        sensorId,
+        parseInt(sensorId),
         twentyFourHoursAgo,
         now,
       );
@@ -107,7 +107,7 @@ class SensorService {
         );
       }
       return await SensorReadingModel.fetchSensorReadings(
-        sensorId,
+        parseInt(sensorId),
         new Date(startDate),
         new Date(endDate),
       );

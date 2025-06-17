@@ -11,9 +11,7 @@ sensorRoutes.get("/readings/recent/:sensorId", async (req, res) => {
       return res.status(400).json({ error: "Falta el ID del sensor" });
     }
 
-    const readings = await SensorService.fetchRecentSensorReadings(
-      parseInt(sensorId),
-    );
+    const readings = await SensorService.fetchRecentSensorReadings(sensorId);
     res.status(200).json(readings);
   } catch (error) {
     res.status(500).json({ error: error.message });
