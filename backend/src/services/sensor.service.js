@@ -98,7 +98,6 @@ class SensorService {
     }
   }
 
-  // générique : récupère entre deux dates
   static async fetchSensorReadings(sensorId, startDate, endDate) {
     try {
       if (!sensorId || !startDate || !endDate) {
