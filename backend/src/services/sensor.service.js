@@ -100,17 +100,11 @@ class SensorService {
 
   // générique : récupère entre deux dates
   static async fetchSensorReadings(sensorId, startDate, endDate) {
-    const readings = await prisma.sensor_readings.findMany({
-      where: {
-        sensorId: sensorId,
-        timestamp: {
-          gte: new Date(startDate),
-          lte: new Date(endDate),
-        },
-      },
-      orderBy: { timestamp: "desc" },
-    });
-    return readings;
+    return await SensorReadingModel.fetchSensorReadings(
+      sensorId,
+      startDate,
+      endDate,
+    );
   }
 }
 module.exports = { SensorService };
