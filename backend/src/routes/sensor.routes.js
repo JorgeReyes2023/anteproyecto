@@ -3,6 +3,31 @@ const { Router } = require("express");
 const { SensorService } = require("../services/sensor.service");
 
 const sensorRoutes = Router();
+// Ruta para obtener lecturas agregadas de un sensor
+sensorRoutes.get("/readings/aggregated/:sensorId", async (req, res) => {
+  try {
+    const { sensorId } = req.params;
+    const { interval } = req.query; // interval puede ser "hour" o "minute"
+
+    if (!sensorId || !interval) {
+      return res.status(400).json({ error: "Faltan parámetros requeridos" });
+    }
+    if (interval !== "hour" && interval !== "minute") {
+      return res
+        .status(400)
+        .json({ error: "Intervalo inválido. Debe ser 'hour' o 'minute'." });
+    }
+
+    const aggregatedReadings = await SensorService.fetchSensorAggregated(
+      sensorId,
+      interval,
+    );
+    res.status(200).json(aggregatedReadings);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 // Ruta para obtener lecturas recientes de un sensor
 sensorRoutes.get("/readings/recent/:sensorId", async (req, res) => {
   try {

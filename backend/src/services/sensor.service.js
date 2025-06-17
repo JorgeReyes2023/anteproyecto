@@ -81,6 +81,27 @@ class SensorService {
 
   // Sensor Readings ////////////////////////////
 
+  static async fetchSensorAggregated(sensorId, interval) {
+    try {
+      if (!sensorId || !interval) {
+        throw new Error("Missing required parameters: sensorId, interval");
+      }
+
+      if (interval !== "hour" && interval !== "minute") {
+        throw new Error("Invalid interval. Must be 'hour' or 'minute'.");
+      }
+
+      return await SensorReadingModel.getSensorAggregated(
+        parseInt(sensorId),
+        interval,
+      );
+    } catch (error) {
+      throw new Error(
+        `Error fetching sensor aggregated data: ${error.message}`,
+      );
+    }
+  }
+
   static async fetchRecentSensorReadings(sensorId) {
     try {
       const now = new Date();
