@@ -11,6 +11,7 @@ import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { User } from '../models/user';
+import { MatDialogModule } from '@angular/material/dialog';
 
 @Component({
   standalone: true,
@@ -25,6 +26,7 @@ import { User } from '../models/user';
     MatCardModule,
     NgIf,
     AsyncPipe,
+    MatDialogModule,
   ],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],

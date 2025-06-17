@@ -1,1 +1,32 @@
-<p>users-data works!</p>
+<mat-list>
+  <!-- headers -->
+  <mat-list-item class="header-row">
+    <div class="user-info-row header">
+      <span>Name</span>
+      <span>Email</span>
+      <span>Company</span>
+      <span class="actions-header">Actions</span>
+    </div>
+  </mat-list-item>
+
+  <!-- Data -->
+  <mat-list-item *ngFor="let user of users">
+    <div class="user-info-row">
+      <span>{{ user.name }}</span>
+      <span>{{ user.email }}</span>
+      <span>{{ user.company || "N/A" }}</span>
+      <span class="actions">
+        <button
+          mat-icon-button
+          color="primary"
+          (click)="openUpdateDialog(user)"
+        >
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button mat-icon-button color="warn" (click)="onDelete(user)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </span>
+    </div>
+  </mat-list-item>
+</mat-list>
