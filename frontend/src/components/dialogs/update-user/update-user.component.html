@@ -14,12 +14,12 @@
         id="username"
         name="username"
         type="text"
-        [(ngModel)]="user.name"
+        [(ngModel)]="localUser.name"
         required
         placeholder="Ej. juanperez"
         autocomplete="off"
       />
-      <mat-error *ngIf="updateUserForm.submitted && !user.name"
+      <mat-error *ngIf="updateUserForm.submitted && !localUser.name"
         >El nombre de usuario es obligatorio</mat-error
       >
     </mat-form-field>
@@ -32,12 +32,12 @@
         id="email"
         name="email"
         type="email"
-        [(ngModel)]="user.email"
+        [(ngModel)]="localUser.email"
         required
         placeholder="Ej. usuario@dominio.com"
         autocomplete="off"
       />
-      <mat-error *ngIf="updateUserForm.submitted && !user.email"
+      <mat-error *ngIf="updateUserForm.submitted && !localUser.email"
         >El correo electrónico es obligatorio</mat-error
       >
     </mat-form-field>
@@ -46,7 +46,7 @@
     <mat-form-field
       appearance="outline"
       class="w-100 mb-3"
-      *ngIf="user.role === 'user'"
+      *ngIf="localUser.role === 'user'"
     >
       <mat-label>Compañía <span class="required"></span></mat-label>
       <input
@@ -54,14 +54,16 @@
         id="company"
         name="company"
         type="text"
-        [(ngModel)]="user.company"
+        [(ngModel)]="localUser.company"
         required
         placeholder="Ej. Mi Empresa S.A."
         autocomplete="off"
       />
       <mat-error
         *ngIf="
-          user.role === 'user' && updateUserForm.submitted && !user.company
+          localUser.role === 'user' &&
+          updateUserForm.submitted &&
+          !localUser.company
         "
         >La compañía es obligatoria</mat-error
       >

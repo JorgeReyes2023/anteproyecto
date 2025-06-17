@@ -43,7 +43,7 @@ export class UsersDataComponent {
       return;
     }
     const dialogRef = this.dialog.open(UpdateUserComponent, {
-      data: user,
+      data: { ...user },
     });
 
     dialogRef.afterClosed().subscribe((result) => {

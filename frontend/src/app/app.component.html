@@ -21,29 +21,40 @@
   <mat-sidenav mode="side" opened style="width: 250px">
     <mat-toolbar>Navegación</mat-toolbar>
     <mat-nav-list>
-      <mat-nav-list>
-        <!-- User conectado (admin o no) -->
-        <ng-container *ngIf="user$ | async as user; else guest">
-          <a mat-list-item routerLink="/dashboard">Dashboard</a>
-          <a mat-list-item routerLink="/info">Información del usuario</a>
-          <a mat-list-item *ngIf="user.role === 'admin'" routerLink="/users"
-            >Lista de usuarios</a
-          >
-          <a
-            mat-list-item
-            *ngIf="user.role === 'admin'"
-            routerLink="/users/create"
-            >Crear usuario</a
-          >
-          <a mat-list-item (click)="logout()">Cerrar sesión</a>
-        </ng-container>
+      <!-- User conectado (admin o no) -->
+      <ng-container *ngIf="user$ | async as user; else guest">
+        <a mat-list-item routerLink="/dashboard" routerLinkActive="active"
+          >Dashboard</a
+        >
+        <a mat-list-item routerLink="/info" routerLinkActive="active"
+          >Información del usuario</a
+        >
+        <a
+          mat-list-item
+          *ngIf="user.role === 'admin'"
+          routerLink="/users"
+          routerLinkActive="active"
+          >Lista de usuarios</a
+        >
+        <a
+          mat-list-item
+          *ngIf="user.role === 'admin'"
+          routerLink="/users/create"
+          routerLinkActive="active"
+          >Crear usuario</a
+        >
+        <a mat-list-item (click)="logout()">Cerrar sesión</a>
+      </ng-container>
 
-        <!-- User invitado -->
-        <ng-template #guest>
-          <a mat-list-item routerLink="/login">Iniciar sesión</a>
-          <a mat-list-item routerLink="/register">Registrarse</a>
-        </ng-template>
-      </mat-nav-list>
+      <!-- User invitado -->
+      <ng-template #guest>
+        <a mat-list-item routerLink="/login" routerLinkActive="active"
+          >Iniciar sesión</a
+        >
+        <a mat-list-item routerLink="/register" routerLinkActive="active"
+          >Registrarse</a
+        >
+      </ng-template>
     </mat-nav-list>
   </mat-sidenav>
 
