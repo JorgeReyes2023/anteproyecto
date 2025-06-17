@@ -1,1 +1,58 @@
-<p>nodes-data works!</p>
+<!-- boton agregar nodo -->
+<mat-toolbar color="primary" class="mat-elevation-z2">
+  <span>Lista de Nodos</span>
+  <span class="spacer"></span>
+  <button
+    mat-raised-button
+    color="accent"
+    [routerLink]="['/nodes/create']"
+    routerLinkActive="active-link"
+  >
+    <mat-icon>add</mat-icon>
+    Agregar Nodo
+  </button>
+</mat-toolbar>
+<mat-card class="mb-3">
+  <mat-card-content>
+    <p>Administra los nodos de tu sistema</p>
+  </mat-card-content>
+</mat-card>
+
+<!-- Lista de nodos -->
+<mat-list>
+  <!-- headers -->
+  <mat-list-item class="header-row">
+    <div class="node-info-row header">
+      <span>ID</span>
+      <span>Nombre</span>
+      <span>Localización</span>
+      <span>Proyecto</span>
+      <span class="actions-header">Acciones</span>
+    </div>
+  </mat-list-item>
+
+  <!-- Data -->
+  <mat-list-item *ngFor="let node of nodes; trackBy: trackByNodeId">
+    <div class="node-info-row">
+      <span>{{ node.id }}</span>
+      <span>{{ node.name }}</span>
+      <span>{{ node.location }}</span>
+      <span>{{ node.project?.name || "N/A" }}</span>
+      <span class="actions">
+        <button
+          mat-icon-button
+          color="primary"
+          aria-label="Edit node"
+          [routerLink]="['/nodes/update', node.id]"
+          routerLinkActive="active-link"
+        >
+          <mat-icon>edit</mat-icon>
+        </button>
+
+        <button mat-icon-button color="warn" (click)="deleteNode(node)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </span>
+    </div>
+  </mat-list-item>
+</mat-list>
