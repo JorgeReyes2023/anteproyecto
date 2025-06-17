@@ -100,11 +100,20 @@ class SensorService {
 
   // générique : récupère entre deux dates
   static async fetchSensorReadings(sensorId, startDate, endDate) {
-    return await SensorReadingModel.fetchSensorReadings(
-      sensorId,
-      startDate,
-      endDate,
-    );
+    try {
+      if (!sensorId || !startDate || !endDate) {
+        throw new Error(
+          "Missing required parameters: sensorId, startDate, endDate",
+        );
+      }
+      return await SensorReadingModel.fetchSensorReadings(
+        sensorId,
+        new Date(startDate),
+        new Date(endDate),
+      );
+    } catch (error) {
+      throw new Error(`Error fetching sensor readings: ${error.message}`);
+    }
   }
 }
 module.exports = { SensorService };

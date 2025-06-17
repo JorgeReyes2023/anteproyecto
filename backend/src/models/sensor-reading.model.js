@@ -7,8 +7,8 @@ class SensorReadingModel {
       where: {
         sensor_id: sensorId,
         timestamp: {
-          gte: new Date(startDate),
-          lte: new Date(endDate),
+          gte: startDate,
+          lte: endDate,
         },
       },
       orderBy: { timestamp: "desc" },
