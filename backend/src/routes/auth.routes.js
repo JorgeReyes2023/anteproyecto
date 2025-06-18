@@ -23,7 +23,7 @@ authRoutes.post("/login", async (req, res) => {
       return res.status(400).json({ error: "Faltan datos requeridos" });
     }
     const { user, token } = await AuthService.login(email, password);
-    if (!token) {
+    if (!token || !user) {
       return res.status(401).json({ error: "Credenciales inválidas" });
     }
     res.status(200).json({ message: "Inicio de sesión exitoso", user, token });
