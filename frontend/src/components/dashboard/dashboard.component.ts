@@ -1,13 +1,10 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { BaseChartDirective } from 'ng2-charts';
-import {
-  ChartConfiguration,
-  ChartType,
-  ChartData
-} from 'chart.js';
+import { ChartConfiguration, ChartType, ChartData } from 'chart.js';
 import { MatCardModule } from '@angular/material/card';
 import { Platform } from '@angular/cdk/platform';
+import { GeneralService } from '../../services/general.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -18,6 +15,26 @@ import { Platform } from '@angular/cdk/platform';
 })
 export class DashboardComponent {
   isBrowser = isPlatformBrowser(inject(Platform));
+
+  constructor(private generalService: GeneralService) {
+    if (this.isBrowser) {
+      this.fetchData();
+    }
+  }
+
+  fetchData(sensorId: number = 1): void {
+    this.generalService
+      .getData(`sensors/readings/aggregated/${sensorId}`)
+      .subscribe({
+        next: (data) => {
+          console.log('Data fetched successfully:', data);
+        },
+        error: (error) => {
+          console.error('Error fetching data:', error);
+        },
+      });
+  }
+
   // Line Chart
   public lineChartType: ChartType = 'line';
   public lineChartData: ChartConfiguration<'line'>['data'] = {
