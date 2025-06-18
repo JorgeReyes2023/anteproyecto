@@ -5,11 +5,11 @@ const authRoutes = Router();
 // Ruta para registrar un nuevo usuario
 authRoutes.post("/register", async (req, res) => {
   try {
-    const { username, email, password, role } = req.body;
-    if (!username || !email || !password) {
+    const { name, email, password, role } = req.body;
+    if (!name || !email || !password) {
       return res.status(400).json({ error: "Faltan datos requeridos" });
     }
-    const user = await AuthService.register(username, email, password, role);
+    const user = await AuthService.register(name, email, password, role);
     res.status(201).json(user);
   } catch (error) {
     res.status(500).json({ error: error.message });
