@@ -75,3 +75,12 @@ body {
 .mat-dialog-container {
   border-radius: 12px;
 }
+
+.alert {
+  opacity: 1;
+  transition: opacity 0.3s ease-in-out;
+
+  &.fade {
+    opacity: 0;
+  }
+}
