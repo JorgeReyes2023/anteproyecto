@@ -27,6 +27,7 @@ class UserModel {
         where: { email: email },
         include: {
           user_roles: true, // Include the user role information
+          companies: true, // Include the company information
         },
       });
       return user;

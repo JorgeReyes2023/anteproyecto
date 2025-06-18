@@ -6,13 +6,12 @@ import { Subscription } from 'rxjs';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 
-
 @Component({
   selector: 'app-alert',
   standalone: true,
   imports: [CommonModule, MatCardModule, MatIconModule],
   templateUrl: './alert.component.html',
-  styleUrls: ['./alert.component.css']
+  styleUrls: ['./alert.component.css'],
 })
 export class AlertComponent implements OnInit, OnDestroy {
   @Input() id = '';
@@ -25,19 +24,18 @@ export class AlertComponent implements OnInit, OnDestroy {
   constructor(private alertService: AlertService) {}
 
   ngOnInit() {
-    this.alertSubscription = this.alertService.onAlert()
-      .subscribe(alert => {
-        if (!alert.message) {
-          this.alerts = this.alerts.filter(x => x.id !== alert.id);
-          return;
-        }
+    this.alertSubscription = this.alertService.onAlert().subscribe((alert) => {
+      if (!alert.message) {
+        this.alerts = this.alerts.filter((x) => x.id !== alert.id);
+        return;
+      }
 
-        this.alerts.push(alert);
+      this.alerts.push(alert);
 
-        if (alert.autoClose) {
-          setTimeout(() => this.removeAlert(alert), 3000);
-        }
-      });
+      if (alert.autoClose) {
+        setTimeout(() => this.removeAlert(alert), 3000);
+      }
+    });
   }
 
   ngOnDestroy() {
@@ -48,10 +46,10 @@ export class AlertComponent implements OnInit, OnDestroy {
     if (this.fade) {
       alert.fade = true;
       setTimeout(() => {
-        this.alerts = this.alerts.filter(x => x !== alert);
+        this.alerts = this.alerts.filter((x) => x !== alert);
       }, 250);
     } else {
-      this.alerts = this.alerts.filter(x => x !== alert);
+      this.alerts = this.alerts.filter((x) => x !== alert);
     }
   }
 
@@ -64,7 +62,7 @@ export class AlertComponent implements OnInit, OnDestroy {
       [AlertType.Success]: 'alert-success',
       [AlertType.Error]: 'alert-danger',
       [AlertType.Info]: 'alert-info',
-      [AlertType.Warning]: 'alert-warning'
+      [AlertType.Warning]: 'alert-warning',
     };
 
     if (alert.fade) {

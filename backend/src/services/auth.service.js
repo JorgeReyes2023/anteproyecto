@@ -38,6 +38,7 @@ class AuthService {
         name: user.name,
         email: user.email,
         role: user.user_roles.name,
+        company: user.companies?.name || null,
       };
 
       // generar token
@@ -45,6 +46,7 @@ class AuthService {
         id: user.id,
         role: user.role,
         email: user.email,
+        company: user.company,
       });
 
       return { user: userDto, token };

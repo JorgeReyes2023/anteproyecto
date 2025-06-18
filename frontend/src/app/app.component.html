@@ -1,27 +1,18 @@
 <!-- Barra de presentación ARRIBA -->
-<div
-  style="
-    width: 100%;
-    background: #bb4d4d;
-    padding: 16px 24px;
-    box-sizing: border-box;
-    color: white;
-  "
->
-  <h2 style="margin: 0; font-weight: 500">Presentación de la página</h2>
-  <p style="margin: 4px 0 0 0; color: #f0f0f0">
+<div class="presentation-banner mat-elevation-z2">
+  <h2>Presentación de la página</h2>
+  <p>
     Bienvenido a esta página. Aquí encontrará una visión general e información
     importante sobre la aplicación.
   </p>
 </div>
 
 <!-- Layout Angular Material -->
-<mat-sidenav-container style="height: calc(100vh - 100px); display: block">
+<mat-sidenav-container opened class="main-container">
   <!-- Sidebar -->
-  <mat-sidenav mode="side" opened style="width: 250px">
-    <mat-toolbar>Navegación</mat-toolbar>
+  <mat-sidenav mode="side" opened class="sidenav">
+    <mat-toolbar color="primary">Navegación</mat-toolbar>
     <mat-nav-list>
-      <!-- User conectado (admin o no) -->
       <ng-container *ngIf="user$ | async as user; else guest">
         <a mat-list-item routerLink="/dashboard" routerLinkActive="active"
           >Dashboard</a
@@ -30,15 +21,15 @@
           >Información del usuario</a
         >
         <a
-          mat-list-item
           *ngIf="user.role === 'admin'"
+          mat-list-item
           routerLink="/users"
           routerLinkActive="active"
           >Lista de usuarios</a
         >
         <a
-          mat-list-item
           *ngIf="user.role === 'admin'"
+          mat-list-item
           routerLink="/users/create"
           routerLinkActive="active"
           >Crear usuario</a
@@ -46,7 +37,6 @@
         <a mat-list-item (click)="logout()">Cerrar sesión</a>
       </ng-container>
 
-      <!-- User invitado -->
       <ng-template #guest>
         <a mat-list-item routerLink="/login" routerLinkActive="active"
           >Iniciar sesión</a
@@ -64,7 +54,7 @@
       <span>{{ title }}</span>
     </mat-toolbar>
 
-    <mat-card class="m-3">
+    <mat-card class="main-card">
       <mat-card-content>
         <app-alert></app-alert>
         <router-outlet></router-outlet>
