@@ -6,7 +6,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { CreateCompanyDialogComponent } from '../dialogs/create-company-dialog/create-company-dialog.component';
-
+import { UpdateCompanyDialogComponent } from '../dialogs/update-company-dialog/update-company-dialog.component';
+import { Company } from '../../models/company';
 @Component({
   selector: 'app-companies-data',
   imports: [
@@ -59,7 +60,15 @@ export class CompaniesDataComponent {
   }
 
   openUpdateDialog(company: { id: number; name: string; address: string }) {
-    console.log('Opening update dialog for company:', company);
+    const dialogRef = this.dialog.open(UpdateCompanyDialogComponent, {
+      width: '400px',
+      data: { ...company },
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.onUpdateCompany(result);
+      }
+    });
   }
 
   addCompany(company: { name: string; address: string }) {

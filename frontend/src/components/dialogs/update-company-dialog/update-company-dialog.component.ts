@@ -13,7 +13,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { Company } from '../../../models/company';
 
 @Component({
-  selector: 'app-create-company-dialog',
+  selector: 'app-update-company-dialog',
   imports: [
     CommonModule,
     FormsModule,
@@ -23,14 +23,14 @@ import { Company } from '../../../models/company';
     MatSelectModule,
     MatButtonModule,
   ],
-  templateUrl: './create-company-dialog.component.html',
-  styleUrls: ['./create-company-dialog.component.css'],
+  templateUrl: './update-company-dialog.component.html',
+  styleUrl: './update-company-dialog.component.css',
 })
-export class CreateCompanyDialogComponent {
+export class UpdateCompanyDialogComponent {
   localCompany: Company;
 
   constructor(
-    public dialogRef: MatDialogRef<CreateCompanyDialogComponent>,
+    public dialogRef: MatDialogRef<UpdateCompanyDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public company: Company
   ) {
     // shallow copy – use structuredClone for deep copy if nested objects exist
