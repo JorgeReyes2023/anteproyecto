@@ -8,6 +8,7 @@ import { MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { CreateCompanyDialogComponent } from '../dialogs/create-company-dialog/create-company-dialog.component';
 import { UpdateCompanyDialogComponent } from '../dialogs/update-company-dialog/update-company-dialog.component';
 import { Company } from '../../models/company';
+
 @Component({
   selector: 'app-companies-data',
   imports: [
@@ -22,7 +23,7 @@ import { Company } from '../../models/company';
   styleUrls: ['./companies-data.component.css'],
 })
 export class CompaniesDataComponent {
-  companies = [
+  companies: Company[] = [
     {
       id: 1,
       name: 'Tech Corp',
@@ -32,7 +33,7 @@ export class CompaniesDataComponent {
         { id: 2, name: 'Project B', description: 'Description B' },
       ],
     },
-    { id: 2, name: 'Health Solutions', address: 'address2', projects: null },
+    { id: 2, name: 'Health Solutions', address: 'address2' },
     {
       id: 3,
       name: 'Finance Group',
@@ -59,7 +60,7 @@ export class CompaniesDataComponent {
     });
   }
 
-  openUpdateDialog(company: { id: number; name: string; address: string }) {
+  openUpdateDialog(company: Company) {
     const dialogRef = this.dialog.open(UpdateCompanyDialogComponent, {
       width: '400px',
       data: { ...company },
