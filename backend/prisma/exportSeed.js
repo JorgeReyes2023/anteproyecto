@@ -7,7 +7,7 @@ async function main() {
     sensor_reading_types: await prisma.sensor_reading_types.findMany(),
     companies: await prisma.companies.findMany(),
     users: await prisma.users.findMany(),
-    roles: await prisma.user_roles.findMany(),
+    user_roles: await prisma.user_roles.findMany(),
     nodes: await prisma.nodes.findMany(),
     sensors: await prisma.sensors.findMany(),
     sensor_readings: await prisma.sensor_readings.findMany(),
