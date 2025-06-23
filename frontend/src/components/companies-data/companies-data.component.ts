@@ -10,6 +10,7 @@ import { UpdateCompanyDialogComponent } from '../dialogs/update-company-dialog/u
 import { Company } from '../../models/company';
 
 import { CompanyService } from '../../services/company.service';
+import { AlertService } from '../../app/_alert/alert.service';
 
 @Component({
   selector: 'app-companies-data',
@@ -29,7 +30,8 @@ export class CompaniesDataComponent {
 
   constructor(
     private dialog: MatDialog,
-    private companyService: CompanyService
+    private companyService: CompanyService,
+    private alertService: AlertService
   ) {}
 
   ngOnInit() {
@@ -97,6 +99,9 @@ export class CompaniesDataComponent {
       },
       error: (error) => {
         console.error('Error updating company:', error);
+        this.alertService.error(
+          'Error al actualizar la empresa. Por favor, inténtelo de nuevo.'
+        );
       },
     });
   }
@@ -108,7 +113,10 @@ export class CompaniesDataComponent {
         this.fetchCompanies();
       },
       error: (error) => {
-        console.error('Error deleting company:', error);
+        this.alertService.error(
+          error.error?.error ||
+            'Error al eliminar la empresa. Por favor, inténtelo de nuevo.'
+        );
       },
     });
   }
