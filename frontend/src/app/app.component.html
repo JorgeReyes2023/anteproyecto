@@ -30,6 +30,13 @@
         <a
           *ngIf="user.role === 'admin'"
           mat-list-item
+          routerLink="/companies"
+          routerLinkActive="active"
+          >Companias</a
+        >
+        <a
+          *ngIf="user.role === 'admin'"
+          mat-list-item
           routerLink="/users/create"
           routerLinkActive="active"
           >Crear usuario</a
@@ -50,10 +57,6 @@
 
   <!-- Contenido principal -->
   <mat-sidenav-content>
-    <mat-toolbar color="primary">
-      <span>{{ title }}</span>
-    </mat-toolbar>
-
     <mat-card class="main-card">
       <mat-card-content>
         <app-alert></app-alert>

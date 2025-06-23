@@ -1,13 +1,28 @@
-.user-info-row {
+mat-list {
+  background-color: var(--md-sys-color-surface);
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+mat-list-item {
+  padding: 0;
+  border-bottom: 1px solid #eee;
+}
+
+mat-list-item:last-child {
+  border-bottom: none;
+}
+
+.company-info-row {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr 120px;
+  grid-template-columns: 1fr 1fr 1fr 120px;
   align-items: center;
   width: 100%;
   padding: 8px 16px;
   box-sizing: border-box;
 }
 
-.user-info-row span {
+.company-info-row span {
   font-size: 14px;
   color: var(--md-sys-color-on-surface);
   overflow: hidden;
@@ -15,7 +30,7 @@
   white-space: nowrap;
 }
 
-.user-info-row .actions {
+.company-info-row .actions {
   display: flex;
   gap: 8px;
   justify-content: flex-end;
