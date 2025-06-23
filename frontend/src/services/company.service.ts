@@ -12,7 +12,7 @@ export class CompanyService {
     return this.gService.getData('companies');
   }
 
-  createCompany(company: Company) {
+  createCompany(company: { name: string; address: string }) {
     return this.gService.postData('companies', company);
   }
 

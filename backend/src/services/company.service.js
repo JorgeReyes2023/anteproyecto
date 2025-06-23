@@ -26,7 +26,8 @@ class CompanyService {
 
   static async deleteCompany(id) {
     try {
-      return await CompanyModel.deleteCompany(id);
+      const numberId = parseInt(id, 10);
+      return await CompanyModel.deleteCompany(numberId);
     } catch (error) {
       throw new Error(`Error al eliminar la empresa: ${error.message}`);
     }

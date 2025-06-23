@@ -74,13 +74,15 @@ export class CompaniesDataComponent {
   }
 
   addCompany(company: { name: string; address: string }) {
-    const newCompany = {
-      id: this.companies.length + 1,
-      name: company.name,
-      address: company.address,
-      projects: [],
-    };
-    this.companies.push(newCompany);
+    this.companyService.createCompany(company).subscribe({
+      next: (response) => {
+        console.log('Company created successfully:', response);
+        this.fetchCompanies();
+      },
+      error: (error) => {
+        console.error('Error creating company:', error);
+      },
+    });
   }
 
   trackByCompanyId(index: number, company: { id: number }): number {
@@ -88,23 +90,26 @@ export class CompaniesDataComponent {
   }
 
   onUpdateCompany(company: { id: number; name: string; address: string }) {
-    const index = this.companies.findIndex((c) => c.id === company.id);
-    if (index !== -1) {
-      this.companies[index] = { ...this.companies[index], ...company };
-      console.log('Update company:', company);
-      this.companyService.updateCompany(company).subscribe({
-        next: (response) => {
-          console.log('Company updated successfully:', response);
-        },
-        error: (error) => {
-          console.error('Error updating company:', error);
-        },
-      });
-    }
+    this.companyService.updateCompany(company).subscribe({
+      next: (response) => {
+        console.log('Company updated successfully:', response);
+        this.fetchCompanies();
+      },
+      error: (error) => {
+        console.error('Error updating company:', error);
+      },
+    });
   }
-  
+
   onDelete(company: { id: number }) {
-    this.companies = this.companies.filter((c) => c.id !== company.id);
-    console.log('Delete company:', company);
+    this.companyService.deleteCompany(company.id).subscribe({
+      next: (response) => {
+        console.log('Company deleted successfully:', response);
+        this.fetchCompanies();
+      },
+      error: (error) => {
+        console.error('Error deleting company:', error);
+      },
+    });
   }
 }

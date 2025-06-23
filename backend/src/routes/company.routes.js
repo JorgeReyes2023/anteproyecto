@@ -6,7 +6,7 @@ const companyRoutes = Router();
 companyRoutes.post("/", async (req, res) => {
   try {
     const { name, address } = req.body;
-    if (!name || !address) {
+    if (!name) {
       return res.status(400).json({ error: "Faltan datos requeridos" });
     }
     const company = await CompanyService.createCompany(name, address);
@@ -41,6 +41,7 @@ companyRoutes.delete("/:id", async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+
 // Ruta para obtener todas las empresas
 companyRoutes.get("/", async (req, res) => {
   try {
@@ -50,6 +51,7 @@ companyRoutes.get("/", async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+
 // Ruta para obtener una empresa por ID
 companyRoutes.get("/:id", async (req, res) => {
   try {
@@ -63,6 +65,7 @@ companyRoutes.get("/:id", async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+
 // Ruta para obtener una empresa por nombre
 companyRoutes.get("/name/:name", async (req, res) => {
   try {
