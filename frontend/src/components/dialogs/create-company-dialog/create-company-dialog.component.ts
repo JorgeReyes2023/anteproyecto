@@ -27,14 +27,11 @@ import { Company } from '../../../models/company';
   styleUrls: ['./create-company-dialog.component.css'],
 })
 export class CreateCompanyDialogComponent {
-  localCompany: Company;
+  localCompany: { name: string; address: string };
 
-  constructor(
-    public dialogRef: MatDialogRef<CreateCompanyDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public company: Company
-  ) {
+  constructor(public dialogRef: MatDialogRef<CreateCompanyDialogComponent>) {
     // shallow copy – use structuredClone for deep copy if nested objects exist
-    this.localCompany = { ...company };
+    this.localCompany = { name: '', address: '' };
   }
 
   onCancel() {

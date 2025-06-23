@@ -73,7 +73,7 @@ export class CompaniesDataComponent {
     });
   }
 
-  addCompany(company: { name: string; address: string }) {
+  addCompany(company: Omit<Company, 'id'>) {
     this.companyService.createCompany(company).subscribe({
       next: (response) => {
         console.log('Company created successfully:', response);
@@ -85,11 +85,11 @@ export class CompaniesDataComponent {
     });
   }
 
-  trackByCompanyId(index: number, company: { id: number }): number {
+  trackByCompanyId(index: number, company: Company): number {
     return company.id;
   }
 
-  onUpdateCompany(company: { id: number; name: string; address: string }) {
+  onUpdateCompany(company: Company) {
     this.companyService.updateCompany(company).subscribe({
       next: (response) => {
         console.log('Company updated successfully:', response);
@@ -101,7 +101,7 @@ export class CompaniesDataComponent {
     });
   }
 
-  onDelete(company: { id: number }) {
+  onDelete(company: Pick<Company, 'id'>) {
     this.companyService.deleteCompany(company.id).subscribe({
       next: (response) => {
         console.log('Company deleted successfully:', response);

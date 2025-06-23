@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { GeneralService } from './general.service';
 import { Company } from '../models/company';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -8,11 +9,11 @@ import { Company } from '../models/company';
 export class CompanyService {
   constructor(private gService: GeneralService) {}
 
-  getCompanies(): any {
+  getCompanies(): Observable<Company[]> {
     return this.gService.getData('companies');
   }
 
-  createCompany(company: { name: string; address: string }) {
+  createCompany(company: Omit<Company, 'id'>) {
     return this.gService.postData('companies', company);
   }
 
