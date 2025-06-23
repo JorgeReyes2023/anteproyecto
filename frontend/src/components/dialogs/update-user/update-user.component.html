@@ -49,16 +49,17 @@
       *ngIf="localUser.role === 'user'"
     >
       <mat-label>Compañía <span class="required"></span></mat-label>
-      <input
-        matInput
+      <mat-select
         id="company"
         name="company"
-        type="text"
         [(ngModel)]="localUser.company"
         required
-        placeholder="Ej. Mi Empresa S.A."
-        autocomplete="off"
-      />
+        placeholder="Seleccione una compañía"
+      >
+        <mat-option *ngFor="let company of companies" [value]="company.name">
+          {{ company.name }}
+        </mat-option>
+      </mat-select>
       <mat-error
         *ngIf="
           localUser.role === 'user' &&

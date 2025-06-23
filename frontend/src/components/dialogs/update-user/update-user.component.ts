@@ -11,6 +11,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { User } from '../../../models/user';
+import { Company } from '../../../models/company';
+import { CompanyService } from '../../../services/company.service';
 
 @Component({
   standalone: true,
@@ -29,13 +31,28 @@ import { User } from '../../../models/user';
 })
 export class UpdateUserComponent {
   localUser: User;
+  companies: Company[] = [];
 
   constructor(
     public dialogRef: MatDialogRef<UpdateUserComponent>,
-    @Inject(MAT_DIALOG_DATA) public user: User
+    @Inject(MAT_DIALOG_DATA) public user: User,
+    private companyService: CompanyService
   ) {
     // shallow copy – use structuredClone for deep copy if nested objects exist
     this.localUser = { ...user };
+  }
+
+  ngOnInit() {
+    if (this.localUser.role === 'user') {
+      this.companyService.getCompanies().subscribe({
+        next: (companies) => {
+          this.companies = companies;
+        },
+        error: (err) => {
+          console.error('Error fetching companies:', err);
+        },
+      });
+    }
   }
 
   onCancel() {
