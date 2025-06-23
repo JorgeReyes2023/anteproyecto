@@ -6,7 +6,7 @@ const companyRoutes = Router();
 companyRoutes.post("/", async (req, res) => {
   try {
     const { name, address } = req.body;
-    if (!name || !address) {
+    if (!name) {
       return res.status(400).json({ error: "Faltan datos requeridos" });
     }
     const company = await CompanyService.createCompany(name, address);
@@ -15,12 +15,13 @@ companyRoutes.post("/", async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+
 // Ruta para actualizar una empresa
 companyRoutes.put("/:id", async (req, res) => {
   try {
     const { id } = req.params;
     const { name, address } = req.body;
-    if (!name || !address) {
+    if (!name) {
       return res.status(400).json({ error: "Faltan datos requeridos" });
     }
     const company = await CompanyService.updateCompany(id, name, address);
@@ -29,6 +30,7 @@ companyRoutes.put("/:id", async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+
 // Ruta para eliminar una empresa
 companyRoutes.delete("/:id", async (req, res) => {
   try {
@@ -39,6 +41,7 @@ companyRoutes.delete("/:id", async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+
 // Ruta para obtener todas las empresas
 companyRoutes.get("/", async (req, res) => {
   try {
@@ -48,6 +51,7 @@ companyRoutes.get("/", async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+
 // Ruta para obtener una empresa por ID
 companyRoutes.get("/:id", async (req, res) => {
   try {
@@ -61,6 +65,7 @@ companyRoutes.get("/:id", async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+
 // Ruta para obtener una empresa por nombre
 companyRoutes.get("/name/:name", async (req, res) => {
   try {
@@ -76,7 +81,7 @@ companyRoutes.get("/name/:name", async (req, res) => {
 });
 
 // Ruta para obtener una empresa por ID de usuario
-//TODO: Cambiar a user routes/service
+//TODO: Cambiar a user routes/service ??
 companyRoutes.get("/user/:userId", async (req, res) => {
   try {
     const { userId } = req.params;

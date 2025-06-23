@@ -17,7 +17,8 @@ class CompanyService {
 
   static async updateCompany(id, name, address) {
     try {
-      return await CompanyModel.updateCompany(id, name, address);
+      const numberId = parseInt(id, 10);
+      return await CompanyModel.updateCompany(numberId, name, address);
     } catch (error) {
       throw new Error(`Error al actualizar la empresa: ${error.message}`);
     }
@@ -25,7 +26,8 @@ class CompanyService {
 
   static async deleteCompany(id) {
     try {
-      return await CompanyModel.deleteCompany(id);
+      const numberId = parseInt(id, 10);
+      return await CompanyModel.deleteCompany(numberId);
     } catch (error) {
       throw new Error(`Error al eliminar la empresa: ${error.message}`);
     }

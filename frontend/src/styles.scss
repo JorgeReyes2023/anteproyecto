@@ -2,7 +2,6 @@
 
 @include mat.core();
 
-// Définition des palettes Material personnalisées
 $custom-primary: mat.m2-define-palette(
   mat.$m2-indigo-palette,
   A400,
@@ -12,7 +11,6 @@ $custom-primary: mat.m2-define-palette(
 $custom-accent: mat.m2-define-palette(mat.$m2-blue-palette, A200, A100, A400);
 $custom-warn: mat.m2-define-palette(mat.$m2-red-palette, A400);
 
-// Thème complet Angular Material
 $custom-theme: mat.m2-define-light-theme(
   (
     color: (
@@ -25,10 +23,8 @@ $custom-theme: mat.m2-define-light-theme(
   )
 );
 
-// Application du thème Angular Material
 @include mat.all-component-themes($custom-theme);
 
-// 🧠 Ajout des variables CSS globales
 :root {
   --primary-color: #{mat.m2-get-color-from-palette($custom-primary)};
   --accent-color: #{mat.m2-get-color-from-palette($custom-accent)};
@@ -37,21 +33,44 @@ $custom-theme: mat.m2-define-light-theme(
   --text-color: #1a1a1a;
 }
 
-// 🎨 Styles globaux de base
+app-root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+mat-sidenav-container {
+  height: 100vh;
+}
+
+.presentation-banner {
+  color: var(--text-color);
+  padding: 16px;
+  border-radius: 8px;
+  text-align: center;
+  font-size: 1.2em;
+  height: 15vh;
+}
+
 body {
   font-family: "Roboto", "Segoe UI", sans-serif;
   background-color: var(--background-color);
   color: var(--text-color);
   margin: 0;
   padding: 0;
+  min-height: 100vh;
 }
 
-// 🧩 Composants Material stylisés avec cohérence
+.main-card {
+  margin: 24px;
+}
+
 .mat-toolbar {
   padding: 0 24px;
   font-weight: 500;
   background-color: var(--primary-color);
   color: #fff;
+  height: 64px;
 }
 
 .mat-card {
@@ -83,4 +102,19 @@ body {
   &.fade {
     opacity: 0;
   }
+}
+
+mat-list {
+  background-color: var(--md-sys-color-surface);
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+mat-list-item {
+  padding: 0;
+  border-bottom: 1px solid #eee;
+}
+
+mat-list-item:last-child {
+  border-bottom: none;
 }
