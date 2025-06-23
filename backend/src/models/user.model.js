@@ -92,6 +92,17 @@ class UserModel {
       throw new Error(`Error al actualizar: ${error.message}`);
     }
   }
+
+  static async deleteUser(id) {
+    try {
+      const user = await prisma.users.delete({
+        where: { id: id },
+      });
+      return user;
+    } catch (error) {
+      throw new Error(`Error deleting user: ${error.message}`);
+    }
+  }
 }
 
 module.exports = { UserModel };

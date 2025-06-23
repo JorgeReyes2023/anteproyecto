@@ -91,12 +91,19 @@ class UserService {
       throw new Error(`Error updating user: ${error.message}`);
     }
   }
+
   static async deleteUser(id) {
     try {
       if (!id) {
         throw new Error("User ID is required");
       }
-      const result = await UserModel.deleteUser(id);
+
+      const numericId = parseInt(id, 10);
+      if (isNaN(numericId)) {
+        throw new Error("Invalid user ID");
+      }
+
+      const result = await UserModel.deleteUser(numericId);
       if (!result) {
         throw new Error("User not found or deletion failed");
       }

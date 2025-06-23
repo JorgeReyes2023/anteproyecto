@@ -74,7 +74,14 @@ export class UsersDataComponent {
   }
 
   onDelete(user: User) {
-    this.users = this.users.filter((u) => u.id !== user.id);
+    this.userService.deleteUser(user.id).subscribe({
+      next: () => {
+        this.fetchUsers();
+      },
+      error: (err) => {
+        console.error('Error deleting user:', err);
+      },
+    });
   }
 
   trackByUserId(index: number, user: User): number {
