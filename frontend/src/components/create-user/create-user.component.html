@@ -48,6 +48,18 @@
             <mat-option value="user">Usuario</mat-option>
           </mat-select>
         </mat-form-field>
+        <mat-form-field
+          appearance="outline"
+          class="full-width"
+          *ngIf="user.role === 'user'"
+        >
+          <mat-label>Compañía</mat-label>
+          <mat-select [(ngModel)]="user.company" name="company" required>
+            <mat-option *ngFor="let company of companies" [value]="company.id">
+              {{ company.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
         <button
           mat-raised-button
           color="primary"
