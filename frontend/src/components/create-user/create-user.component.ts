@@ -10,6 +10,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { AlertService } from '../../app/_alert/alert.service';
 import { UserCreate } from '../../models/user';
 import { UserService } from '../../services/user.service';
+import { AuthService } from '../../services/auth.service';
 import { CompanyService } from '../../services/company.service';
 import { Company } from '../../models/company';
 
@@ -49,7 +50,8 @@ export class createUserComponent {
     private router: Router,
     private userService: UserService,
     private alertService: AlertService,
-    private companyService: CompanyService
+    private companyService: CompanyService,
+    private authService: AuthService
   ) {}
 
   ngOnInit() {
@@ -84,11 +86,10 @@ export class createUserComponent {
       this.alertService.error('Se requiere completar todos los campos.');
       return;
     }
-    this.userService.createUser(userData).subscribe({
+    this.authService.register(userData).subscribe({
       next: (response) => {
         console.log('User created successfully:', response);
         this.alertService.success('Usuario creado exitosamente.');
-        this.router.navigate(['/users']);
       },
       error: (error) => {
         console.error('Error creating user:', error);

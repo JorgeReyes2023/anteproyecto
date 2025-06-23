@@ -10,18 +10,16 @@ export class UserService {
   constructor(private gService: GeneralService) {}
 
   getUsers(): Observable<User[]> {
-    return this.gService.getData('/users');
+    return this.gService.getData('users');
   }
 
-  createUser(user: Omit<User, 'id'>): Observable<User> {
-    return this.gService.postData('/users', user);
-  }
+  // createUser in AuthService !!
 
   updateUser(user: User): Observable<User> {
-    return this.gService.putData(`/users/${user.id}`, user);
+    return this.gService.putData(`users/${user.id}`, user);
   }
 
   deleteUser(userId: number): Observable<void> {
-    return this.gService.deleteData(`/users/${userId}`);
+    return this.gService.deleteData(`users/${userId}`);
   }
 }

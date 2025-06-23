@@ -57,4 +57,15 @@ export class AuthService {
   getCurrentUser() {
     return this.userSubject.value;
   }
+
+  register(user: Omit<User, 'id'>): Observable<User> {
+    return this.generalService.postData('auth/register', user).pipe(
+      tap((newUser) => {
+        if (typeof window !== 'undefined' && window.localStorage) {
+          localStorage.setItem('user', JSON.stringify(newUser));
+          this.userSubject.next(newUser);
+        }
+      })
+    );
+  }
 }
