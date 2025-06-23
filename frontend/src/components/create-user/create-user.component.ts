@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { GeneralService } from '../../services/general.service';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -10,6 +9,10 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { AlertService } from '../../app/_alert/alert.service';
 import { UserCreate } from '../../models/user';
+import { UserService } from '../../services/user.service';
+import { AuthService } from '../../services/auth.service';
+import { CompanyService } from '../../services/company.service';
+import { Company } from '../../models/company';
 
 @Component({
   standalone: true,
@@ -32,9 +35,12 @@ export class createUserComponent {
     email: '',
     password: '',
     role: '',
-    company: undefined,
+    company: '',
   };
 
+  companies: Company[] = [];
+
+  // TODO: Replace with actual fetch from backend
   roles = [
     { value: 'admin', viewValue: 'Administrador' },
     { value: 'user', viewValue: 'Usuario' },
@@ -42,9 +48,24 @@ export class createUserComponent {
 
   constructor(
     private router: Router,
-    private generalService: GeneralService,
-    private alertService: AlertService
+    private userService: UserService,
+    private alertService: AlertService,
+    private companyService: CompanyService,
+    private authService: AuthService
   ) {}
+
+  ngOnInit() {
+    // Fetch companies from the backend
+    this.companyService.getCompanies().subscribe({
+      next: (companies) => {
+        this.companies = companies;
+      },
+      error: (error) => {
+        console.error('Error fetching companies:', error);
+        this.alertService.error('Error al cargar las empresas.');
+      },
+    });
+  }
 
   createUser() {
     const userData = {
@@ -65,15 +86,14 @@ export class createUserComponent {
       this.alertService.error('Se requiere completar todos los campos.');
       return;
     }
-    this.generalService.postData('auth/register', userData).subscribe({
-      next: (res: any) => {
+    this.authService.register(userData).subscribe({
+      next: (response) => {
+        console.log('User created successfully:', response);
         this.alertService.success('Usuario creado exitosamente.');
-        this.router.navigate(['/users']);
       },
-      error: (err: any) => {
-        this.alertService.error(
-          'Error al crear el usuario. Inténtalo de nuevo.'
-        );
+      error: (error) => {
+        console.error('Error creating user:', error);
+        this.alertService.error('Error al crear el usuario.');
       },
     });
   }
