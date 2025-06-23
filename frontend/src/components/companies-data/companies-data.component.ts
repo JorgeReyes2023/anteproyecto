@@ -9,6 +9,8 @@ import { CreateCompanyDialogComponent } from '../dialogs/create-company-dialog/c
 import { UpdateCompanyDialogComponent } from '../dialogs/update-company-dialog/update-company-dialog.component';
 import { Company } from '../../models/company';
 
+import { CompanyService } from '../../services/company.service';
+
 @Component({
   selector: 'app-companies-data',
   imports: [
@@ -23,29 +25,16 @@ import { Company } from '../../models/company';
   styleUrls: ['./companies-data.component.css'],
 })
 export class CompaniesDataComponent {
-  companies: Company[] = [
-    {
-      id: 1,
-      name: 'Tech Corp',
-      address: 'address1',
-      projects: [
-        { id: 1, name: 'Project A', description: 'Description A' },
-        { id: 2, name: 'Project B', description: 'Description B' },
-      ],
-    },
-    { id: 2, name: 'Health Solutions', address: 'address2' },
-    {
-      id: 3,
-      name: 'Finance Group',
-      address: 'address3',
-      projects: [
-        { id: 3, name: 'Project C', description: 'Description C' },
-        { id: 4, name: 'Project D', description: 'Description D' },
-      ],
-    },
-  ];
+  companies: Company[] = [];
 
-  constructor(private dialog: MatDialog) {}
+  constructor(
+    private dialog: MatDialog,
+    private companyService: CompanyService
+  ) {}
+
+  ngOnInit() {
+    this.fetchCompanies();
+  }
 
   openCreateDialog() {
     const dialogRef = this.dialog.open(CreateCompanyDialogComponent, {
@@ -69,6 +58,18 @@ export class CompaniesDataComponent {
       if (result) {
         this.onUpdateCompany(result);
       }
+    });
+  }
+
+  fetchCompanies() {
+    console.log('Fetching companies...');
+    this.companyService.getCompanies().subscribe({
+      next: (response: Company[]) => {
+        this.companies = response;
+      },
+      error: (error: any) => {
+        console.error('Error fetching companies:', error);
+      },
     });
   }
 
