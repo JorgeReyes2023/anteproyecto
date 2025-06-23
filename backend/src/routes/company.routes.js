@@ -15,6 +15,7 @@ companyRoutes.post("/", async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+
 // Ruta para actualizar una empresa
 companyRoutes.put("/:id", async (req, res) => {
   try {
@@ -76,7 +77,7 @@ companyRoutes.get("/name/:name", async (req, res) => {
 });
 
 // Ruta para obtener una empresa por ID de usuario
-//TODO: Cambiar a user routes/service
+//TODO: Cambiar a user routes/service ??
 companyRoutes.get("/user/:userId", async (req, res) => {
   try {
     const { userId } = req.params;

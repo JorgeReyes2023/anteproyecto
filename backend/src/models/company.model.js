@@ -48,7 +48,7 @@ class CompanyModel {
 
   static async getCompanyByName(name) {
     try {
-      const company = await prisma.companies.findUnique({
+      const company = await prisma.companies.findFirst({
         where: { name: name },
       });
       return company;
