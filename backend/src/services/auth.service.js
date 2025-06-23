@@ -37,14 +37,14 @@ class AuthService {
         id: user.id,
         name: user.name,
         email: user.email,
-        role: user.user_roles,
+        role: user.role?.name || user.role,
         company: user.companies?.name || null,
       };
 
       // generar token
       const token = generateToken({
         id: user.id,
-        role: user.role,
+        role: user.role?.name || user.role,
         email: user.email,
         company: user.company,
       });

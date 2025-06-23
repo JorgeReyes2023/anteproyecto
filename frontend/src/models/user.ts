@@ -5,7 +5,7 @@ export interface User {
   name: string;
   email: string;
   role: string;
-  user_role?: Role;
+  roleDetails?: Role;
   company?: string;
 }
 

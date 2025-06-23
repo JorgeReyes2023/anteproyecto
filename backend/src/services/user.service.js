@@ -60,7 +60,7 @@ class UserService {
       }
 
       // delete id from updates to avoid conflicts
-      delete updates.id;
+      updates.id = undefined;
 
       // check role
       if (updates.role) {
@@ -69,7 +69,7 @@ class UserService {
           throw new Error("Invalid role specified");
         }
         updates.user_roles = { connect: { id: role.id } };
-        delete updates.role; // Remove role from updates to avoid conflicts
+        updates.role = undefined; // Remove role from updates to avoid conflicts
       }
 
       // check company
@@ -79,7 +79,7 @@ class UserService {
           throw new Error("Company not found");
         }
         updates.companies = { connect: { id: company.id } };
-        delete updates.company; // Remove company from updates to avoid conflicts
+        updates.company = undefined; // Remove company from updates to avoid conflicts
       }
 
       const user = await UserModel.updateUser(numericId, updates);
