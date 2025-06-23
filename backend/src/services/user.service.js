@@ -1,7 +1,24 @@
 const { UserModel } = require("../models/user.model");
+const { RoleModel } = require("../models/role.model");
 const bcrypt = require("bcryptjs");
+const { CompanyModel } = require("../models/company.model");
 
 class UserService {
+  static async getAllUsers() {
+    try {
+      const users = await UserModel.getAllUsers();
+      return users.map((user) => ({
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        role: user.user_roles.name,
+        company: user.companies?.name || null,
+      }));
+    } catch (error) {
+      throw new Error(`Error fetching users: ${error.message}`);
+    }
+  }
+
   static async getUserById(id) {
     try {
       if (!id) {
@@ -35,7 +52,37 @@ class UserService {
       if (!id || !updates) {
         throw new Error("User ID and updates are required");
       }
-      const user = await UserModel.updateUser(id, updates);
+
+      const numericId = parseInt(id, 10);
+
+      if (numericId !== updates.id) {
+        throw new Error("User ID in updates does not match the provided ID");
+      }
+
+      // delete id from updates to avoid conflicts
+      updates.id = undefined;
+
+      // check role
+      if (updates.role) {
+        const role = await RoleModel.getRoleByName(updates.role);
+        if (!role) {
+          throw new Error("Invalid role specified");
+        }
+        updates.user_roles = { connect: { id: role.id } };
+        updates.role = undefined; // Remove role from updates to avoid conflicts
+      }
+
+      // check company
+      if (updates.company) {
+        const company = await CompanyModel.getCompanyByName(updates.company);
+        if (!company) {
+          throw new Error("Company not found");
+        }
+        updates.companies = { connect: { id: company.id } };
+        updates.company = undefined; // Remove company from updates to avoid conflicts
+      }
+
+      const user = await UserModel.updateUser(numericId, updates);
       if (!user) {
         throw new Error("User not found or update failed");
       }
@@ -44,12 +91,19 @@ class UserService {
       throw new Error(`Error updating user: ${error.message}`);
     }
   }
+
   static async deleteUser(id) {
     try {
       if (!id) {
         throw new Error("User ID is required");
       }
-      const result = await UserModel.deleteUser(id);
+
+      const numericId = parseInt(id, 10);
+      if (isNaN(numericId)) {
+        throw new Error("Invalid user ID");
+      }
+
+      const result = await UserModel.deleteUser(numericId);
       if (!result) {
         throw new Error("User not found or deletion failed");
       }

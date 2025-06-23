@@ -8,7 +8,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { AlertService } from '../../app/_alert/alert.service';
-import { UserCreate } from '../../models/user';
+import { User, UserCreate } from '../../models/user';
 import { UserService } from '../../services/user.service';
 import { AuthService } from '../../services/auth.service';
 import { CompanyService } from '../../services/company.service';
@@ -68,7 +68,7 @@ export class createUserComponent {
   }
 
   createUser() {
-    const userData = {
+    const userData : UserCreate = {
       name: this.user.name,
       email: this.user.email,
       password: this.user.password,

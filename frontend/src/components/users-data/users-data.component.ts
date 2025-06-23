@@ -6,6 +6,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { UpdateUserComponent } from '../dialogs/update-user/update-user.component';
+import { UserService } from '../../services/user.service';
 
 import { User } from '../../models/user';
 
@@ -24,18 +25,26 @@ import { User } from '../../models/user';
   styleUrls: ['./users-data.component.css'],
 })
 export class UsersDataComponent {
-  users: User[] = [
-    { id: 1, name: 'john_doe', email: 'john@example.com', role: 'admin' },
-    {
-      id: 2,
-      name: 'jane_doe',
-      email: 'jane@example.com',
-      role: 'user',
-      company: 'Tech Corp',
-    },
-  ];
+  users: User[] = [];
 
-  constructor(private dialog: MatDialog) {}
+  constructor(private dialog: MatDialog, private userService: UserService) {}
+
+  ngOnInit() {
+    this.fetchUsers();
+  }
+
+  fetchUsers() {
+    this.userService.getUsers().subscribe({
+      next: (users) => {
+        console.log('Fetched users:', users);
+        this.users = users;
+        console.log('Fetched users:', this.users);
+      },
+      error: (err) => {
+        console.error('Error fetching users:', err);
+      },
+    });
+  }
 
   openUpdateDialog(user: User) {
     if (!user) {
@@ -48,23 +57,31 @@ export class UsersDataComponent {
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        console.log('User updated:', result);
         this.onUpdate(result);
       }
     });
   }
 
   onUpdate(user: User) {
-    const index = this.users.findIndex((u) => u.id === user.id);
-    if (index !== -1) {
-      this.users[index] = { ...this.users[index], ...user };
-      console.log('Update user:', user);
-    }
+    this.userService.updateUser(user).subscribe({
+      next: () => {
+        this.fetchUsers();
+      },
+      error: (err) => {
+        console.error('Error updating user:', err);
+      },
+    });
   }
 
   onDelete(user: User) {
-    this.users = this.users.filter((u) => u.id !== user.id);
-    console.log('Delete user:', user);
+    this.userService.deleteUser(user.id).subscribe({
+      next: () => {
+        this.fetchUsers();
+      },
+      error: (err) => {
+        console.error('Error deleting user:', err);
+      },
+    });
   }
 
   trackByUserId(index: number, user: User): number {

@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { GeneralService } from './general.service';
 import { User } from '../models/user';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',

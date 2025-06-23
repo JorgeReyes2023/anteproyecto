@@ -1,6 +1,20 @@
 const prisma = require("../prisma");
 
 class UserModel {
+  static async getAllUsers() {
+    try {
+      const users = await prisma.users.findMany({
+        include: {
+          user_roles: true, // Include the user role information
+          companies: true, // Include the company information
+        },
+      });
+      return users;
+    } catch (error) {
+      throw new Error(`Error fetching users: ${error.message}`);
+    }
+  }
+
   static async createUser(username, email, password, role, company = null) {
     //get roleId from role name
     const roleId = await prisma.user_roles
@@ -61,20 +75,32 @@ class UserModel {
 
   static async updateUser(id, updates) {
     try {
-      const numericId = parseInt(id, 10);
-      if (isNaN(numericId)) {
-        throw new Error("Invalid user ID");
-      }
+      const data = { ...updates };
+
       const user = await prisma.users.update({
-        where: { id: numericId },
-        data: updates,
+        where: { id },
+        data,
         include: {
           user_roles: true,
+          companies: true,
         },
+      });
+
+      return user;
+    } catch (error) {
+      console.error(`Error al actualizar el usuario ${id}:`, error);
+      throw new Error(`Error al actualizar: ${error.message}`);
+    }
+  }
+
+  static async deleteUser(id) {
+    try {
+      const user = await prisma.users.delete({
+        where: { id: id },
       });
       return user;
     } catch (error) {
-      throw new Error(`Error updating user: ${error.message}`);
+      throw new Error(`Error deleting user: ${error.message}`);
     }
   }
 }
