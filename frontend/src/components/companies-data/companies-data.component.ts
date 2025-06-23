@@ -92,8 +92,17 @@ export class CompaniesDataComponent {
     if (index !== -1) {
       this.companies[index] = { ...this.companies[index], ...company };
       console.log('Update company:', company);
+      this.companyService.updateCompany(company).subscribe({
+        next: (response) => {
+          console.log('Company updated successfully:', response);
+        },
+        error: (error) => {
+          console.error('Error updating company:', error);
+        },
+      });
     }
   }
+  
   onDelete(company: { id: number }) {
     this.companies = this.companies.filter((c) => c.id !== company.id);
     console.log('Delete company:', company);

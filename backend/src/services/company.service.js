@@ -17,7 +17,8 @@ class CompanyService {
 
   static async updateCompany(id, name, address) {
     try {
-      return await CompanyModel.updateCompany(id, name, address);
+      const numberId = parseInt(id, 10);
+      return await CompanyModel.updateCompany(numberId, name, address);
     } catch (error) {
       throw new Error(`Error al actualizar la empresa: ${error.message}`);
     }
