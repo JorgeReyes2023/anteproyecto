@@ -28,8 +28,12 @@ export class AuthService {
       tap((response) => {
         if (typeof window !== 'undefined' && window.localStorage) {
           localStorage.setItem('token', response.token);
-          localStorage.setItem('user', JSON.stringify(response.user));
-          this.userSubject.next(response.user);
+          const userDto = {
+            ...response.user,
+            role: response.user.role.name,
+          };
+          localStorage.setItem('user', JSON.stringify(userDto));
+          this.userSubject.next(userDto);
         }
       })
     );

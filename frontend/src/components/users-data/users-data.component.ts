@@ -36,7 +36,9 @@ export class UsersDataComponent {
   fetchUsers() {
     this.userService.getUsers().subscribe({
       next: (users) => {
+        console.log('Fetched users:', users);
         this.users = users;
+        console.log('Fetched users:', this.users);
       },
       error: (err) => {
         console.error('Error fetching users:', err);
