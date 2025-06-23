@@ -1,5 +1,7 @@
 const { UserModel } = require("../models/user.model");
+const { RoleModel } = require("../models/role.model");
 const bcrypt = require("bcryptjs");
+const { CompanyModel } = require("../models/company.model");
 
 class UserService {
   static async getAllUsers() {
@@ -50,7 +52,37 @@ class UserService {
       if (!id || !updates) {
         throw new Error("User ID and updates are required");
       }
-      const user = await UserModel.updateUser(id, updates);
+
+      const numericId = parseInt(id, 10);
+
+      if (numericId !== updates.id) {
+        throw new Error("User ID in updates does not match the provided ID");
+      }
+
+      // delete id from updates to avoid conflicts
+      delete updates.id;
+
+      // check role
+      if (updates.role) {
+        const role = await RoleModel.getRoleByName(updates.role);
+        if (!role) {
+          throw new Error("Invalid role specified");
+        }
+        updates.user_roles = { connect: { id: role.id } };
+        delete updates.role; // Remove role from updates to avoid conflicts
+      }
+
+      // check company
+      if (updates.company) {
+        const company = await CompanyModel.getCompanyByName(updates.company);
+        if (!company) {
+          throw new Error("Company not found");
+        }
+        updates.companies = { connect: { id: company.id } };
+        delete updates.company; // Remove company from updates to avoid conflicts
+      }
+
+      const user = await UserModel.updateUser(numericId, updates);
       if (!user) {
         throw new Error("User not found or update failed");
       }

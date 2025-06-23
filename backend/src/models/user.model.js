@@ -75,20 +75,21 @@ class UserModel {
 
   static async updateUser(id, updates) {
     try {
-      const numericId = parseInt(id, 10);
-      if (isNaN(numericId)) {
-        throw new Error("Invalid user ID");
-      }
+      const data = { ...updates };
+
       const user = await prisma.users.update({
-        where: { id: numericId },
-        data: updates,
+        where: { id },
+        data,
         include: {
           user_roles: true,
+          companies: true,
         },
       });
+
       return user;
     } catch (error) {
-      throw new Error(`Error updating user: ${error.message}`);
+      console.error(`Error al actualizar el usuario ${id}:`, error);
+      throw new Error(`Error al actualizar: ${error.message}`);
     }
   }
 }

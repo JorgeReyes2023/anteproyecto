@@ -61,10 +61,14 @@ export class UsersDataComponent {
   }
 
   onUpdate(user: User) {
-    const index = this.users.findIndex((u) => u.id === user.id);
-    if (index !== -1) {
-      this.users[index] = { ...this.users[index], ...user };
-    }
+    this.userService.updateUser(user).subscribe({
+      next: () => {
+        this.fetchUsers();
+      },
+      error: (err) => {
+        console.error('Error updating user:', err);
+      },
+    });
   }
 
   onDelete(user: User) {

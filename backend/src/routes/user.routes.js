@@ -27,11 +27,15 @@ userRoutes.get("/:id", async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+
 // Ruta para actualizar un usuario
 userRoutes.put("/:id", async (req, res) => {
   try {
     const userId = req.params.id;
     const updates = req.body;
+
+    console.log("Updating user with ID:", userId);
+    console.log("Updates:", updates);
     if (!userId || !updates) {
       return res
         .status(400)
@@ -43,6 +47,7 @@ userRoutes.put("/:id", async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+
 // Ruta para eliminar un usuario
 userRoutes.delete("/:id", async (req, res) => {
   try {
