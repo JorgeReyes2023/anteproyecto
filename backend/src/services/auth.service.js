@@ -38,6 +38,7 @@ class AuthService {
         name: user.name,
         email: user.email,
         role: user.user_roles.name,
+        company: user.companies?.name || null,
       };
 
       // generar token
@@ -45,6 +46,7 @@ class AuthService {
         id: user.id,
         role: user.role,
         email: user.email,
+        company: user.company,
       });
 
       return { user: userDto, token };
@@ -53,7 +55,13 @@ class AuthService {
     }
   }
 
-  static async register(username, email, password, role = "user") {
+  static async register(
+    username,
+    email,
+    password,
+    role = "user",
+    company = null,
+  ) {
     try {
       const hashedPassword = await this.hashPassword(password);
       const user = await UserModel.createUser(
@@ -61,11 +69,13 @@ class AuthService {
         email,
         hashedPassword,
         role,
+        company,
       );
       const token = generateToken({
         id: user.id,
         role: user.role,
         email: user.email,
+        company: user.company,
       });
       return { user, token };
     } catch (error) {

@@ -15,6 +15,7 @@ import { AuthService } from '../../services/auth.service';
 import { GeneralService } from '../../services/general.service';
 import { AlertService } from '../../app/_alert/alert.service';
 import { User } from '../../models/user';
+import { NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-user-info',
@@ -25,6 +26,7 @@ import { User } from '../../models/user';
     MatInputModule,
     MatCardModule,
     MatButtonModule,
+    NgIf,
   ],
   templateUrl: './user-info.component.html',
   styleUrls: ['./user-info.component.css'],

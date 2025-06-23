@@ -1,39 +1,60 @@
-/* Estilos base para el contenedor de alertas */
-.alert-error {
-    background-color: #f8d7da;
-    color: #842029;
-    border: 1px solid #f5c2c7;
-    border-radius: 6px;
-    padding: 16px 40px 16px 16px;
-    margin-bottom: 16px;
-    position: relative;
-    font-size: 1rem;
-    box-shadow: 0 2px 8px rgba(220, 53, 69, 0.08);
-    display: flex;
-    align-items: center;
-    animation: fadeIn 0.3s;
+.alert-container {
+  margin-bottom: 16px;
+  position: relative;
 }
 
-/* Botón de cerrar */
-.btn-close {
-    position: absolute;
-    top: 12px;
-    right: 12px;
-    background: transparent;
-    border: none;
-    font-size: 1.2rem;
-    color: #842029;
-    cursor: pointer;
-    opacity: 0.7;
-    transition: opacity 0.2s;
+mat-card {
+  padding: 16px;
+  border-left: 5px solid transparent;
+  border-radius: 8px;
+  position: relative;
 }
 
-.btn-close:hover {
-    opacity: 1;
+.alert-success mat-card {
+  border-color: #4caf50;
+  background-color: #e8f5e9;
+  color: #1b5e20;
 }
 
-/* Animación de aparición */
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-10px);}
-    to { opacity: 1; transform: translateY(0);}
+.alert-danger mat-card {
+  border-color: #f44336;
+  background-color: #ffebee;
+  color: #b71c1c;
+}
+
+.alert-warning mat-card {
+  border-color: #ff9800;
+  background-color: #fff3e0;
+  color: #e65100;
+}
+
+.alert-info mat-card {
+  border-color: #2196f3;
+  background-color: #e3f2fd;
+  color: #0d47a1;
+}
+
+.close-button {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: transparent;
+  border: none;
+  color: #888;
+  font-size: 20px;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 50%;
+}
+
+.close-button:hover,
+.close-button:focus {
+  background: #f0f0f0;
+  color: #d32f2f;
+  outline: none;
+}
+
+.alert-message {
+  font-size: 14px;
+  line-height: 1.5;
 }

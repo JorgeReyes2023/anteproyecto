@@ -9,6 +9,9 @@
       <p>
         <strong>Correo electrónico:</strong> {{ user?.email || "Desconocido" }}
       </p>
+      <p *ngIf="user?.role === 'user'">
+        <strong>Compañía:</strong> {{ user?.company || "Desconocido" }}
+      </p>
     </mat-card-content>
   </mat-card>
 

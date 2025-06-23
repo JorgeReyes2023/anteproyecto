@@ -5,6 +5,7 @@ import { createUserComponent } from '../components/create-user/create-user.compo
 import { DashboardComponent } from '../components/dashboard/dashboard.component';
 import { UserInfoComponent } from '../components/user-info/user-info.component';
 import { UsersDataComponent } from '../components/users-data/users-data.component';
+import { CompaniesDataComponent } from '../components/companies-data/companies-data.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -28,6 +29,12 @@ export const routes: Routes = [
     component: UsersDataComponent,
     canActivate: [roleGuard(['admin'])],
   },
+  {
+    path: 'companies',
+    component: CompaniesDataComponent,
+    canActivate: [roleGuard(['admin'])],
+  },
+  // Redirects
   { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
   { path: '**', redirectTo: '/login' },
 ];
