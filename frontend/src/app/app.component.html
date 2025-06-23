@@ -21,21 +21,21 @@
           >Información del usuario</a
         >
         <a
-          *ngIf="user.role === 'admin'"
+          *ngIf="user.role.name === 'admin'"
           mat-list-item
           routerLink="/users"
           routerLinkActive="active"
           >Lista de usuarios</a
         >
         <a
-          *ngIf="user.role === 'admin'"
+          *ngIf="user.role.name === 'admin'"
           mat-list-item
           routerLink="/companies"
           routerLinkActive="active"
           >Companias</a
         >
         <a
-          *ngIf="user.role === 'admin'"
+          *ngIf="user.role.name === 'admin'"
           mat-list-item
           routerLink="/users/create"
           routerLinkActive="active"

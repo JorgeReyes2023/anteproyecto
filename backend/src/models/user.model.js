@@ -1,6 +1,20 @@
 const prisma = require("../prisma");
 
 class UserModel {
+  static async getAllUsers() {
+    try {
+      const users = await prisma.users.findMany({
+        include: {
+          user_roles: true, // Include the user role information
+          companies: true, // Include the company information
+        },
+      });
+      return users;
+    } catch (error) {
+      throw new Error(`Error fetching users: ${error.message}`);
+    }
+  }
+
   static async createUser(username, email, password, role, company = null) {
     //get roleId from role name
     const roleId = await prisma.user_roles

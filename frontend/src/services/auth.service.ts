@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { tap } from 'rxjs/operators';
 import { GeneralService } from './general.service';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { User } from '../models/user';
+import { User, UserCreate } from '../models/user';
 
 @Injectable({
   providedIn: 'root',
@@ -58,7 +58,7 @@ export class AuthService {
     return this.userSubject.value;
   }
 
-  register(user: Omit<User, 'id'>): Observable<User> {
+  register(user: UserCreate): Observable<User> {
     return this.generalService.postData('auth/register', user).pipe(
       tap((newUser) => {
         if (typeof window !== 'undefined' && window.localStorage) {

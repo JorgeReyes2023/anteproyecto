@@ -46,7 +46,7 @@
     <mat-form-field
       appearance="outline"
       class="w-100 mb-3"
-      *ngIf="localUser.role === 'user'"
+      *ngIf="localUser.role?.name === 'user'"
     >
       <mat-label>Compañía <span class="required"></span></mat-label>
       <input
@@ -61,7 +61,7 @@
       />
       <mat-error
         *ngIf="
-          localUser.role === 'user' &&
+          localUser.role?.name === 'user' &&
           updateUserForm.submitted &&
           !localUser.company
         "

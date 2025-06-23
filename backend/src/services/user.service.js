@@ -2,6 +2,21 @@ const { UserModel } = require("../models/user.model");
 const bcrypt = require("bcryptjs");
 
 class UserService {
+  static async getAllUsers() {
+    try {
+      const users = await UserModel.getAllUsers();
+      return users.map((user) => ({
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        role: user.user_roles.name,
+        company: user.companies?.name || null,
+      }));
+    } catch (error) {
+      throw new Error(`Error fetching users: ${error.message}`);
+    }
+  }
+
   static async getUserById(id) {
     try {
       if (!id) {

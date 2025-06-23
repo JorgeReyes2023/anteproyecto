@@ -4,6 +4,16 @@ const { AuthService } = require("../services/auth.service");
 
 const userRoutes = Router();
 
+// Ruta para obtener todos los usuarios
+userRoutes.get("/", async (req, res) => {
+  try {
+    const users = await UserService.getAllUsers();
+    res.status(200).json(users);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 // Ruta para obtener un usuario por ID
 userRoutes.get("/:id", async (req, res) => {
   try {

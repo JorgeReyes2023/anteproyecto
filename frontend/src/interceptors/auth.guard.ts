@@ -8,7 +8,7 @@ export const roleGuard = (allowedRoles: string[]): CanActivateFn => {
     const router = inject(Router);
     const user = auth.getCurrentUser();
 
-    if (!user || !allowedRoles.includes(user.role)) {
+    if (!user || !allowedRoles.includes(user.role.name)) {
       router.navigate(['/unauthorized']);
       return false;
     }

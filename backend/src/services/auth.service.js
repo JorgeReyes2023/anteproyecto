@@ -37,7 +37,7 @@ class AuthService {
         id: user.id,
         name: user.name,
         email: user.email,
-        role: user.user_roles.name,
+        role: user.user_roles,
         company: user.companies?.name || null,
       };
 
