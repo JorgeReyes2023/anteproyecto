@@ -28,9 +28,10 @@ export class AuthService {
       tap((response) => {
         if (typeof window !== 'undefined' && window.localStorage) {
           localStorage.setItem('token', response.token);
+          console.log(response);
           const userDto = {
             ...response.user,
-            role: response.user.role.name,
+            role: response.user.role,
           };
           localStorage.setItem('user', JSON.stringify(userDto));
           this.userSubject.next(userDto);

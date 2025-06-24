@@ -33,11 +33,12 @@ class AuthService {
         throw new Error("Invalid email or password");
       }
 
+      console.log("User found:", user);
       const userDto = {
         id: user.id,
         name: user.name,
         email: user.email,
-        role: user.role?.name || user.role,
+        role: user.user_roles?.name || user.user_roles,
         company: user.companies?.name || null,
       };
 
