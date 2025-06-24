@@ -50,6 +50,17 @@ async function main() {
     skipDuplicates: true
   });
 
+  await prisma.projects.createMany({
+    data: [
+    {
+        "name": "proyecto test",
+        "description": "dev data",
+        "company_id": 1
+    }
+],
+    skipDuplicates: true
+  });
+
   await prisma.nodes.createMany({
     data: [
     {
