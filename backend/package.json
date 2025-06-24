@@ -15,7 +15,8 @@
     "mqtt": "node src/mqtt/mqttServer.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "seed": "node prisma/seed.js",
-    "seed:generate": "node prisma/exportSeed.js"
+    "seed:generate": "node prisma/exportSeed.js",
+    "prisma:reset": "prisma migrate reset --force"
   },
   "keywords": [],
   "author": "",

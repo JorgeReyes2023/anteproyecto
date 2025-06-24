@@ -36,7 +36,6 @@ client.on("message", async (topic, message) => {
     const timestampMs = Number(data.timestamp) * 1000;
     const date = new Date(timestampMs);
 
-    // On exclut sensorId et timestamp pour traiter uniquement les valeurs
     const keys = Object.keys(data).filter(
       (k) => !["sensorId", "timestamp"].includes(k),
     );
@@ -48,24 +47,19 @@ client.on("message", async (topic, message) => {
         continue;
       }
 
-      // Vérifie ou crée le type de lecture (ex: "temperature", "humidity")
-      let readingType = await prisma.sensor_reading_types.findUnique({
+      let readingType = await prisma.sensor_reading_types.upsert({
         where: { name: key },
+        update: {},
+        create: {
+          name: key,
+          unit: "",
+          description: "",
+        },
       });
-
-      if (!readingType) {
-        // Par défaut, aucune unité ni description, à compléter manuellement plus tard
-        readingType = await prisma.sensor_reading_types.create({
-          data: {
-            name: key,
-            unit: "",
-            description: "",
-          },
-        });
+      if (readingType.createdAt === readingType.updatedAt) {
         console.log(`Nuevo tipo de lectura creado: ${key}`);
       }
 
-      // Enregistre la lecture
       await prisma.sensor_readings.create({
         data: {
           sensor_id: sensor.id,
