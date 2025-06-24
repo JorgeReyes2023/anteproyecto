@@ -33,7 +33,6 @@ class AuthService {
         throw new Error("Invalid email or password");
       }
 
-      console.log("User found:", user);
       const userDto = {
         id: user.id,
         name: user.name,
@@ -45,7 +44,7 @@ class AuthService {
       // generar token
       const token = generateToken({
         id: user.id,
-        role: user.role?.name || user.role,
+        role: user.user_roles?.name || user.user_roles,
         email: user.email,
         company: user.company,
       });

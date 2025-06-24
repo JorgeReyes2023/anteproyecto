@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
 import { MatListModule } from '@angular/material/list';
 import { FormsModule } from '@angular/forms';
@@ -26,8 +28,9 @@ import { AlertService } from '../../app/_alert/alert.service';
   templateUrl: './projects-data.component.html',
   styleUrls: ['./projects-data.component.css'],
 })
-export class ProjectsDataComponent {
+export class ProjectsDataComponent implements OnDestroy {
   projects: Project[] = [];
+  private destroy$ = new Subject<void>();
 
   constructor(
     private dialog: MatDialog,
@@ -38,17 +41,25 @@ export class ProjectsDataComponent {
     this.fetchProjects();
   }
 
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
   fetchProjects() {
-    this.projectService.getProjects().subscribe({
-      next: (projects) => {
-        console.log('Fetched projects:', projects);
-        this.projects = projects;
-      },
-      error: (err) => {
-        console.error('Error fetching projects:', err);
-        this.alertService.error('Failed to fetch projects');
-      },
-    });
+    this.projectService
+      .getProjects()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (projects) => {
+          console.log('Fetched projects:', projects);
+          this.projects = projects;
+        },
+        error: (err) => {
+          console.error('Error fetching projects:', err);
+          this.alertService.error('Failed to fetch projects');
+        },
+      });
   }
 
   openUpdateDialog(project: Project) {

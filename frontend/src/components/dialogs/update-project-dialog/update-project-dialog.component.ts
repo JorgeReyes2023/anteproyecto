@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm } from '@angular/forms';
 import {
@@ -28,18 +28,17 @@ import { CompanyService } from '../../../services/company.service';
   templateUrl: './update-project-dialog.component.html',
   styleUrl: './update-project-dialog.component.css',
 })
-export class UpdateProjectDialogComponent {
+export class UpdateProjectDialogComponent implements OnInit {
   localProject: Project;
   companies: Company[] = [];
 
   constructor(
     public dialogRef: MatDialogRef<UpdateProjectDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public project: Project,
-    private CompanyService: CompanyService
+    private companyService: CompanyService
   ) {
     // shallow copy – use structuredClone for deep copy if nested objects exist
     this.localProject = { ...project };
-    console.log('Project data received:', this.localProject);
   }
 
   ngOnInit() {
@@ -47,7 +46,7 @@ export class UpdateProjectDialogComponent {
   }
 
   fetchCompanies() {
-    this.CompanyService.getCompanies().subscribe({
+    this.companyService.getCompanies().subscribe({
       next: (companies) => {
         this.companies = companies;
       },

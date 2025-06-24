@@ -7,5 +7,5 @@ export interface Threshold {
   type?: string;
   minValue: number;
   maxValue: number;
-  sensors?: Sensor[];
+  sensor: Sensor;
 }

@@ -13,7 +13,7 @@ export class ProjectService {
     return this.gService.getData('projects');
   }
 
-  getProjectById(id: number | string) {
+  getProjectById(id: number) {
     return this.gService.getData(`projects/${id}`);
   }
 
@@ -21,7 +21,7 @@ export class ProjectService {
     return this.gService.postData(`projects`, project);
   }
 
-  updateProject(id: number | string, project: Project) {
+  updateProject(id: number, project: Project) {
     return this.gService.putData(`projects/${id}`, project);
   }
 
