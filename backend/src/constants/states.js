@@ -5,4 +5,4 @@ const State = {
   ERROR: "error",
 };
 
-module.exports = State;
+module.exports = { State };
