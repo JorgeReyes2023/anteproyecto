@@ -54,11 +54,12 @@ model projects {
 }
 
 model sensor_reading_types {
-  id       Int               @id @default(autoincrement())
-  name     String            @unique @db.VarChar(50)
-  unit     String            @db.VarChar(20)
-  description String? @db.VarChar(255)       
-  readings sensor_readings[]                       
+  id          Int               @id @default(autoincrement())
+  name        String            @unique @db.VarChar(50)
+  unit        String            @db.VarChar(20)
+  description String?           @db.VarChar(255)       
+  readings    sensor_readings[]
+  thresholds  thresholds[]     
 }
 
 model sensor_readings {
@@ -89,10 +90,14 @@ model sensors {
 model thresholds {
   id        Int      @id @default(autoincrement())
   sensor_id Int
+  type_id   Int
   min_value Float?
   max_value Float?
-  sensors   sensors? @relation(fields: [sensor_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  sensors   sensors?              @relation(fields: [sensor_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  sensor_reading_types sensor_reading_types @relation(fields: [type_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
+
 
 model user_roles {
   id          Int     @id @default(autoincrement())
