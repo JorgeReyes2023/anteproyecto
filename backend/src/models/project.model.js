@@ -36,7 +36,12 @@ class ProjectModel {
 
   static async getAllProjects() {
     try {
-      const projects = await prisma.projects.findMany();
+      const projects = await prisma.projects.findMany({
+        include: {
+          nodes: true,
+          companies: true,
+        },
+      });
       return projects;
     } catch (error) {
       throw new Error(`Error fetching projects: ${error.message}`);

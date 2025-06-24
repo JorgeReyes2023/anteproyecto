@@ -8,6 +8,7 @@ import { MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { ProjectService } from '../../services/project.service';
 import { Project } from '../../models/project';
 // add dialogs
+import { UpdateProjectDialogComponent } from '../dialogs/update-project-dialog/update-project-dialog.component';
 
 import { AlertService } from '../../app/_alert/alert.service';
 
@@ -54,11 +55,11 @@ export class ProjectsDataComponent {
   }
 
   openUpdateDialog(project: Project) {
-    /*if (!project) {
+    if (!project) {
       console.error('No project data provided for update dialog');
       return;
     }
-    const dialogRef = this.dialog.open(UpdateProjectComponent, {
+    const dialogRef = this.dialog.open(UpdateProjectDialogComponent, {
       data: { ...project },
     });
 
@@ -66,7 +67,7 @@ export class ProjectsDataComponent {
       if (result) {
         this.onUpdate(result);
       }
-    });*/
+    });
   }
 
   onUpdate(project: Project) {
