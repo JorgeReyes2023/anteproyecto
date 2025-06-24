@@ -6,7 +6,7 @@ class ProjectModel {
       data: {
         name: name,
         description: description,
-        companyId: companyId,
+        company_id: companyId,
         nodes: {
           create: nodes,
         },
@@ -20,7 +20,7 @@ class ProjectModel {
       data: {
         name: name,
         description: description,
-        companyId: companyId,
+        company_id: companyId,
         nodes: {
           create: nodes,
         },
@@ -36,7 +36,12 @@ class ProjectModel {
 
   static async getAllProjects() {
     try {
-      const projects = await prisma.projects.findMany();
+      const projects = await prisma.projects.findMany({
+        include: {
+          nodes: true,
+          companies: true,
+        },
+      });
       return projects;
     } catch (error) {
       throw new Error(`Error fetching projects: ${error.message}`);
@@ -56,7 +61,7 @@ class ProjectModel {
 
   static async getProjectByName(name) {
     try {
-      const project = await prisma.projects.findUnique({
+      const project = await prisma.projects.findFirst({
         where: { name: name },
       });
       return project;

@@ -28,9 +28,10 @@ export class AuthService {
       tap((response) => {
         if (typeof window !== 'undefined' && window.localStorage) {
           localStorage.setItem('token', response.token);
+          console.log(response);
           const userDto = {
             ...response.user,
-            role: response.user.role.name,
+            role: response.user.role,
           };
           localStorage.setItem('user', JSON.stringify(userDto));
           this.userSubject.next(userDto);
@@ -63,13 +64,6 @@ export class AuthService {
   }
 
   register(user: UserCreate): Observable<User> {
-    return this.generalService.postData('auth/register', user).pipe(
-      tap((newUser) => {
-        if (typeof window !== 'undefined' && window.localStorage) {
-          localStorage.setItem('user', JSON.stringify(newUser));
-          this.userSubject.next(newUser);
-        }
-      })
-    );
+    return this.generalService.postData('auth/register', user);
   }
 }

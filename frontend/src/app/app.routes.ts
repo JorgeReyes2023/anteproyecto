@@ -6,6 +6,7 @@ import { DashboardComponent } from '../components/dashboard/dashboard.component'
 import { UserInfoComponent } from '../components/user-info/user-info.component';
 import { UsersDataComponent } from '../components/users-data/users-data.component';
 import { CompaniesDataComponent } from '../components/companies-data/companies-data.component';
+import { ProjectsDataComponent } from '../components/projects-data/projects-data.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -32,6 +33,11 @@ export const routes: Routes = [
   {
     path: 'companies',
     component: CompaniesDataComponent,
+    canActivate: [roleGuard(['admin'])],
+  },
+  {
+    path: 'projects',
+    component: ProjectsDataComponent,
     canActivate: [roleGuard(['admin'])],
   },
   // Redirects

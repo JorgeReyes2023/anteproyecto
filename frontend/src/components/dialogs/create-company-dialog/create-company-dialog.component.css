@@ -29,7 +29,7 @@ mat-dialog-actions button + button {
 }
 
 @media (max-width: 500px) {
-  .update-user-dialog {
+  .create-company-dialog {
     min-width: 100%;
     padding: 12px;
   }

@@ -25,14 +25,21 @@
           mat-list-item
           routerLink="/users"
           routerLinkActive="active"
-          >Lista de usuarios</a
+          >Usuarios</a
         >
         <a
           *ngIf="user.role === 'admin'"
           mat-list-item
           routerLink="/companies"
           routerLinkActive="active"
-          >Companias</a
+          >Empresas</a
+        >
+        <a
+          *ngIf="user.role === 'admin'"
+          mat-list-item
+          routerLink="/projects"
+          routerLinkActive="active"
+          >Proyectos</a
         >
         <a
           *ngIf="user.role === 'admin'"

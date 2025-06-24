@@ -7,7 +7,7 @@ const projectRoutes = Router();
 projectRoutes.post("/", async (req, res) => {
   try {
     const { name, description, companyId, nodes } = req.body;
-    if (!name || !description || !companyId) {
+    if (!name) {
       return res.status(400).json({ error: "Faltan datos requeridos" });
     }
     const project = await ProjectService.createProject(
@@ -26,7 +26,7 @@ projectRoutes.put("/:id", async (req, res) => {
   try {
     const { id } = req.params;
     const { name, description, companyId, nodes } = req.body;
-    if (!name || !description || !companyId) {
+    if (!name) {
       return res.status(400).json({ error: "Faltan datos requeridos" });
     }
     const project = await ProjectService.updateProject(
