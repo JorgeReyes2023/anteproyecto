@@ -48,8 +48,7 @@ client.on("message", async (topic, message) => {
       data: {
         sensor_id: sensor.id,
         timestamp: date,
-        temperature: data.temperature,
-        humidity: data.humidity,
+        value: data.value, // Asegúrate de que 'value' sea el campo correcto
       },
     });
 
