@@ -1,5 +1,6 @@
 const { PrismaClient } = require("@prisma/client");
 const fs = require("fs");
+const { sensor_reading_types, nodes, thresholds } = require("../src/prisma");
 const prisma = new PrismaClient();
 
 async function main() {
@@ -11,6 +12,9 @@ async function main() {
     nodes: await prisma.nodes.findMany(),
     sensors: await prisma.sensors.findMany(),
     sensor_readings: await prisma.sensor_readings.findMany(),
+    sensor_reading_types: await prisma.sensor_reading_types.findMany(),
+    nodes: await prisma.nodes.findMany(),
+    thresholds: await prisma.thresholds.findMany(),
   };
 
   const lines = [];
