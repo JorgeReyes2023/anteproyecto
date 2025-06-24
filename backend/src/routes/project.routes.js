@@ -10,6 +10,7 @@ projectRoutes.post("/", async (req, res) => {
     if (!name) {
       return res.status(400).json({ error: "Faltan datos requeridos" });
     }
+    console.log(req.body);
     const project = await ProjectService.createProject(
       name,
       description,

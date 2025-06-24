@@ -16,7 +16,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "seed": "node prisma/seed.js",
     "seed:generate": "node prisma/exportSeed.js",
-    "prisma:reset": "prisma migrate reset --force"
+    "prisma:reset": "prisma migrate reset --force",
+    "doc": "jsdoc -c jsdoc.json"
   },
   "keywords": [],
   "author": "",
@@ -39,8 +40,11 @@
     "eslint-config-prettier": "^10.1.5",
     "eslint-plugin-prettier": "^5.4.1",
     "globals": "^16.2.0",
+    "jsdoc": "^4.0.4",
+    "minami": "^1.2.3",
     "nodemon": "^3.1.10",
     "prettier": "^3.5.3",
-    "prisma": "^6.10.1"
+    "prisma": "^6.10.1",
+    "taffydb": "^2.7.3"
   }
 }
