@@ -20,7 +20,7 @@ class ProjectModel {
       data: {
         name: name,
         description: description,
-        companyId: companyId,
+        company_id: companyId,
         nodes: {
           create: nodes,
         },

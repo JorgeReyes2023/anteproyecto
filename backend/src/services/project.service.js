@@ -19,13 +19,18 @@ class ProjectService {
     }
   }
 
-  static async updateProject(id, name, description, companyId, nodes = []) {
+  static async updateProject(id, name, description, company_id, nodes = []) {
     try {
+      const numberId = parseInt(id, 10);
+      if (isNaN(numberId)) {
+        throw new Error("El ID del proyecto debe ser un número válido");
+      }
+
       return await ProjectModel.updateProject(
-        id,
+        numberId,
         name,
         description,
-        companyId,
+        company_id,
         nodes,
       );
     } catch (error) {

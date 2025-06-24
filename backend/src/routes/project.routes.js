@@ -25,15 +25,15 @@ projectRoutes.post("/", async (req, res) => {
 projectRoutes.put("/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    const { name, description, companyId, nodes } = req.body;
-    if (!name || !description || !companyId) {
+    const { name, description, company_id, nodes } = req.body;
+    if (!name || !description || !company_id) {
       return res.status(400).json({ error: "Faltan datos requeridos" });
     }
     const project = await ProjectService.updateProject(
       id,
       name,
       description,
-      companyId,
+      company_id,
       nodes,
     );
     res.status(200).json(project);
