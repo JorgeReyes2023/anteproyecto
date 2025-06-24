@@ -1,10 +1,13 @@
 const { ProjectModel } = require("../models/project.model");
-const { projectSchema } = require("../validators/project.validator");
+const {
+  projectSchema,
+  deleteProjectSchema,
+} = require("../validators/project.validator");
 
 /**
  * @typedef {Object} NodeInput
  * @property {number} id - ID del nodo.
- * @property {string} [name] - Nombre opcional del nodo.
+ * @property {string} [name] - Nombre del nodo.
  */
 
 /**
@@ -100,7 +103,13 @@ class ProjectService {
    */
   static async deleteProject(id) {
     try {
-      return await ProjectModel.deleteProject(id);
+      const { value, error } = deleteProjectSchema.validate(
+        { id },
+        { convert: true },
+      );
+
+      if (error) throw new Error(`Datos inválidos: ${error.message}`);
+      return await ProjectModel.deleteProject(value.id);
     } catch (error) {
       throw new Error(`Error al eliminar el proyecto: ${error.message}`);
     }

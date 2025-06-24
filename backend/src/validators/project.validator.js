@@ -10,4 +10,8 @@ const projectSchema = Joi.object({
   nodes: Joi.array().items(nodeSchema).default([]),
 });
 
-module.exports = { projectSchema };
+const deleteProjectSchema = Joi.object({
+  id: Joi.number().required(),
+});
+
+module.exports = { projectSchema , deleteProjectSchema };
