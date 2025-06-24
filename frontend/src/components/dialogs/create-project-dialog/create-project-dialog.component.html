@@ -1,14 +1,14 @@
-<h2 mat-dialog-title>Actualizar proyecto</h2>
+<h2 mat-dialog-title>Crear proyecto</h2>
 
 <mat-dialog-content>
   <form
-    #updateProjectForm="ngForm"
-    (ngSubmit)="onSubmit(updateProjectForm)"
+    #createProjectForm="ngForm"
+    (ngSubmit)="onSubmit(createProjectForm)"
     autocomplete="off"
   >
-    <!-- Nombre -->
+    <!-- Nombre del proyecto -->
     <mat-form-field appearance="outline" class="w-100 mb-3">
-      <mat-label>Nombre <span class="required"></span></mat-label>
+      <mat-label>Nombre del proyecto <span class="required"></span></mat-label>
       <input
         matInput
         id="name"
@@ -16,51 +16,51 @@
         type="text"
         [(ngModel)]="localProject.name"
         required
-        placeholder="Ej. juanperez"
+        placeholder="Ej. Nuevo Sistema"
         autocomplete="off"
       />
-      <mat-error *ngIf="updateProjectForm.submitted && !localProject.name"
-        >El nombre de proyecto es obligatorio</mat-error
+      <mat-error *ngIf="createProjectForm.submitted && !localProject.name"
+        >El nombre del proyecto es obligatorio</mat-error
       >
     </mat-form-field>
 
-    <!-- description -->
+    <!-- Descripción del proyecto -->
     <mat-form-field appearance="outline" class="w-100 mb-3">
-      <mat-label>Descripcion <span></span></mat-label>
-      <input
+      <mat-label>Descripción</mat-label>
+      <textarea
         matInput
         id="description"
         name="description"
-        type="text"
         [(ngModel)]="localProject.description"
-        placeholder="Ej. Proyecto de prueba"
+        placeholder="Describe el proyecto"
         autocomplete="off"
-      />
+        rows="3"
+      ></textarea>
     </mat-form-field>
 
-    <!-- Company -->
+    <!-- Selección de empresa (opcional) -->
     <mat-form-field appearance="outline" class="w-100 mb-3">
-      <mat-label>Compañia</mat-label>
+      <mat-label>Empresa</mat-label>
       <mat-select
         id="company"
         name="company"
         [(ngModel)]="localProject.companyId"
       >
-        <mat-option
-          *ngFor="let company of companies; trackBy: trackByCompanyId"
-          [value]="company.id"
-        >
+        <mat-option [value]="null">Sin empresa</mat-option>
+        <mat-option *ngFor="let company of companies" [value]="company.id">
           {{ company.name }}
         </mat-option>
       </mat-select>
     </mat-form-field>
+
+    <!-- Actions -->
     <mat-dialog-actions align="end">
       <button
         mat-stroked-button
         color="warn"
         type="button"
         (click)="onCancel()"
-        aria-label="Cancelar edición"
+        aria-label="Cancelar"
       >
         Cancelar
       </button>
@@ -68,10 +68,10 @@
         mat-flat-button
         color="primary"
         type="submit"
-        [disabled]="!updateProjectForm.form.valid"
-        aria-label="Actualizar proyecto"
+        [disabled]="!createProjectForm.form.valid"
+        aria-label="Crear proyecto"
       >
-        Actualizar
+        Crear
       </button>
     </mat-dialog-actions>
   </form>

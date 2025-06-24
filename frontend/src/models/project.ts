@@ -5,7 +5,7 @@ export interface Project {
   id: number;
   name: string;
   description?: string;
-  company_id?: number;
-  companies?: Company;
+  companyId?: number;
+  company?: Company;
   nodes?: Node[];
 }

@@ -1,3 +1,17 @@
+<div
+  style="
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 16px;
+    margin-right: 16px;
+  "
+>
+  <button mat-raised-button color="primary" (click)="openCreateDialog()">
+    Crear proyecto
+    <mat-icon>add</mat-icon>
+  </button>
+</div>
+
 <mat-list>
   <!-- headers -->
   <mat-list-item class="header-row">
@@ -15,7 +29,7 @@
     <div class="project-info-row">
       <span>{{ project.name }}</span>
       <span>{{ project.description }}</span>
-      <span>{{ project.companies?.name }}</span>
+      <span>{{ project.company?.name }}</span>
       <span>
         <ng-container
           *ngIf="project.nodes && project.nodes.length > 0; else noNodes"

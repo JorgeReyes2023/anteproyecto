@@ -9,6 +9,7 @@ import { ProjectService } from '../../services/project.service';
 import { Project } from '../../models/project';
 // add dialogs
 import { UpdateProjectDialogComponent } from '../dialogs/update-project-dialog/update-project-dialog.component';
+import { CreateProjectDialogComponent } from '../dialogs/create-project-dialog/create-project-dialog.component';
 
 import { AlertService } from '../../app/_alert/alert.service';
 
@@ -42,10 +43,6 @@ export class ProjectsDataComponent {
       next: (projects) => {
         console.log('Fetched projects:', projects);
         this.projects = projects;
-        console.log(
-          'Fetched projects companies:',
-          this.projects[0]?.companies?.name
-        );
       },
       error: (err) => {
         console.error('Error fetching projects:', err);
@@ -67,6 +64,34 @@ export class ProjectsDataComponent {
       if (result) {
         this.onUpdate(result);
       }
+    });
+  }
+
+  openCreateDialog() {
+    const dialogRef = this.dialog.open(CreateProjectDialogComponent, {
+      data: { name: '', description: '', companies: [] }, // Default values for a new project
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result) {
+        this.onCreate(result);
+      }
+    });
+  }
+
+  onCreate(project: Project) {
+    if (!project) {
+      console.error('No project data provided for creation');
+      return;
+    }
+    this.projectService.createProject(project).subscribe({
+      next: () => {
+        this.alertService.success('Project created successfully');
+        this.fetchProjects();
+      },
+      error: (err) => {
+        console.error('Error creating project:', err);
+        this.alertService.error('Failed to create project');
+      },
     });
   }
 

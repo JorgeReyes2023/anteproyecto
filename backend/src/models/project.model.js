@@ -61,7 +61,7 @@ class ProjectModel {
 
   static async getProjectByName(name) {
     try {
-      const project = await prisma.projects.findUnique({
+      const project = await prisma.projects.findFirst({
         where: { name: name },
       });
       return project;

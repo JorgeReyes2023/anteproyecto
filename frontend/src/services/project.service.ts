@@ -18,7 +18,7 @@ export class ProjectService {
   }
 
   createProject(project: Project) {
-    return this.gService.postData('projects', project);
+    return this.gService.postData(`projects`, project);
   }
 
   updateProject(id: number | string, project: Project) {
