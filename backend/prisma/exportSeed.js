@@ -34,7 +34,7 @@ async function main() {
   lines.push(`async function main() {`);
 
   // 📥 Insertamos los datos extraídos
-  lines.push(`\n  // 📥 Inserción de datos`);
+  lines.push(`\n  // Inserción de datos`);
   for (const [table, rows] of Object.entries(tables)) {
     if (!rows || rows.length === 0) continue;
     lines.push(`  await prisma.${table}.createMany({`);
@@ -43,18 +43,16 @@ async function main() {
     lines.push(`  });\n`);
   }
 
-  // ✅ Mensaje de éxito
-  lines.push(`  console.log("✅ Base de datos reinicializada con éxito");`);
+  // Mensaje de éxito
+  lines.push(`  console.log("Base de datos reinicializada con éxito");`);
   lines.push(`}\n`);
   lines.push(
     `main().catch(console.error).finally(() => prisma.$disconnect());`,
   );
 
-  // 💾 Escribimos el archivo
+  // Escribimos el archivo
   fs.writeFileSync("prisma/seed.js", lines.join("\n"));
-  console.log(
-    "📦 Archivo seed.js generado con eliminación automática incluida",
-  );
+  console.log("Archivo seed.js generado con eliminación automática incluida");
 }
 
 main();
