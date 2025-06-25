@@ -9,7 +9,7 @@
 
 .project-info-row span {
   font-size: 14px;
-  color: var(--md-sys-color-on-surface);
+  color: var(--accent-color);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -23,14 +23,14 @@
 }
 
 .header-row {
-  background-color: var(--md-sys-color-background);
+  background-color: var(--background-color);
   font-weight: bold;
   border-bottom: 2px solid #ddd;
 }
 
 .header span {
   font-weight: 600;
-  color: var(--md-sys-color-on-surface-variant, #666);
+  color: var(--primary-color);
 }
 
 .actions-header {

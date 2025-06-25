@@ -2,19 +2,65 @@
 
 @include mat.core();
 
-$custom-primary: mat.m2-define-palette(
-  mat.$m2-indigo-palette,
-  A400,
-  A100,
-  A700
+// === Fountain Blue Palette ===
+$fountain-blue-palette: (
+  50: #f0fbfa,
+  100: #d8f4f5,
+  200: #b6e9eb,
+  300: #84d9dc,
+  400: #4abfc6,
+  500: #33b2bb,
+  600: #2a8490,
+  700: #286b76,
+  800: #285962,
+  900: #254b54,
+  A100: #d8f4f5,
+  A200: #84d9dc,
+  A400: #4abfc6,
+  A700: #2a8490,
+  contrast: (
+    50: #000,
+    100: #000,
+    200: #000,
+    300: #000,
+    400: #000,
+    500: #fff,
+    600: #fff,
+    700: #fff,
+    800: #fff,
+    900: #fff,
+    A100: #000,
+    A200: #000,
+    A400: #000,
+    A700: #fff,
+  ),
 );
-$custom-accent: mat.m2-define-palette(mat.$m2-blue-palette, A200, A100, A400);
-$custom-warn: mat.m2-define-palette(mat.$m2-red-palette, A400);
+// Usa tu paleta personalizada como color primario
+$custom-primary: mat.m2-define-palette($fountain-blue-palette, 500, 100, 700);
+$custom-primary-light: mat.m2-define-palette(
+  $fountain-blue-palette,
+  200,
+  100,
+  700
+);
+$custom-primary-contrast: mat.m2-define-palette(
+  $fountain-blue-palette,
+  900,
+  100,
+  700
+);
+$custom-secondary: mat.m2-define-palette($fountain-blue-palette, 300, 100, 700);
+$custom-accent: mat.m2-define-palette($fountain-blue-palette, 400, 100, 700);
+$custom-warn: mat.m2-define-palette($fountain-blue-palette, 600, 100, 700);
 
+// Define el tema con tu nueva paleta
 $custom-theme: mat.m2-define-light-theme(
   (
     color: (
       primary: $custom-primary,
+      primary-light: $custom-primary-light,
+      primary-contrast: $custom-primary-contrast,
+      secondary: $custom-secondary,
       accent: $custom-accent,
       warn: $custom-warn,
     ),
@@ -23,13 +69,17 @@ $custom-theme: mat.m2-define-light-theme(
   )
 );
 
+// Aplica el tema globalmente
 @include mat.all-component-themes($custom-theme);
 
 :root {
   --primary-color: #{mat.m2-get-color-from-palette($custom-primary)};
+  --primary-color-light: #{mat.m2-get-color-from-palette($custom-primary, 100)};
+  --primary-color-dark: #{mat.m2-get-color-from-palette($custom-primary, 700)};
   --accent-color: #{mat.m2-get-color-from-palette($custom-accent)};
   --warn-color: #{mat.m2-get-color-from-palette($custom-warn)};
-  --background-color: #f7f9fc;
+  --background-color: #{mat.m2-get-color-from-palette($custom-primary, 100)};
+  --surface-color: #ffffff;
   --text-color: #1a1a1a;
 }
 
@@ -75,6 +125,7 @@ body {
 
 .mat-card {
   margin: 16px;
+  background: #285962;
   padding: 16px;
   border-radius: 12px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
@@ -105,7 +156,7 @@ body {
 }
 
 mat-list {
-  background-color: var(--md-sys-color-surface);
+  background-color: var(--surface-color);
   border-radius: 8px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }

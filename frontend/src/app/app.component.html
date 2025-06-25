@@ -1,6 +1,6 @@
 <!-- Barra de presentación ARRIBA -->
 <div class="presentation-banner mat-elevation-z2">
-  <h2>Presentación de la página</h2>
+  <h2>NODALIS</h2>
   <p>
     Bienvenido a esta página. Aquí encontrará una visión general e información
     importante sobre la aplicación.
@@ -10,7 +10,7 @@
 <!-- Layout Angular Material -->
 <mat-sidenav-container opened class="main-container">
   <!-- Sidebar -->
-  <mat-sidenav mode="side" opened class="sidenav">
+  <mat-sidenav mode="side" opened class="sidenav" *ngIf="user$ | async as user">
     <mat-toolbar color="primary">Navegación</mat-toolbar>
     <mat-nav-list>
       <ng-container *ngIf="user$ | async as user; else guest">
@@ -61,9 +61,6 @@
       <ng-template #guest>
         <a mat-list-item routerLink="/login" routerLinkActive="active"
           >Iniciar sesión</a
-        >
-        <a mat-list-item routerLink="/register" routerLinkActive="active"
-          >Registrarse</a
         >
       </ng-template>
     </mat-nav-list>
