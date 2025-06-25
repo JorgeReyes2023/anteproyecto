@@ -38,6 +38,24 @@
       ></textarea>
     </mat-form-field>
 
+    <!-- Proyecto - lista des proyectos -->
+    <mat-form-field appearance="outline" class="w-100 mb-3">
+      <mat-label>Proyecto</mat-label>
+      <mat-select
+        id="project"
+        name="project"
+        [(ngModel)]="localNode.project"
+        required
+      >
+        <mat-option *ngFor="let project of projects" [value]="project.id">
+          {{ project.name }}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="updateNodeForm.submitted && !localNode.project">
+        El proyecto es obligatorio
+      </mat-error>
+    </mat-form-field>
+
     <!-- Actions -->
     <mat-dialog-actions align="end">
       <button

@@ -6,13 +6,14 @@
 </div>
 
 <mat-list>
-  <!-- Headers-->
+  <!-- Headers -->
   <mat-list-item class="header-row">
     <div class="node-info-row header">
       <span>Nombre</span>
       <span>Ubicación</span>
       <span>Estado</span>
       <span>Proyecto</span>
+      <span>Sensores</span>
       <span class="actions-header">Acciones</span>
     </div>
   </mat-list-item>
@@ -20,15 +21,42 @@
   <!-- Data -->
   <mat-list-item *ngFor="let node of nodes; trackBy: trackByNodeId">
     <div class="node-info-row">
+      <!-- Nom -->
       <span>{{ node.name }}</span>
+
+      <!-- Localisation -->
       <span>{{ node.location || "Sin ubicación" }}</span>
-      <span style="display: flex; align-items: center; gap: 6px">
+
+      <!-- Statut avec icône -->
+      <span class="status-cell">
         <mat-icon [color]="getStatusColor(node.status)">
           {{ getStatusIcon(node.status) }}
         </mat-icon>
         {{ node.status | titlecase }}
       </span>
-      <span>{{ node.project?.name || "Sin proyecto" }}</span>
+
+      <!-- Projet -->
+      <span>
+        <ng-container *ngIf="hasProject(node); else noProject">
+          {{ node.project.name }}
+        </ng-container>
+        <ng-template #noProject>
+          <span class="text-no-data">Sin proyecto</span>
+        </ng-template>
+      </span>
+      <!-- Liste des capteurs -->
+      <span>
+        <ng-container *ngIf="hasSensors(node); else noSensors">
+          <ul class="sensor-list">
+            <li *ngFor="let sensor of node.sensors">{{ sensor.name }}</li>
+          </ul>
+        </ng-container>
+        <ng-template #noSensors>
+          <span class="text-no-data">Sin sensores</span>
+        </ng-template>
+      </span>
+
+      <!-- Actions -->
       <span class="actions">
         <button
           mat-icon-button

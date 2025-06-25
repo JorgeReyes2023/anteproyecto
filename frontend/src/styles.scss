@@ -83,6 +83,14 @@ $custom-theme: mat.m2-define-light-theme(
   --text-color: #1a1a1a;
 }
 
+.text-no-data {
+  color: #888;
+  font-size: 15px;
+  text-align: center;
+  margin-top: 20px;
+  font-style: italic;
+}
+
 app-root {
   min-height: 100vh;
   display: flex;
@@ -176,3 +184,39 @@ mat-list-item:last-child {
   margin-bottom: 16px;
   margin-right: 16px;
 }
+
+@mixin flexible-mat-list-items {
+  .mat-mdc-list-item,
+  .mat-mdc-list-option {
+    min-height: unset !important;
+    height: auto !important;
+
+    align-items: flex-start !important;
+
+    padding-top: 12px;
+    padding-bottom: 12px;
+
+    .mdc-list-item__content {
+      height: auto !important;
+      white-space: normal;
+      word-break: break-word;
+    }
+  }
+
+  .mat-list-item,
+  .mat-list-option {
+    min-height: unset !important;
+    height: auto !important;
+    align-items: flex-start !important;
+    padding-top: 12px;
+    padding-bottom: 12px;
+
+    .mat-list-item-content {
+      height: auto !important;
+      white-space: normal;
+      word-break: break-word;
+    }
+  }
+}
+
+@include flexible-mat-list-items();

@@ -37,7 +37,13 @@ class NodeService {
     try {
       const { value, error } = nodeSchemaId.validate({ id }, { convert: true });
       if (error) throw new Error(`Error de validación: ${error.message}`);
-      return await NodeModel.getNodeById(value.id);
+      const node = await NodeModel.getNodeById(value.id);
+      return {
+        ...node,
+        status: State[node.status], // Convertir el estado a un valor del enum State
+        projectId: node.project_id, // Asegurarse de que projectId esté presente
+        project: node.projects || [], // Asegurarse de que projects esté presente
+      };
     } catch (error) {
       throw new Error(`Error al obtener el nodo: ${error.message}`);
     }
@@ -68,6 +74,8 @@ class NodeService {
       return {
         ...node,
         status: State[node.status], // Convertir el estado a un valor del enum State
+        projectId: node.project_id, // Asegurarse de que projectId esté presente
+        project: node.projects || [], // Asegurarse de que projects esté presente
       };
     } catch (error) {
       throw new Error(`Error al actualizar el nodo: ${error.message}`);
@@ -91,6 +99,8 @@ class NodeService {
       return nodes.map((node) => ({
         ...node,
         status: State[node.status],
+        projectId: node.project_id, // Asegurarse de que projectId esté presente
+        project: node.projects || [], // Asegurarse de que projects esté presente
       }));
     } catch (error) {
       throw new Error(`Error al obtener los nodos: ${error.message}`);

@@ -11,7 +11,10 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 
+import { ProjectService } from '../../../services/project.service';
+
 import { Node } from '../../../models/node';
+import { Project } from '../../../models/project';
 
 @Component({
   selector: 'app-update-node-dialog',
@@ -29,15 +32,28 @@ import { Node } from '../../../models/node';
 })
 export class UpdateNodeDialogComponent {
   localNode: Node;
+  projects: Project[] = [];
 
   constructor(
     public dialogRef: MatDialogRef<UpdateNodeDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public node: Node
+    @Inject(MAT_DIALOG_DATA) public node: Node,
+    private projectService: ProjectService
   ) {
     // shallow copy – use structuredClone for deep copy if nested objects exist
     this.localNode = { ...node };
-    console.log('UpdateNodeDialogComponent initialized with node:', node);
-    console.log('localNode:', this.localNode);
+    this.fetchData();
+  }
+
+  fetchData() {
+    this.projectService.getProjects().subscribe({
+      next: (projects) => {
+        this.projects = projects;
+        console.log('Projects fetched:', this.projects);
+      },
+      error: (error) => {
+        console.error('Error fetching projects:', error);
+      },
+    });
   }
 
   onCancel() {

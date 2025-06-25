@@ -132,6 +132,15 @@ export class NodesDataComponent implements OnDestroy {
     return node.id; // Assuming each node has a unique 'id' property
   }
 
+  hasSensors(node: Node): boolean {
+    return node.sensors && node.sensors.length > 0;
+  }
+
+  hasProject(node: Node): boolean {
+    console.log('Checking if node has project:', node);
+    return node.project && !!node.project.id;
+  }
+
   getStatusColor(status: Status): 'primary' | 'warn' | 'accent' | undefined {
     console.log('getStatusColor called with status:', status);
     switch (status) {
