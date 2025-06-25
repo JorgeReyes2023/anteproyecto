@@ -1,14 +1,14 @@
+const { Status } = require("@prisma/client");
 const prisma = require("../prisma");
 
 const NodeModel = {
-  async createNode(name, type, projectId) {
+  async createNode(name, location, status, projectId) {
     return prisma.nodes.create({
       data: {
         name: name,
-        type: type,
-        project: {
-          connect: { id: projectId },
-        },
+        location: location,
+        status: status,
+        project_id: projectId,
       },
     });
   },
@@ -19,10 +19,15 @@ const NodeModel = {
     });
   },
 
-  async updateNode(id, name, type) {
+  async updateNode(id, name, location, status, projectId) {
     return prisma.nodes.update({
       where: { id: id },
-      data: { name: name, type: type },
+      data: {
+        name: name,
+        location: location,
+        status: status,
+        project_id: projectId,
+      },
     });
   },
 
