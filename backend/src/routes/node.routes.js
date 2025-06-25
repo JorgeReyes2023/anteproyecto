@@ -6,11 +6,17 @@ const nodeRoutes = Router();
 // Ruta para crear un nodo
 nodeRoutes.post("/", async (req, res) => {
   try {
-    const { name, type, projectId } = req.body;
-    if (!name || !type || !projectId) {
+    console.log("Creando nodo con datos:", req.body);
+    const { name, location, status, projectId } = req.body;
+    if (!name) {
       return res.status(400).json({ error: "Faltan datos requeridos" });
     }
-    const node = await NodeService.createNode(name, type, projectId);
+    const node = await NodeService.createNode(
+      name,
+      location,
+      status,
+      projectId,
+    );
     res.status(201).json(node);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -20,11 +26,17 @@ nodeRoutes.post("/", async (req, res) => {
 nodeRoutes.put("/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    const { name, type } = req.body;
-    if (!name || !type) {
+    const { name, location, status, projectId } = req.body;
+    if (!name || !id) {
       return res.status(400).json({ error: "Faltan datos requeridos" });
     }
-    const node = await NodeService.updateNode(id, name, type);
+    const node = await NodeService.updateNode(
+      id,
+      name,
+      location,
+      status,
+      projectId,
+    );
     res.status(200).json(node);
   } catch (error) {
     res.status(500).json({ error: error.message });

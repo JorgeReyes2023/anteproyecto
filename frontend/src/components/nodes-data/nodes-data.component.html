@@ -1,11 +1,4 @@
-<div
-  style="
-    display: flex;
-    justify-content: flex-end;
-    margin-bottom: 16px;
-    margin-right: 16px;
-  "
->
+<div class="add-button">
   <button mat-raised-button color="primary" (click)="openCreateDialog()">
     Crear nodo
     <mat-icon>add</mat-icon>
@@ -29,7 +22,12 @@
     <div class="node-info-row">
       <span>{{ node.name }}</span>
       <span>{{ node.location || "Sin ubicación" }}</span>
-      <span>{{ node.status }}</span>
+      <span style="display: flex; align-items: center; gap: 6px">
+        <mat-icon [color]="getStatusColor(node.status)">
+          {{ getStatusIcon(node.status) }}
+        </mat-icon>
+        {{ node.status | titlecase }}
+      </span>
       <span>{{ node.project?.name || "Sin proyecto" }}</span>
       <span class="actions">
         <button

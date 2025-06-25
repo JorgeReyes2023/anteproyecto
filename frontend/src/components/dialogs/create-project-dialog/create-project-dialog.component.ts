@@ -60,6 +60,8 @@ export class CreateProjectDialogComponent {
   onSubmit(form: NgForm) {
     if (form.valid) {
       this.dialogRef.close(this.localProject);
+    } else {
+      console.error('Form is invalid');
     }
   }
 }

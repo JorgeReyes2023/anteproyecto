@@ -7,6 +7,7 @@ import { UserInfoComponent } from '../components/user-info/user-info.component';
 import { UsersDataComponent } from '../components/users-data/users-data.component';
 import { CompaniesDataComponent } from '../components/companies-data/companies-data.component';
 import { ProjectsDataComponent } from '../components/projects-data/projects-data.component';
+import { NodesDataComponent } from '../components/nodes-data/nodes-data.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -38,6 +39,11 @@ export const routes: Routes = [
   {
     path: 'projects',
     component: ProjectsDataComponent,
+    canActivate: [roleGuard(['admin'])],
+  },
+  {
+    path: 'nodes',
+    component: NodesDataComponent,
     canActivate: [roleGuard(['admin'])],
   },
   // Redirects

@@ -37,6 +37,13 @@
         <a
           *ngIf="user.role === 'admin'"
           mat-list-item
+          routerLink="/nodes"
+          routerLinkActive="active"
+          >Nodos</a
+        >
+        <a
+          *ngIf="user.role === 'admin'"
+          mat-list-item
           routerLink="/projects"
           routerLinkActive="active"
           >Proyectos</a

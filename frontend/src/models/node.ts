@@ -1,11 +1,16 @@
 import { Project } from './project';
 import { Sensor } from './sensor';
+import { Status } from './status';
 
-export interface Node {
-  id: number;
+export interface NodeCreate {
   name: string;
   location: string;
   projectId?: number;
-  projects?: Project[];
+  status: Status;
+}
+
+export interface Node extends NodeCreate {
+  id: number;
+  project?: Project;
   sensors?: Sensor[];
 }
