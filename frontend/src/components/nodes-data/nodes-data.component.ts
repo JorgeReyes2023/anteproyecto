@@ -77,7 +77,7 @@ export class NodesDataComponent implements OnDestroy {
       if (result) {
         this.nodeService.createNode(result).subscribe({
           next: (newNode) => {
-            this.nodes.push(newNode);
+            this.fetchNodes(); // Refresh the list after creation
             this.alertService.success(
               `Node ${newNode.name} created successfully`
             );

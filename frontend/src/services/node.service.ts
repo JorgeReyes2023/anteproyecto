@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { GeneralService } from './general.service';
-import { Node } from '../models/node';
+import { Node, NodeCreate } from '../models/node';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -17,7 +17,7 @@ export class NodeService {
     return this.gService.getData(`nodes/${id}`);
   }
 
-  createNode(node: Node): Observable<Node> {
+  createNode(node: NodeCreate): Observable<Node> {
     return this.gService.postData('nodes', node);
   }
 
