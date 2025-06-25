@@ -1,6 +1,6 @@
 const { NodeModel } = require("../models/node.model");
 const { State } = require("../constants/states");
-const { nodeSchema } = require("../validators/node.validator");
+const { nodeSchema, nodeSchemaId } = require("../validators/node.validator");
 
 class NodeService {
   static async createNode(name, location, status, projectId) {
@@ -18,12 +18,16 @@ class NodeService {
       if (error) {
         throw new Error(`Error de validación: ${error.message}`);
       }
-      return await NodeModel.createNode(
+      const node = await NodeModel.createNode(
         value.name,
         value.location,
         value.status,
         value.projectId,
       );
+      return {
+        ...node,
+        status: State[node.status], // Convertir el estado a un valor del enum State
+      };
     } catch (error) {
       throw new Error(`Error al crear el nodo: ${error.message}`);
     }
@@ -31,7 +35,7 @@ class NodeService {
 
   static async getNodeById(id) {
     try {
-      const { value, error } = nodeSchema.validate({ id }, { convert: true });
+      const { value, error } = nodeSchemaId.validate({ id }, { convert: true });
       if (error) throw new Error(`Error de validación: ${error.message}`);
       return await NodeModel.getNodeById(value.id);
     } catch (error) {
@@ -72,7 +76,7 @@ class NodeService {
 
   static async deleteNode(id) {
     try {
-      const { value, error } = nodeSchema.validate({ id }, { convert: true });
+      const { value, error } = nodeSchemaId.validate({ id }, { convert: true });
       if (error) throw new Error(`Error de validación: ${error.message}`);
       return await NodeModel.deleteNode(value.id);
     } catch (error) {

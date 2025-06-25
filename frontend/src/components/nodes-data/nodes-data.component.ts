@@ -101,10 +101,7 @@ export class NodesDataComponent implements OnDestroy {
       if (result) {
         this.nodeService.updateNode(result.id, result).subscribe({
           next: (updatedNode) => {
-            const index = this.nodes.findIndex((n) => n.id === updatedNode.id);
-            if (index !== -1) {
-              this.nodes[index] = updatedNode; // Update the node in the list
-            }
+            this.fetchNodes(); // Refresh the list after update
             this.alertService.success(
               `Node ${updatedNode.name} updated successfully`
             );
@@ -119,8 +116,16 @@ export class NodesDataComponent implements OnDestroy {
   }
 
   onDelete(Node: Node) {
-    // Implement delete logic here
-    this.alertService.success(`Node ${Node.name} deleted successfully`);
+    this.nodeService.deleteNode(Node.id).subscribe({
+      next: () => {
+        this.alertService.success(`Node ${Node.name} deleted successfully`);
+        this.fetchNodes(); // Refresh the list after deletion
+      },
+      error: (error) => {
+        this.alertService.error('Failed to delete node');
+        console.error('Error deleting node:', error);
+      },
+    });
   }
 
   trackByNodeId(index: number, node: Node): number {

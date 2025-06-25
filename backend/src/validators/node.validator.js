@@ -3,7 +3,7 @@ const Joi = require("joi");
 const statusMap = {
   activo: "ACTIVE",
   inactivo: "INACTIVE",
-  "En Mantenimiento": "MAINTENANCE",
+  "en Mantenimiento": "MAINTENANCE",
   error: "ERROR",
 };
 
@@ -25,4 +25,8 @@ const nodeSchema = Joi.object({
     .default("MAINTENANCE"),
 });
 
-module.exports = { nodeSchema };
+const nodeSchemaId = Joi.object({
+  id: Joi.number().integer().positive().required(),
+});
+
+module.exports = { nodeSchema, nodeSchemaId };
