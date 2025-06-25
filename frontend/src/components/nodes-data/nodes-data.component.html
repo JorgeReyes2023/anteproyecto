@@ -1,0 +1,54 @@
+<div
+  style="
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 16px;
+    margin-right: 16px;
+  "
+>
+  <button mat-raised-button color="primary" (click)="openCreateDialog()">
+    Crear nodo
+    <mat-icon>add</mat-icon>
+  </button>
+</div>
+
+<mat-list>
+  <!-- Headers-->
+  <mat-list-item class="header-row">
+    <div class="node-info-row header">
+      <span>Nombre</span>
+      <span>Ubicación</span>
+      <span>Estado</span>
+      <span>Proyecto</span>
+      <span class="actions-header">Acciones</span>
+    </div>
+  </mat-list-item>
+
+  <!-- Data -->
+  <mat-list-item *ngFor="let node of nodes; trackBy: trackByNodeId">
+    <div class="node-info-row">
+      <span>{{ node.name }}</span>
+      <span>{{ node.location || "Sin ubicación" }}</span>
+      <span>{{ node.status }}</span>
+      <span>{{ node.project?.name || "Sin proyecto" }}</span>
+      <span class="actions">
+        <button
+          mat-icon-button
+          color="primary"
+          aria-label="Editar nodo"
+          (click)="openUpdateDialog(node)"
+        >
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button
+          mat-icon-button
+          color="warn"
+          aria-label="Eliminar nodo"
+          (click)="onDelete(node)"
+        >
+          <mat-icon>delete</mat-icon>
+        </button>
+      </span>
+    </div>
+  </mat-list-item>
+</mat-list>
