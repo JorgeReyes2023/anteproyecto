@@ -13,6 +13,7 @@ import { AlertService } from '../../app/_alert/alert.service';
 import { Node } from '../../models/node';
 import { NodeService } from '../../services/node.service';
 import { Status } from '../../models/status';
+import { CreateNodeDialogComponent } from '../dialogs/create-node-dialog/create-node-dialog.component';
 
 @Component({
   standalone: true,
@@ -67,7 +68,26 @@ export class NodesDataComponent implements OnDestroy {
   }
 
   openCreateDialog() {
-    // Implement dialog logic to create a new node
+    const dialogRef = this.dialog.open(CreateNodeDialogComponent, {
+      data: { node: null }, // Pass any initial data if needed
+    });
+
+    dialogRef.afterClosed().subscribe((result: Node | undefined) => {
+      if (result) {
+        this.nodeService.createNode(result).subscribe({
+          next: (newNode) => {
+            this.nodes.push(newNode);
+            this.alertService.success(
+              `Node ${newNode.name} created successfully`
+            );
+          },
+          error: (error) => {
+            this.alertService.error('Failed to create node');
+            console.error('Error creating node:', error);
+          },
+        });
+      }
+    });
   }
 
   openUpdateDialog(Node: Node) {
