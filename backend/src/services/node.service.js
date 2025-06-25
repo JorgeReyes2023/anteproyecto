@@ -1,4 +1,5 @@
 const { NodeModel } = require("../models/node.model");
+const { State } = require("../constants/states");
 
 class NodeService {
   static async createNode(name, type, projectId) {
@@ -35,7 +36,12 @@ class NodeService {
 
   static async getAllNodes() {
     try {
-      return await NodeModel.getAllNodes();
+      const nodes = await NodeModel.getAllNodes();
+      // Mapear los nodos para convertir el string de estado en un valor del enum State
+      return nodes.map((node) => ({
+        ...node,
+        status: State[node.status],
+      }));
     } catch (error) {
       throw new Error(`Error al obtener los nodos: ${error.message}`);
     }

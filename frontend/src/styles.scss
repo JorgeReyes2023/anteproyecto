@@ -118,3 +118,10 @@ mat-list-item {
 mat-list-item:last-child {
   border-bottom: none;
 }
+
+.add-button {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 16px;
+  margin-right: 16px;
+}

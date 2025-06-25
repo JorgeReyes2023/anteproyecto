@@ -11,6 +11,8 @@ import { AlertService } from '../../app/_alert/alert.service';
 
 // add dialogs and services
 import { Node } from '../../models/node';
+import { NodeService } from '../../services/node.service';
+import { Status } from '../../models/status';
 
 @Component({
   standalone: true,
@@ -30,7 +32,11 @@ export class NodesDataComponent implements OnDestroy {
   nodes: Node[] = [];
   private destroy$ = new Subject<void>();
 
-  constructor(private dialog: MatDialog, private alertService: AlertService) {
+  constructor(
+    private dialog: MatDialog,
+    private alertService: AlertService,
+    private nodeService: NodeService
+  ) {
     // Initialize or fetch nodes data here if needed
     this.fetchNodes();
   }
@@ -45,7 +51,19 @@ export class NodesDataComponent implements OnDestroy {
   }
 
   fetchNodes() {
-    // update the UI or perform any other actions needed after fetching
+    this.nodeService
+      .getNodes()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (nodes: Node[]) => {
+          this.nodes = nodes;
+          console.log('Fetched nodes:', this.nodes);
+        },
+        error: (error) => {
+          this.alertService.error('Failed to fetch nodes');
+          console.error('Error fetching nodes:', error);
+        },
+      });
   }
 
   openCreateDialog() {
@@ -63,5 +81,35 @@ export class NodesDataComponent implements OnDestroy {
 
   trackByNodeId(index: number, node: Node): number {
     return node.id; // Assuming each node has a unique 'id' property
+  }
+
+  getStatusColor(status: Status): 'primary' | 'warn' | 'accent' | undefined {
+    console.log('getStatusColor called with status:', status);
+    switch (status) {
+      case Status.ACTIVE:
+        return 'primary';
+      case Status.INACTIVE:
+      case Status.ERROR:
+        return 'warn';
+      case Status.MAINTENANCE:
+        return 'accent';
+      default:
+        return undefined;
+    }
+  }
+
+  getStatusIcon(status: Status): string {
+    switch (status) {
+      case Status.ACTIVE:
+        return 'check_circle';
+      case Status.INACTIVE:
+        return 'cancel';
+      case Status.MAINTENANCE:
+        return 'hourglass_empty';
+      case Status.ERROR:
+        return 'error';
+      default:
+        return 'help';
+    }
   }
 }
