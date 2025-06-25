@@ -13,7 +13,17 @@
       <span>Ubicación</span>
       <span>Estado</span>
       <span>Proyecto</span>
-      <span>Sensores</span>
+      <span
+        matTooltip="Para agregar sensores, hacerlo desde las acciones"
+        matTooltipPosition="above"
+        aria-label="Sensores: información"
+        class="project-header"
+      >
+        Sensores
+        <mat-icon class="info-icon" color="primary" aria-hidden="true"
+          >info</mat-icon
+        >
+      </span>
       <span class="actions-header">Acciones</span>
     </div>
   </mat-list-item>
@@ -51,7 +61,7 @@
           <span class="text-no-data">Sin proyecto</span>
         </ng-template>
       </span>
-      <!-- Liste des capteurs -->
+      <!-- Lista sensores -->
       <span>
         <ng-container *ngIf="hasSensors(node); else noSensors">
           <ul class="sensor-list">
@@ -68,7 +78,17 @@
         <button
           mat-icon-button
           color="primary"
+          aria-label="Agregar sensores"
+          matTooltip="Agregar sensores"
+          (click)="openAddSensorsDialog(node)"
+        >
+          <mat-icon>add_circle_outline</mat-icon>
+        </button>
+        <button
+          mat-icon-button
+          color="primary"
           aria-label="Editar nodo"
+          matTooltip="Editar nodo"
           (click)="openUpdateDialog(node)"
         >
           <mat-icon>edit</mat-icon>
@@ -77,6 +97,7 @@
           mat-icon-button
           color="warn"
           aria-label="Eliminar nodo"
+          matTooltip="Eliminar nodo"
           (click)="onDelete(node)"
         >
           <mat-icon>delete</mat-icon>

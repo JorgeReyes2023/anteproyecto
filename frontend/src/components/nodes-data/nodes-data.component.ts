@@ -8,6 +8,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { AlertService } from '../../app/_alert/alert.service';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 // add dialogs and services
 import { Node } from '../../models/node';
@@ -26,6 +27,7 @@ import { UpdateNodeDialogComponent } from '../dialogs/update-node-dialog/update-
     MatIconModule,
     MatButtonModule,
     MatDialogModule,
+    MatTooltipModule,
   ],
   templateUrl: './nodes-data.component.html',
   styleUrl: './nodes-data.component.css',
@@ -66,6 +68,12 @@ export class NodesDataComponent implements OnDestroy {
           console.error('Error fetching nodes:', error);
         },
       });
+  }
+
+  openAddSensorsDialog(node: Node) {
+    const dialogRef = this.dialog.open(CreateNodeDialogComponent, {
+      data: node, // Pass the selected node for adding sensors
+    });
   }
 
   openCreateDialog() {

@@ -36,3 +36,15 @@
   justify-content: flex-end;
   align-items: center;
 }
+
+.project-header {
+  display: inline-flex; /* texto + icono en línea */
+  align-items: center; /* alinea verticalmente */
+  gap: 4px; /* espacio entre texto e icono */
+  cursor: help; /* opcional: cursor de “hint” */
+}
+
+.info-icon {
+  font-size: 18px; /* mismo alto que el texto (~14 px + espacio) */
+  line-height: 1; /* quita desplazamiento vertical residual */
+}
