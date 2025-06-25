@@ -16,7 +16,13 @@ authRoutes.post("/register", async (req, res) => {
         .json({ error: "El rol 'user' requiere una empresa asociada" });
     }
 
-    const user = await AuthService.register(name, email, password, role, company);
+    const user = await AuthService.register(
+      name,
+      email,
+      password,
+      role,
+      company,
+    );
     res.status(201).json(user);
   } catch (error) {
     res.status(500).json({ error: error.message });

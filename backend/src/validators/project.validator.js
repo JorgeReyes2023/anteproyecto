@@ -14,4 +14,4 @@ const deleteProjectSchema = Joi.object({
   id: Joi.number().required(),
 });
 
-module.exports = { projectSchema , deleteProjectSchema };
+module.exports = { projectSchema, deleteProjectSchema };
