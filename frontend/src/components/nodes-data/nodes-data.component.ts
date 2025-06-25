@@ -79,11 +79,13 @@ export class NodesDataComponent implements OnDestroy {
           next: (newNode) => {
             this.fetchNodes(); // Refresh the list after creation
             this.alertService.success(
-              `Node ${newNode.name} created successfully`
+              `Nodo ${newNode.name} creado correctamente`
             );
           },
           error: (error) => {
-            this.alertService.error('Failed to create node');
+            this.alertService.error(
+              'Error al crear el nodo. Por favor, inténtelo de nuevo.'
+            );
             console.error('Error creating node:', error);
           },
         });
@@ -103,11 +105,13 @@ export class NodesDataComponent implements OnDestroy {
           next: (updatedNode) => {
             this.fetchNodes(); // Refresh the list after update
             this.alertService.success(
-              `Node ${updatedNode.name} updated successfully`
+              `Nodo ${updatedNode.name} actualizado correctamente`
             );
           },
           error: (error) => {
-            this.alertService.error('Failed to update node');
+            this.alertService.error(
+              'Error al actualizar el nodo. Por favor, inténtelo de nuevo.'
+            );
             console.error('Error updating node:', error);
           },
         });
@@ -118,11 +122,13 @@ export class NodesDataComponent implements OnDestroy {
   onDelete(Node: Node) {
     this.nodeService.deleteNode(Node.id).subscribe({
       next: () => {
-        this.alertService.success(`Node ${Node.name} deleted successfully`);
+        this.alertService.success(`Nodo ${Node.name} eliminado correctamente`);
         this.fetchNodes(); // Refresh the list after deletion
       },
       error: (error) => {
-        this.alertService.error('Failed to delete node');
+        this.alertService.error(
+          'Error al eliminar el nodo. Por favor, inténtelo de nuevo.'
+        );
         console.error('Error deleting node:', error);
       },
     });
@@ -137,12 +143,14 @@ export class NodesDataComponent implements OnDestroy {
   }
 
   hasProject(node: Node): boolean {
-    console.log('Checking if node has project:', node);
     return node.project && !!node.project.id;
   }
 
+  hasLocation(node: Node): boolean {
+    return !!node.location;
+  }
+
   getStatusColor(status: Status): 'primary' | 'warn' | 'accent' | undefined {
-    console.log('getStatusColor called with status:', status);
     switch (status) {
       case Status.ACTIVE:
         return 'primary';

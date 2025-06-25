@@ -25,9 +25,16 @@
       <span>{{ node.name }}</span>
 
       <!-- Localisation -->
-      <span>{{ node.location || "Sin ubicación" }}</span>
+      <span>
+        <ng-container *ngIf="hasLocation(node); else noLocation">
+          {{ node.location }}
+        </ng-container>
+        <ng-template #noLocation>
+          <span class="text-no-data">Sin ubicación</span>
+        </ng-template>
+      </span>
 
-      <!-- Statut avec icône -->
+      <!-- Statuts-->
       <span class="status-cell">
         <mat-icon [color]="getStatusColor(node.status)">
           {{ getStatusIcon(node.status) }}
@@ -35,7 +42,7 @@
         {{ node.status | titlecase }}
       </span>
 
-      <!-- Projet -->
+      <!-- Project -->
       <span>
         <ng-container *ngIf="hasProject(node); else noProject">
           {{ node.project.name }}

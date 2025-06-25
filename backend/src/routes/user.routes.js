@@ -33,8 +33,6 @@ userRoutes.put("/:id", async (req, res) => {
     const userId = req.params.id;
     const updates = req.body;
 
-    console.log("Updating user with ID:", userId);
-    console.log("Updates:", updates);
     if (!userId || !updates) {
       return res
         .status(400)
