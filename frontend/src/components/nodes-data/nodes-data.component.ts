@@ -14,6 +14,7 @@ import { Node } from '../../models/node';
 import { NodeService } from '../../services/node.service';
 import { Status } from '../../models/status';
 import { CreateNodeDialogComponent } from '../dialogs/create-node-dialog/create-node-dialog.component';
+import { UpdateNodeDialogComponent } from '../dialogs/update-node-dialog/update-node-dialog.component';
 
 @Component({
   standalone: true,
@@ -69,7 +70,7 @@ export class NodesDataComponent implements OnDestroy {
 
   openCreateDialog() {
     const dialogRef = this.dialog.open(CreateNodeDialogComponent, {
-      data: { node: null }, // Pass any initial data if needed
+      data: null, // Pass any initial data if needed
     });
 
     dialogRef.afterClosed().subscribe((result: Node | undefined) => {
@@ -90,8 +91,31 @@ export class NodesDataComponent implements OnDestroy {
     });
   }
 
-  openUpdateDialog(Node: Node) {
-    // Implement dialog logic to update the selected node
+  openUpdateDialog(node: Node) {
+    console;
+    const dialogRef = this.dialog.open(UpdateNodeDialogComponent, {
+      data: node, // Pass the selected node for editing
+    });
+
+    dialogRef.afterClosed().subscribe((result: Node | undefined) => {
+      if (result) {
+        this.nodeService.updateNode(result.id, result).subscribe({
+          next: (updatedNode) => {
+            const index = this.nodes.findIndex((n) => n.id === updatedNode.id);
+            if (index !== -1) {
+              this.nodes[index] = updatedNode; // Update the node in the list
+            }
+            this.alertService.success(
+              `Node ${updatedNode.name} updated successfully`
+            );
+          },
+          error: (error) => {
+            this.alertService.error('Failed to update node');
+            console.error('Error updating node:', error);
+          },
+        });
+      }
+    });
   }
 
   onDelete(Node: Node) {
