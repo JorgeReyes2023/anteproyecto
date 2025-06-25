@@ -6,6 +6,7 @@ export interface Node {
   name: string;
   location: string;
   projectId?: number;
-  projects?: Project[];
+  project?: Project;
   sensors?: Sensor[];
+  status: 'active' | 'inactive' | 'maintenance' | 'error';
 }
