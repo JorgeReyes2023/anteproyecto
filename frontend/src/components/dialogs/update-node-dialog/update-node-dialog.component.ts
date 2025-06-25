@@ -42,13 +42,16 @@ export class UpdateNodeDialogComponent {
     // shallow copy – use structuredClone for deep copy if nested objects exist
     this.localNode = { ...node };
     this.fetchData();
+    console.log(
+      'UpdateNodeDialogComponent initialized with node:',
+      this.localNode
+    );
   }
 
   fetchData() {
     this.projectService.getProjects().subscribe({
       next: (projects) => {
         this.projects = projects;
-        console.log('Projects fetched:', this.projects);
       },
       error: (error) => {
         console.error('Error fetching projects:', error);

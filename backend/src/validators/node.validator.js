@@ -22,7 +22,7 @@ const nodeSchema = Joi.object({
       }
       return helpers.error("any.invalid");
     })
-    .default("MAINTENANCE"),
+    .default("INACTIVE"),
 });
 
 const nodeSchemaId = Joi.object({

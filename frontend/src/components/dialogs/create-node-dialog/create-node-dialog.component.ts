@@ -35,7 +35,7 @@ export class CreateNodeDialogComponent {
     public dialogRef: MatDialogRef<CreateNodeDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
-    this.localNode = { name: '', location: '', status: Status.MAINTENANCE };
+    this.localNode = { name: '', location: '', status: Status.INACTIVE };
   }
 
   onCancel() {
