@@ -16,6 +16,7 @@ import { NodeService } from '../../services/node.service';
 import { Status } from '../../models/status';
 import { CreateNodeDialogComponent } from '../dialogs/create-node-dialog/create-node-dialog.component';
 import { UpdateNodeDialogComponent } from '../dialogs/update-node-dialog/update-node-dialog.component';
+import { AddSensorsDialogComponent } from '../dialogs/add-sensors-dialog/add-sensors-dialog.component';
 
 @Component({
   standalone: true,
@@ -61,7 +62,6 @@ export class NodesDataComponent implements OnDestroy {
       .subscribe({
         next: (nodes: Node[]) => {
           this.nodes = nodes;
-          console.log('Fetched nodes:', this.nodes);
         },
         error: (error) => {
           this.alertService.error('Failed to fetch nodes');
@@ -71,8 +71,30 @@ export class NodesDataComponent implements OnDestroy {
   }
 
   openAddSensorsDialog(node: Node) {
-    const dialogRef = this.dialog.open(CreateNodeDialogComponent, {
-      data: node, // Pass the selected node for adding sensors
+    const dialogRef = this.dialog.open(AddSensorsDialogComponent, {
+      width: '600px',
+      minHeight: '400px',
+      maxHeight: '90vh',
+      data: node,
+    });
+
+    dialogRef.afterClosed().subscribe((result: Node | undefined) => {
+      if (result) {
+        this.nodeService.addSensorsToNode(result.id, result.sensors).subscribe({
+          next: (updatedNode) => {
+            this.fetchNodes(); // Refresh the list after adding sensors
+            this.alertService.success(
+              `Sensores añadidos al nodo ${updatedNode.name} correctamente`
+            );
+          },
+          error: (error) => {
+            this.alertService.error(
+              'Error al añadir sensores al nodo. Por favor, inténtelo de nuevo.'
+            );
+            console.error('Error adding sensors:', error);
+          },
+        });
+      }
     });
   }
 

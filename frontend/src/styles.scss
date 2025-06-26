@@ -78,7 +78,7 @@ $custom-theme: mat.m2-define-light-theme(
   --primary-color-dark: #{mat.m2-get-color-from-palette($custom-primary, 700)};
   --accent-color: #{mat.m2-get-color-from-palette($custom-accent)};
   --warn-color: #{mat.m2-get-color-from-palette($custom-warn)};
-  --background-color: #{mat.m2-get-color-from-palette($custom-primary, 100)};
+  --background-color: #{mat.m2-get-color-from-palette($custom-primary, 50)};
   --surface-color: #ffffff;
   --text-color: #1a1a1a;
 }
