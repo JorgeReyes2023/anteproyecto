@@ -7,6 +7,7 @@ import { AuthService } from '../../services/auth.service';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
+import { trigger, style, animate, transition } from '@angular/animations';
 
 @Component({
   standalone: true,
@@ -17,6 +18,14 @@ import { MatCardModule } from '@angular/material/card';
     MatInputModule,
     MatButtonModule,
     MatCardModule,
+  ],
+  animations: [
+    trigger('fadeIn', [
+      transition(':enter', [
+        style({ opacity: 0 }),
+        animate('2s ease-in', style({ opacity: 1 })),
+      ]),
+    ]),
   ],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css'],

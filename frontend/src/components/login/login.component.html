@@ -1,24 +1,52 @@
 <div class="login-container">
-  <mat-card>
-    <mat-card-header>
-      <mat-card-title>
-        <h2>Iniciar sesión</h2>
-      </mat-card-title>
-    </mat-card-header>
-    <mat-card-content>
-      <form (ngSubmit)="login()" #loginForm="ngForm">
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Correo</mat-label>
-          <input matInput [(ngModel)]="email" name="email" type="email" required autocomplete="email" />
-        </mat-form-field>
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Contraseña</mat-label>
-          <input matInput [(ngModel)]="password" name="password" type="password" required autocomplete="current-password" />
-        </mat-form-field>
-        <button mat-raised-button color="primary" class="full-width" type="submit">
-          Entrar
-        </button>
-      </form>
-    </mat-card-content>
-  </mat-card>
+  <div >
+    <img @fadeIn
+      src="./logoNodalis.png"
+      alt="Logo NODALIS"
+      style="height: 200px; margin-right: 16px"
+      class="shine-effect"
+    />
+
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>
+          <h2>Iniciar sesión</h2>
+        </mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <form (ngSubmit)="login()" #loginForm="ngForm">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Correo</mat-label>
+            <input
+              matInput
+              [(ngModel)]="email"
+              name="email"
+              type="email"
+              required
+              autocomplete="email"
+            />
+          </mat-form-field>
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Contraseña</mat-label>
+            <input
+              matInput
+              [(ngModel)]="password"
+              name="password"
+              type="password"
+              required
+              autocomplete="current-password"
+            />
+          </mat-form-field>
+          <button
+            mat-raised-button
+            color="primary"
+            class="full-width"
+            type="submit"
+          >
+            Entrar
+          </button>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </div>
 </div>

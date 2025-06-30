@@ -3,27 +3,33 @@
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+  background: linear-gradient(20grad, #141a1d 100%, #b5dddf 0%);
   animation: fadeIn 1s ease;
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(-20px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 mat-card {
   width: 360px;
   padding: 32px 24px;
   border-radius: 16px;
-  box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
   background: #ffffffcc;
   backdrop-filter: blur(10px);
   transition: box-shadow 0.3s ease;
 }
 
 mat-card:hover {
-  box-shadow: 0 14px 28px rgba(0,0,0,0.3);
+  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.3);
 }
 
 .full-width {
@@ -60,4 +66,17 @@ button[mat-raised-button]:hover {
 
 button[mat-raised-button]:active {
   transform: scale(0.98);
+}
+.shine-effect {
+  filter: drop-shadow(0 0 6px #33b2bb);
+  animation: shine 1.5s infinite alternate ease-in-out;
+}
+
+@keyframes shine {
+  from {
+    filter: drop-shadow(0 0 4px #33b2bb);
+  }
+  to {
+    filter: drop-shadow(0 0 15px #33b2bb);
+  }
 }

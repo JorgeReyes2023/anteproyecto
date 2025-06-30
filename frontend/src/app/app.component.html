@@ -1,78 +1,81 @@
-<!-- Barra de presentación ARRIBA -->
-<div class="presentation-banner mat-elevation-z2">
-  <h2>NODALIS</h2>
-  <p>
-    Bienvenido a esta página. Aquí encontrará una visión general e información
-    importante sobre la aplicación.
-  </p>
-</div>
+<!-- Barra superior con logo y título -->
+<mat-toolbar
+  color="primary"
+  class="mat-elevation-z4"
+  *ngIf="user$ | async as user"
+>
+  <img
+    src="./logoNodalis.png"
+    alt="Logo NODALIS"
+    style="height: 40px; margin-right: 16px"
+    class="animated-logo"
+  />
+  <span style="font-size: 20px; font-weight: 500">NODALIS</span>
+</mat-toolbar>
 
-<!-- Layout Angular Material -->
-<mat-sidenav-container opened class="main-container">
+<!-- Layout principal -->
+<mat-sidenav-container class="main-container">
   <!-- Sidebar -->
   <mat-sidenav mode="side" opened class="sidenav" *ngIf="user$ | async as user">
-    <mat-toolbar color="primary">Navegación</mat-toolbar>
+    <mat-toolbar>Navegación</mat-toolbar>
     <mat-nav-list>
-      <ng-container *ngIf="user$ | async as user; else guest">
-        <a mat-list-item routerLink="/dashboard" routerLinkActive="active"
-          >Dashboard</a
-        >
-        <a mat-list-item routerLink="/info" routerLinkActive="active"
-          >Información del usuario</a
-        >
-        <a
-          *ngIf="user.role === 'admin'"
-          mat-list-item
-          routerLink="/users"
-          routerLinkActive="active"
-          >Usuarios</a
-        >
-        <a
-          *ngIf="user.role === 'admin'"
-          mat-list-item
-          routerLink="/companies"
-          routerLinkActive="active"
-          >Empresas</a
-        >
-        <a
-          *ngIf="user.role === 'admin'"
-          mat-list-item
-          routerLink="/nodes"
-          routerLinkActive="active"
-          >Nodos</a
-        >
-        <a
-          *ngIf="user.role === 'admin'"
-          mat-list-item
-          routerLink="/projects"
-          routerLinkActive="active"
-          >Proyectos</a
-        >
-        <a
-          *ngIf="user.role === 'admin'"
-          mat-list-item
-          routerLink="/users/create"
-          routerLinkActive="active"
-          >Crear usuario</a
-        >
-        <a mat-list-item (click)="logout()">Cerrar sesión</a>
-      </ng-container>
-
-      <ng-template #guest>
-        <a mat-list-item routerLink="/login" routerLinkActive="active"
-          >Iniciar sesión</a
-        >
-      </ng-template>
+      <a mat-list-item routerLink="/dashboard" routerLinkActive="active"
+        >Dashboard</a
+      >
+      <a mat-list-item routerLink="/info" routerLinkActive="active"
+        >Información del usuario</a
+      >
+      <a
+        *ngIf="user.role === 'admin'"
+        mat-list-item
+        routerLink="/users"
+        routerLinkActive="active"
+        >Usuarios</a
+      >
+      <a
+        *ngIf="user.role === 'admin'"
+        mat-list-item
+        routerLink="/companies"
+        routerLinkActive="active"
+        >Empresas</a
+      >
+      <a
+        *ngIf="user.role === 'admin'"
+        mat-list-item
+        routerLink="/nodes"
+        routerLinkActive="active"
+        >Nodos</a
+      >
+      <a
+        *ngIf="user.role === 'admin'"
+        mat-list-item
+        routerLink="/projects"
+        routerLinkActive="active"
+        >Proyectos</a
+      >
+      <a
+        *ngIf="user.role === 'admin'"
+        mat-list-item
+        routerLink="/users/create"
+        routerLinkActive="active"
+        >Crear usuario</a
+      >
+      <a mat-list-item (click)="logout()">Cerrar sesión</a>
     </mat-nav-list>
   </mat-sidenav>
 
-  <!-- Contenido principal -->
+  <!-- Contenido principal sin mat-card -->
   <mat-sidenav-content>
-    <mat-card class="main-card">
-      <mat-card-content>
-        <app-alert></app-alert>
-        <router-outlet></router-outlet>
-      </mat-card-content>
-    </mat-card>
+    <div>
+      <ng-container *ngIf="user$ | async as user">
+        <p style="margin-bottom: 16px">
+          Bienvenido. Aquí encontrará una visión general e información
+          importante sobre la aplicación.
+        </p>
+      </ng-container>
+
+      <app-alert></app-alert>
+      <router-outlet></router-outlet>
+    </div>
   </mat-sidenav-content>
 </mat-sidenav-container>
