@@ -20,10 +20,11 @@ import {
 } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
+import { MatSelectChange, MatSelectModule } from '@angular/material/select';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatChipGrid } from '@angular/material/chips';
+import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatButtonModule } from '@angular/material/button';
@@ -53,6 +54,7 @@ import { SensorService } from '../../../services/sensor.service';
     MatButtonModule,
     MatExpansionModule,
     MatChipGrid,
+    MatDividerModule,
   ],
   templateUrl: './add-sensors-dialog.component.html',
   styleUrl: './add-sensors-dialog.component.css',
@@ -63,6 +65,7 @@ export class AddSensorsDialogComponent implements OnInit {
   sensors = signal<Sensor[]>([]);
   selectedSensors = signal<Sensor[]>([]);
   newSensorsDraft = signal<SensorCreate[]>([]);
+  sensorTypesMap = new Map<number, Type>();
 
   sensorTypes: Type[] = [];
 
@@ -70,7 +73,7 @@ export class AddSensorsDialogComponent implements OnInit {
 
   newSensorForm = inject(FormBuilder).nonNullable.group({
     name: ['', [Validators.required, Validators.maxLength(255)]],
-    typeId: [null as number | null, Validators.required],
+    typeIds: [[] as number[], Validators.required], // valeur initiale vide
   });
 
   showNewSensorForm = signal(false);
@@ -87,6 +90,16 @@ export class AddSensorsDialogComponent implements OnInit {
 
   ngOnInit(): void {
     this.sensorService.getSensorsWithoutNode().then((s) => this.sensors.set(s));
+    this.sensorService.getSensorsTypes().subscribe((types) => {
+      this.sensorTypes = types;
+      types.forEach((t) => this.sensorTypesMap.set(t.id, t));
+      // Set default type if not already set
+      if (!this.newSensorForm.get('typeIds')?.value?.length) {
+        this.newSensorForm.patchValue({
+          typeIds: types[0]?.id ? [types[0].id] : [],
+        });
+      }
+    });
   }
 
   filteredSensors = computed(() =>
@@ -94,6 +107,8 @@ export class AddSensorsDialogComponent implements OnInit {
       (s) => !this.selectedSensors().some((sel) => sel.id === s.id)
     )
   );
+
+  compareFn = (a: number, b: number) => a === b;
 
   selectSensor(sensor: Sensor) {
     if (!this.selectedSensors().some((s) => s.id === sensor.id))
@@ -111,37 +126,43 @@ export class AddSensorsDialogComponent implements OnInit {
   }
 
   cancelNewSensor() {
-    this.newSensorForm.reset();
+    this.newSensorForm.setValue({
+      name: '',
+      typeIds: [],
+    });
     this.showNewSensorForm.set(false);
   }
 
   addNewSensorDraft() {
     if (this.newSensorForm.invalid) return;
-    const draft: SensorCreate = {
-      ...this.newSensorForm.getRawValue(),
-      nodeId: undefined,
+
+    const dto: SensorCreate = {
+      name: this.newSensorForm.value.name!,
       status: Status.INACTIVE,
+      nodeId: undefined,
+      typeIds: this.newSensorForm.value.typeIds!, // array
     };
-    this.newSensorsDraft.set([...this.newSensorsDraft(), draft]);
-    this.newSensorForm.reset();
+
+    this.newSensorsDraft.set([...this.newSensorsDraft(), dto]);
+    this.newSensorForm.reset({ typeIds: [] });
     this.showNewSensorForm.set(false);
   }
 
   async confirm() {
-    const selected = this.selectedSensors();
-    const drafts = this.newSensorsDraft();
+    const createdObservables = this.newSensorsDraft().map((d) =>
+      this.sensorService.createSensor(d)
+    );
+    const created = await Promise.all(
+      createdObservables.map((obs) => obs.toPromise())
+    );
 
-    const created = selected.map((s) => ({
-      id: s.id,
-      name: s.name,
-      nodeId: this.node.id,
-      status: s.status,
-      thresholds: s.thresholds,
-    })) as SensorCreate[];
+    const allSensors = [...this.selectedSensors(), ...created];
+    this.sensorService.attachSensorsToNode(
+      this.node.id,
+      allSensors.map((s) => s!.id)
+    );
 
-    created.push(...drafts);
-
-    this.dialogRef.close(created);
+    this.dialogRef.close(true);
   }
 
   onCancel() {
@@ -167,4 +188,6 @@ export class AddSensorsDialogComponent implements OnInit {
       input.value = '';
     }
   }
+
+  onTypeSelect(): void {}
 }

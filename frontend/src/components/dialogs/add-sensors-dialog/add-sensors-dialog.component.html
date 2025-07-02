@@ -34,7 +34,10 @@
     </mat-autocomplete>
   </mat-form-field>
 
-  <mat-expansion-panel [expanded]="showNewSensorForm()" class="sensor-form-panel">
+  <mat-expansion-panel
+    [expanded]="showNewSensorForm()"
+    class="sensor-form-panel"
+  >
     <mat-expansion-panel-header (click)="toggleNewSensorForm()">
       <mat-panel-title>Crear nuevo sensor</mat-panel-title>
       <mat-panel-description
@@ -50,10 +53,16 @@
 
       <mat-form-field appearance="outline" class="w-100">
         <mat-label>Tipo de lectura</mat-label>
-        <mat-select formControlName="typeId">
+        <mat-select
+          formControlName="typeIds"
+          multiple
+          [compareWith]="compareFn"
+        >
           <mat-option *ngFor="let t of sensorTypes" [value]="t.id">
-            {{ t.name }}
+            {{ t.name }} ({{ t.unit }})
           </mat-option>
+          <mat-divider></mat-divider>
+          <mat-option value="custom">Personalizado</mat-option>
         </mat-select>
       </mat-form-field>
 
