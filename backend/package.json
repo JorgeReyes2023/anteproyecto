@@ -47,5 +47,16 @@
     "prettier": "^3.5.3",
     "prisma": "^6.10.1",
     "taffydb": "^2.7.3"
+  },
+  "jest": {
+    "collectCoverage": true,
+    "coverageDirectory": "coverage",
+    "coverageReporters": [
+      "text",
+      "html"
+    ],
+    "collectCoverageFrom": [
+      "src/services/**/*.js"
+    ]
   }
 }
