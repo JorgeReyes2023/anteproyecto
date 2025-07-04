@@ -18,12 +18,11 @@ function generateToken(payload) {
  * @throws {Error} Si el token es inválido o ha expirado.
  */
 function verifyToken(token) {
-  return jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
-    if (err) {
-      throw new Error("Token inválido o expirado");
-    }
-    return decoded;
-  });
+  try {
+    return jwt.verify(token, process.env.JWT_SECRET);
+  } catch (err) {
+    throw new Error("Token inválido o expirado");
+  }
 }
 
 module.exports = {
