@@ -39,10 +39,11 @@ class NodeService {
       if (error) throw new Error(`Error de validación: ${error.message}`);
       const node = await NodeModel.getNodeById(value.id);
       return {
-        ...node,
-        status: State[node.status], // Convertir el estado a un valor del enum State
-        projectId: node.project_id, // Asegurarse de que projectId esté presente
-        project: node.projects || [], // Asegurarse de que projects esté presente
+        id: node.id,
+        name: node.name,
+        status: State[node.status],
+        projectId: node.project_id,
+        project: node.projects || [],
       };
     } catch (error) {
       throw new Error(`Error al obtener el nodo: ${error.message}`);
@@ -72,7 +73,8 @@ class NodeService {
         value.projectId,
       );
       return {
-        ...node,
+        id: node.id,
+        name: node.name,
         status: State[node.status], // Convertir el estado a un valor del enum State
         projectId: node.project_id, // Asegurarse de que projectId esté presente
         project: node.projects || [], // Asegurarse de que projects esté presente
@@ -97,7 +99,8 @@ class NodeService {
       const nodes = await NodeModel.getAllNodes();
       // Mapear los nodos para convertir el string de estado en un valor del enum State
       return nodes.map((node) => ({
-        ...node,
+        id: node.id,
+        name: node.name,
         status: State[node.status],
         projectId: node.project_id, // Asegurarse de que projectId esté presente
         project: node.projects || [], // Asegurarse de que projects esté presente
