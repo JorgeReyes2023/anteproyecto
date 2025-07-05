@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>project.service.js - Documentation</title>
+    <title>auth.service.js - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -29,7 +29,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">project.service.js</h1>
+    <h1 class="page-title">auth.service.js</h1>
     
 
     
@@ -39,155 +39,147 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>const { ProjectModel } = require("../models/project.model");
-const {
-  projectSchema,
-  deleteProjectSchema,
-} = require("../validators/project.validator");
+            <pre class="prettyprint source linenums"><code>const { generateToken, verifyToken } = require("./token.service");
+const bcrypt = require("bcryptjs");
+
+const { UserModel } = require("../models/user.model");
 
 /**
- * @typedef {Object} NodeInput
- * @property {number} id - ID del nodo.
- * @property {string} [name] - Nombre del nodo.
+ * Servicio de autenticación.
+ *
+ * Este servicio maneja el registro, inicio de sesión y verificación de tokens.
+ * También se encarga del cifrado de contraseñas usando bcrypt y de la generación/verificación de JWTs.
  */
-
-/**
- * Servicio para la gestión de proyectos.
- * Incluye creación, actualización, eliminación y obtención de proyectos,
- * validando los datos y controlando las reglas de negocio.
- */
-class ProjectService {
+class AuthService {
   /**
-   * Crea un nuevo proyecto después de validar los datos y verificar que no exista uno con el mismo nombre.
+   * Cifra una contraseña utilizando bcrypt.
    *
-   * @param {string} name - Nombre del proyecto.
-   * @param {string} description - Descripción del proyecto.
-   * @param {number|string} companyId - ID de la empresa asociada.
-   * @param {NodeInput[]} [nodes=[]] - IDs de los nodos asociados al proyecto.
-   *
-   * @returns {Promise&lt;Project>} Proyecto creado exitosamente.
-   *
-   * @throws {Error} Si los datos son inválidos o el proyecto ya existe.
+   * @param {string} password - Contraseña en texto plano.
+   * @returns {Promise&lt;string>} Contraseña cifrada (hash).
+   * @throws {Error} Si ocurre un error al cifrar la contraseña.
    */
-  static async createProject(name, description, companyId, nodes = []) {
+  static async hashPassword(password) {
     try {
-      const { value, error } = projectSchema.validate(
-        { name, description, companyId, nodes },
-        { convert: true },
-      );
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(password, salt);
+      return hashedPassword;
+    } catch (error) {
+      throw new Error(`Error hashing password: ${error.message}`);
+    }
+  }
 
-      if (error) throw new Error(`Datos inválidos: ${error.message}`);
-      // Check if the project already exists
-      const existingProject = await ProjectModel.getProjectByName(value.name);
-      if (existingProject) {
-        throw new Error(`El proyecto con el nombre ${value.name} ya existe`);
+  /**
+   * Verifica si una contraseña coincide con su hash cifrado.
+   *
+   * @param {string} password - Contraseña en texto plano.
+   * @param {string} hashedPassword - Contraseña cifrada.
+   * @returns {Promise&lt;boolean>} `true` si las contraseñas coinciden.
+   * @throws {Error} Si ocurre un error durante la comparación.
+   */
+  static async checkPassword(password, hashedPassword) {
+    try {
+      const isMatch = await bcrypt.compare(password, hashedPassword);
+      return isMatch;
+    } catch (error) {
+      throw new Error(`Error checking password: ${error.message}`);
+    }
+  }
+
+  /**
+   * Autentica a un usuario con su correo electrónico y contraseña.
+   *
+   * @param {string} email - Correo electrónico del usuario.
+   * @param {string} password - Contraseña en texto plano.
+   * @returns {Promise&lt;{user: Object, token: string}>} Objeto con los datos del usuario autenticado y su token JWT.
+   * @throws {Error} Si los datos son inválidos o la autenticación falla.
+   */
+  static async login(email, password) {
+    try {
+      if (!email || !password) {
+        throw new Error("Email and password are required");
       }
-      return await ProjectModel.createProject(
-        value.name,
-        value.description,
-        value.companyId,
-        value.nodes,
-      );
+      const user = await UserModel.getUserByEmail(email);
+      if (!user || !this.checkPassword(password, user.password)) {
+        throw new Error("Invalid email or password");
+      }
+
+      const userDto = {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        role: user.user_roles?.name || user.user_roles,
+        company: user.companies?.name || null,
+      };
+
+      // generar token
+      const token = generateToken({
+        id: user.id,
+        role: user.user_roles?.name || user.user_roles,
+        email: user.email,
+        company: user.company,
+      });
+
+      return { user: userDto, token };
     } catch (error) {
-      throw new Error(`Error al crear el proyecto: ${error.message}`);
+      throw new Error(`Error logging in user: ${error.message}`);
     }
   }
 
   /**
-   * Actualiza un proyecto existente con nuevos valores.
+   * Registra un nuevo usuario en el sistema.
    *
-   * @param {number} id - ID del proyecto a actualizar.
-   * @param {string} name - Nuevo nombre del proyecto.
-   * @param {string} description - Nueva descripción.
-   * @param {number|string} companyId - ID de la empresa asociada.
-   * @param {NodeInput[]} [nodes=[]] - IDs de los nodos a vincular.
-   *
-   * @returns {Promise&lt;Project>} Proyecto actualizado.
-   *
-   * @throws {Error} Si los datos son inválidos o ocurre un error en la base de datos.
+   * @param {string} username - Nombre del usuario.
+   * @param {string} email - Correo electrónico.
+   * @param {string} password - Contraseña en texto plano.
+   * @param {string} [role="user"] - Rol asignado al usuario (por defecto: "user").
+   * @param {string|null} [company=null] - Empresa asociada al usuario.
+   * @returns {Promise&lt;{user: Object, token: string}>} Objeto con el usuario creado y su token JWT.
+   * @throws {Error} Si el registro falla.
    */
-  static async updateProject(id, name, description, companyId, nodes = []) {
+  static async register(
+    username,
+    email,
+    password,
+    role = "user",
+    company = null,
+  ) {
     try {
-      const { value, error } = projectSchema.validate(
-        {
-          id,
-          name,
-          description,
-          companyId,
-          nodes,
-        },
-        { convert: true },
+      const hashedPassword = await this.hashPassword(password);
+      const user = await UserModel.createUser(
+        username,
+        email,
+        hashedPassword,
+        role,
+        company,
       );
-
-      if (error) throw new Error(`Datos inválidos: ${error.message}`);
-
-      return await ProjectModel.updateProject(
-        value.id,
-        value.name,
-        value.description,
-        value.companyId,
-        value.nodes,
-      );
+      const token = generateToken({
+        id: user.id,
+        role: user.role,
+        email: user.email,
+        company: user.company,
+      });
+      return { user, token };
     } catch (error) {
-      throw new Error(`Error al actualizar el proyecto: ${error.message}`);
+      throw new Error(`Registration failed: ${error.message}`);
     }
   }
 
   /**
-   * Elimina un proyecto por su ID.
+   * Verifica y decodifica un token JWT.
    *
-   * @param {number} id - ID del proyecto a eliminar.
-   *
-   * @returns {Promise&lt;boolean>} `true` si se eliminó correctamente.
-   *
-   * @throws {Error} Si ocurre un error durante la eliminación.
+   * @param {string} token - Token JWT a verificar.
+   * @returns {Object} Datos decodificados del token.
+   * @throws {Error} Si el token no es válido o ha expirado.
    */
-  static async deleteProject(id) {
+  static async verifyToken(token) {
     try {
-      const { value, error } = deleteProjectSchema.validate(
-        { id },
-        { convert: true },
-      );
-
-      if (error) throw new Error(`Datos inválidos: ${error.message}`);
-      return await ProjectModel.deleteProject(value.id);
+      return verifyToken(token);
     } catch (error) {
-      throw new Error(`Error al eliminar el proyecto: ${error.message}`);
-    }
-  }
-
-  /**
-   * Obtiene todos los proyectos existentes junto con sus empresas asociadas y nodos.
-   *
-   * @returns {Promise&lt;Array&lt;Object>>} Lista de proyectos en formato DTO,
-   * incluyendo la información básica de la empresa asociada.
-   *
-   * @throws {Error} Si ocurre un error al obtener los proyectos.
-   */
-  static async getAllProjects() {
-    try {
-      const projects = await ProjectModel.getAllProjects();
-      const projectsDto = projects.map((project) => ({
-        id: project.id,
-        name: project.name,
-        description: project.description,
-        companyId: project.company_id,
-        nodes: project.nodes,
-        company: project.companies
-          ? {
-              id: project.companies.id,
-              name: project.companies.name,
-            }
-          : null,
-      }));
-      return projectsDto;
-    } catch (error) {
-      throw new Error(`Error al obtener los proyectos: ${error.message}`);
+      throw new Error(`Token verification failed: ${error.message}`);
     }
   }
 }
-
-module.exports = { ProjectService };
+module.exports = { AuthService };
 </code></pre>
         </article>
     </section>

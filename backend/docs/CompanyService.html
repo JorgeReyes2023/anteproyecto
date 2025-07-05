@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Global - Documentation</title>
+    <title>CompanyService - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -29,7 +29,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">Global</h1>
+    <h1 class="page-title">CompanyService</h1>
     
 
     
@@ -42,8 +42,13 @@
 <header>
     
         <h2>
-        
+        CompanyService
         </h2>
+        
+            <div class="class-description">Servicio para la gestión de empresas.
+
+Este servicio proporciona funciones para crear, actualizar, eliminar y obtener empresas,
+controlando errores como duplicación de nombres o restricciones de integridad referencial.</div>
         
     
 </header>
@@ -52,8 +57,20 @@
     <div class="container-overview">
     
         
+<div class="section-method">
 
-        
+    
+    <h2>Constructor</h2>
+    
+
+    <h4 class="name" id="CompanyService"><span class="type-signature"></span>new CompanyService<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+
+
 
 
 <dl class="details">
@@ -83,6 +100,11 @@
     
 
     
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="company.service.js.html">company.service.js</a>, <a href="company.service.js.html#line9">line 9</a>
+    </li></ul></dd>
+    
 
     
 
@@ -92,7 +114,28 @@
 </dl>
 
 
-        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
     
     </div>
 
@@ -117,14 +160,14 @@
 
     
 
-    <h4 class="name" id="generateToken"><span class="type-signature"></span>generateToken<span class="signature">(payload)</span><span class="type-signature"> &rarr; {string}</span></h4>
+    <h4 class="name" id=".createCompany"><span class="type-signature">(async, static) </span>createCompany<span class="signature">(name, address)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
 
     
 
 
 
 <div class="description">
-    Genera un token para un usuario dado.
+    Crea una nueva empresa si no existe ya una con el mismo nombre.
 </div>
 
 
@@ -160,7 +203,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="token.service.js.html">token.service.js</a>, <a href="token.service.js.html#line8">line 8</a>
+        <a href="company.service.js.html">company.service.js</a>, <a href="company.service.js.html#line18">line 18</a>
     </li></ul></dd>
     
 
@@ -204,13 +247,13 @@
 
         <tr>
             
-                <td class="name"><code>payload</code></td>
+                <td class="name"><code>name</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><code>Object</code></span>
+<span class="param-type"><code>string</code></span>
 
 
             
@@ -221,150 +264,16 @@
             
 
             <td class="description last">
-                Datos a incluir en el token (id, rol, email, etc.).
+                Nombre de la empresa.
                 
             </td>
         </tr>
 
     
-    </tbody>
-</table>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div class="section-returns">
-<h5>Returns:</h5>
-
-        
-
-<dl class="param-type">
-    <dt>
-        Type:
-    </dt>
-    <dd>
-        
-<span class="param-type"><code>string</code></span>
-
-
-    </dd>
-</dl>
-
-
-<div class="param-desc">
-    El token firmado.
-</div>
-
-    
-</div>
-
-
-
-</div>
-        
-            
-<div class="section-method">
-
-    
-
-    <h4 class="name" id="verifyToken"><span class="type-signature"></span>verifyToken<span class="signature">(token)</span><span class="type-signature"> &rarr; {Object}</span></h4>
-
-    
-
-
-
-<div class="description">
-    Verifica y decodifica un token.
-</div>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="token.service.js.html">token.service.js</a>, <a href="token.service.js.html#line20">line 20</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
 
         <tr>
             
-                <td class="name"><code>token</code></td>
+                <td class="name"><code>address</code></td>
             
 
             <td class="type">
@@ -381,7 +290,7 @@
             
 
             <td class="description last">
-                El token a verificar.
+                Dirección de la empresa.
                 
             </td>
         </tr>
@@ -409,7 +318,7 @@
 <dl>
     <dt>
         <div class="param-desc">
-        Si el token es inválido o ha expirado.
+        Si la empresa ya existe o ocurre un error en la base de datos.
         </div>
     </dt>
     <dd></dd>
@@ -446,7 +355,7 @@
     </dt>
     <dd>
         
-<span class="param-type"><code>Object</code></span>
+<span class="param-type"><code>Promise.&lt;Object></code></span>
 
 
     </dd>
@@ -454,7 +363,7 @@
 
 
 <div class="param-desc">
-    Los datos del token decodificado si es válido.
+    Empresa creada exitosamente.
 </div>
 
     
@@ -464,114 +373,21 @@
 
 </div>
         
-    
-
-    
-        <h3 class="subsection-title">Type Definitions</h3>
-
-        
-                
-<div class="section-members">
-<h4 class="name" id="NodeInput">NodeInput</h4>
-
-
-
-
-
-
-
-
-    <h5 class="subsection-title">Properties:</h5>
+            
+<div class="section-method">
 
     
 
-<table class="props">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-        <th>Attributes</th>
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>id</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>number</code></span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">ID del nodo.</td>
-        </tr>
-
-        
+    <h4 class="name" id=".deleteCompany"><span class="type-signature">(async, static) </span>deleteCompany<span class="signature">(id)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
 
     
 
-        <tr>
-            
-                <td class="name"><code>name</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>string</code></span>
 
 
-            
-            </td>
+<div class="description">
+    Elimina una empresa por su ID.
+</div>
 
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">Nombre del nodo.</td>
-        </tr>
-
-        
-
-    
-    </tbody>
-</table>
 
 
 
@@ -605,7 +421,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="project.service.js.html">project.service.js</a>, <a href="project.service.js.html#line7">line 7</a>
+        <a href="company.service.js.html">company.service.js</a>, <a href="company.service.js.html#line57">line 57</a>
     </li></ul></dd>
     
 
@@ -618,23 +434,724 @@
 
 
 
-    <h5>Type:</h5>
-    <ul>
-        <li>
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
             
-<span class="param-type"><code>Object</code></span>
+                <td class="name"><code>id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>number</code></span>
+|
+
+<span class="param-type"><code>string</code></span>
 
 
-        </li>
-    </ul>
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                ID de la empresa a eliminar.
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
 
 
+
+
+
+
+
+
+
+
+
+
+<div class="section-throws">
+<h5>Throws:</h5>
+
+        
+
+<dl>
+    <dt>
+        <div class="param-desc">
+        Si la empresa tiene usuarios o proyectos asociados, o si ocurre otro error.
+        </div>
+    </dt>
+    <dd></dd>
+    <dt>
+        <dl>
+            <dt>
+                Type
+            </dt>
+            <dd>
+                
+<span class="param-type"><code>Error</code></span>
+
+
+            </dd>
+        </dl>
+    </dt>
+    <dd></dd>
+</dl>
+
+
+    
+</div>
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code>Promise.&lt;Object></code></span>
+
+
+    </dd>
+</dl>
+
+
+<div class="param-desc">
+    Resultado de la eliminación.
+</div>
+
+    
+</div>
 
 
 
 </div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id=".getAllCompanies"><span class="type-signature">(async, static) </span>getAllCompanies<span class="signature">()</span><span class="type-signature"> &rarr; {Promise.&lt;Array.&lt;Object>>}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Obtiene todas las empresas registradas.
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="company.service.js.html">company.service.js</a>, <a href="company.service.js.html#line79">line 79</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section-throws">
+<h5>Throws:</h5>
+
+        
+
+<dl>
+    <dt>
+        <div class="param-desc">
+        Si ocurre un error al obtener los datos.
+        </div>
+    </dt>
+    <dd></dd>
+    <dt>
+        <dl>
+            <dt>
+                Type
+            </dt>
+            <dd>
+                
+<span class="param-type"><code>Error</code></span>
+
+
+            </dd>
+        </dl>
+    </dt>
+    <dd></dd>
+</dl>
+
+
+    
+</div>
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code>Promise.&lt;Array.&lt;Object>></code></span>
+
+
+    </dd>
+</dl>
+
+
+<div class="param-desc">
+    Lista de todas las empresas.
+</div>
+
+    
+</div>
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id=".getCompanyById"><span class="type-signature">(async, static) </span>getCompanyById<span class="signature">(id)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Obtiene una empresa por su ID.
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="company.service.js.html">company.service.js</a>, <a href="company.service.js.html#line94">line 94</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>number</code></span>
+|
+
+<span class="param-type"><code>string</code></span>
+
 
             
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                ID de la empresa.
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section-throws">
+<h5>Throws:</h5>
+
+        
+
+<dl>
+    <dt>
+        <div class="param-desc">
+        Si ocurre un error al buscar la empresa.
+        </div>
+    </dt>
+    <dd></dd>
+    <dt>
+        <dl>
+            <dt>
+                Type
+            </dt>
+            <dd>
+                
+<span class="param-type"><code>Error</code></span>
+
+
+            </dd>
+        </dl>
+    </dt>
+    <dd></dd>
+</dl>
+
+
+    
+</div>
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code>Promise.&lt;Object></code></span>
+
+
+    </dd>
+</dl>
+
+
+<div class="param-desc">
+    Empresa encontrada.
+</div>
+
+    
+</div>
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id=".updateCompany"><span class="type-signature">(async, static) </span>updateCompany<span class="signature">(id, name, address)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Actualiza una empresa existente por su ID.
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="company.service.js.html">company.service.js</a>, <a href="company.service.js.html#line41">line 41</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>number</code></span>
+|
+
+<span class="param-type"><code>string</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                ID de la empresa a actualizar.
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>name</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>string</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                Nuevo nombre de la empresa.
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>address</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>string</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                Nueva dirección de la empresa.
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section-throws">
+<h5>Throws:</h5>
+
+        
+
+<dl>
+    <dt>
+        <div class="param-desc">
+        Si ocurre un error durante la actualización.
+        </div>
+    </dt>
+    <dd></dd>
+    <dt>
+        <dl>
+            <dt>
+                Type
+            </dt>
+            <dd>
+                
+<span class="param-type"><code>Error</code></span>
+
+
+            </dd>
+        </dl>
+    </dt>
+    <dd></dd>
+</dl>
+
+
+    
+</div>
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code>Promise.&lt;Object></code></span>
+
+
+    </dd>
+</dl>
+
+
+<div class="param-desc">
+    Empresa actualizada.
+</div>
+
+    
+</div>
+
+
+
+</div>
+        
+    
+
     
 
     

@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Global - Documentation</title>
+    <title>ThresholdService - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -29,7 +29,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">Global</h1>
+    <h1 class="page-title">ThresholdService</h1>
     
 
     
@@ -42,8 +42,13 @@
 <header>
     
         <h2>
-        
+        ThresholdService
         </h2>
+        
+            <div class="class-description">Servicio para la gestión de umbrales.
+
+Este servicio permite crear, actualizar, eliminar y obtener umbrales,
+centralizando la lógica de negocio relacionada a estos componentes.</div>
         
     
 </header>
@@ -52,8 +57,20 @@
     <div class="container-overview">
     
         
+<div class="section-method">
 
-        
+    
+    <h2>Constructor</h2>
+    
+
+    <h4 class="name" id="ThresholdService"><span class="type-signature"></span>new ThresholdService<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+
+
 
 
 <dl class="details">
@@ -83,6 +100,11 @@
     
 
     
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="threshold.service.js.html">threshold.service.js</a>, <a href="threshold.service.js.html#line9">line 9</a>
+    </li></ul></dd>
+    
 
     
 
@@ -92,7 +114,28 @@
 </dl>
 
 
-        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
     
     </div>
 
@@ -117,14 +160,14 @@
 
     
 
-    <h4 class="name" id="generateToken"><span class="type-signature"></span>generateToken<span class="signature">(payload)</span><span class="type-signature"> &rarr; {string}</span></h4>
+    <h4 class="name" id=".createThreshold"><span class="type-signature">(async, static) </span>createThreshold<span class="signature">(thresholdData)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
 
     
 
 
 
 <div class="description">
-    Genera un token para un usuario dado.
+    Crea un nuevo umbral con los datos proporcionados.
 </div>
 
 
@@ -160,7 +203,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="token.service.js.html">token.service.js</a>, <a href="token.service.js.html#line8">line 8</a>
+        <a href="threshold.service.js.html">threshold.service.js</a>, <a href="threshold.service.js.html#line17">line 17</a>
     </li></ul></dd>
     
 
@@ -204,7 +247,7 @@
 
         <tr>
             
-                <td class="name"><code>payload</code></td>
+                <td class="name"><code>thresholdData</code></td>
             
 
             <td class="type">
@@ -221,167 +264,7 @@
             
 
             <td class="description last">
-                Datos a incluir en el token (id, rol, email, etc.).
-                
-            </td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div class="section-returns">
-<h5>Returns:</h5>
-
-        
-
-<dl class="param-type">
-    <dt>
-        Type:
-    </dt>
-    <dd>
-        
-<span class="param-type"><code>string</code></span>
-
-
-    </dd>
-</dl>
-
-
-<div class="param-desc">
-    El token firmado.
-</div>
-
-    
-</div>
-
-
-
-</div>
-        
-            
-<div class="section-method">
-
-    
-
-    <h4 class="name" id="verifyToken"><span class="type-signature"></span>verifyToken<span class="signature">(token)</span><span class="type-signature"> &rarr; {Object}</span></h4>
-
-    
-
-
-
-<div class="description">
-    Verifica y decodifica un token.
-</div>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="token.service.js.html">token.service.js</a>, <a href="token.service.js.html#line20">line 20</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>token</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>string</code></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">
-                El token a verificar.
+                Datos del umbral (nombre, valor, etc.).
                 
             </td>
         </tr>
@@ -409,7 +292,7 @@
 <dl>
     <dt>
         <div class="param-desc">
-        Si el token es inválido o ha expirado.
+        Si ocurre un error al crear el umbral.
         </div>
     </dt>
     <dd></dd>
@@ -446,7 +329,7 @@
     </dt>
     <dd>
         
-<span class="param-type"><code>Object</code></span>
+<span class="param-type"><code>Promise.&lt;Object></code></span>
 
 
     </dd>
@@ -454,7 +337,7 @@
 
 
 <div class="param-desc">
-    Los datos del token decodificado si es válido.
+    Umbral creado exitosamente.
 </div>
 
     
@@ -464,114 +347,21 @@
 
 </div>
         
-    
-
-    
-        <h3 class="subsection-title">Type Definitions</h3>
-
-        
-                
-<div class="section-members">
-<h4 class="name" id="NodeInput">NodeInput</h4>
-
-
-
-
-
-
-
-
-    <h5 class="subsection-title">Properties:</h5>
+            
+<div class="section-method">
 
     
 
-<table class="props">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-        <th>Attributes</th>
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>id</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>number</code></span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">ID del nodo.</td>
-        </tr>
-
-        
+    <h4 class="name" id=".deleteThreshold"><span class="type-signature">(async, static) </span>deleteThreshold<span class="signature">(id)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
 
     
 
-        <tr>
-            
-                <td class="name"><code>name</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>string</code></span>
 
 
-            
-            </td>
+<div class="description">
+    Elimina un umbral por su ID.
+</div>
 
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">Nombre del nodo.</td>
-        </tr>
-
-        
-
-    
-    </tbody>
-</table>
 
 
 
@@ -605,7 +395,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="project.service.js.html">project.service.js</a>, <a href="project.service.js.html#line7">line 7</a>
+        <a href="threshold.service.js.html">threshold.service.js</a>, <a href="threshold.service.js.html#line61">line 61</a>
     </li></ul></dd>
     
 
@@ -618,23 +408,698 @@
 
 
 
-    <h5>Type:</h5>
-    <ul>
-        <li>
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
             
-<span class="param-type"><code>Object</code></span>
+                <td class="name"><code>id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>number</code></span>
+|
+
+<span class="param-type"><code>string</code></span>
 
 
-        </li>
-    </ul>
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                ID del umbral a eliminar.
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
 
 
+
+
+
+
+
+
+
+
+
+
+<div class="section-throws">
+<h5>Throws:</h5>
+
+        
+
+<dl>
+    <dt>
+        <div class="param-desc">
+        Si ocurre un error al eliminar el umbral.
+        </div>
+    </dt>
+    <dd></dd>
+    <dt>
+        <dl>
+            <dt>
+                Type
+            </dt>
+            <dd>
+                
+<span class="param-type"><code>Error</code></span>
+
+
+            </dd>
+        </dl>
+    </dt>
+    <dd></dd>
+</dl>
+
+
+    
+</div>
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code>Promise.&lt;Object></code></span>
+
+
+    </dd>
+</dl>
+
+
+<div class="param-desc">
+    Resultado de la operación.
+</div>
+
+    
+</div>
 
 
 
 </div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id=".getAllThresholds"><span class="type-signature">(async, static) </span>getAllThresholds<span class="signature">()</span><span class="type-signature"> &rarr; {Promise.&lt;Array.&lt;Object>>}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Obtiene todos los umbrales registrados.
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="threshold.service.js.html">threshold.service.js</a>, <a href="threshold.service.js.html#line38">line 38</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section-throws">
+<h5>Throws:</h5>
+
+        
+
+<dl>
+    <dt>
+        <div class="param-desc">
+        Si ocurre un error al obtener los umbrales.
+        </div>
+    </dt>
+    <dd></dd>
+    <dt>
+        <dl>
+            <dt>
+                Type
+            </dt>
+            <dd>
+                
+<span class="param-type"><code>Error</code></span>
+
+
+            </dd>
+        </dl>
+    </dt>
+    <dd></dd>
+</dl>
+
+
+    
+</div>
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code>Promise.&lt;Array.&lt;Object>></code></span>
+
+
+    </dd>
+</dl>
+
+
+<div class="param-desc">
+    Lista de umbrales.
+</div>
+
+    
+</div>
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id=".getThresholdById"><span class="type-signature">(async, static) </span>getThresholdById<span class="signature">(id)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Obtiene un umbral por su ID.
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="threshold.service.js.html">threshold.service.js</a>, <a href="threshold.service.js.html#line28">line 28</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>number</code></span>
+|
+
+<span class="param-type"><code>string</code></span>
+
 
             
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                ID del umbral a buscar.
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section-throws">
+<h5>Throws:</h5>
+
+        
+
+<dl>
+    <dt>
+        <div class="param-desc">
+        Si ocurre un error durante la búsqueda.
+        </div>
+    </dt>
+    <dd></dd>
+    <dt>
+        <dl>
+            <dt>
+                Type
+            </dt>
+            <dd>
+                
+<span class="param-type"><code>Error</code></span>
+
+
+            </dd>
+        </dl>
+    </dt>
+    <dd></dd>
+</dl>
+
+
+    
+</div>
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code>Promise.&lt;Object></code></span>
+
+
+    </dd>
+</dl>
+
+
+<div class="param-desc">
+    Umbral encontrado.
+</div>
+
+    
+</div>
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id=".updateThreshold"><span class="type-signature">(async, static) </span>updateThreshold<span class="signature">(id, thresholdData)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Actualiza un umbral existente con nuevos datos.
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="threshold.service.js.html">threshold.service.js</a>, <a href="threshold.service.js.html#line50">line 50</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>number</code></span>
+|
+
+<span class="param-type"><code>string</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                ID del umbral a actualizar.
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>thresholdData</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>Object</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                Nuevos datos para el umbral.
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section-throws">
+<h5>Throws:</h5>
+
+        
+
+<dl>
+    <dt>
+        <div class="param-desc">
+        Si ocurre un error durante la actualización.
+        </div>
+    </dt>
+    <dd></dd>
+    <dt>
+        <dl>
+            <dt>
+                Type
+            </dt>
+            <dd>
+                
+<span class="param-type"><code>Error</code></span>
+
+
+            </dd>
+        </dl>
+    </dt>
+    <dd></dd>
+</dl>
+
+
+    
+</div>
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code>Promise.&lt;Object></code></span>
+
+
+    </dd>
+</dl>
+
+
+<div class="param-desc">
+    Umbral actualizado.
+</div>
+
+    
+</div>
+
+
+
+</div>
+        
+    
+
     
 
     

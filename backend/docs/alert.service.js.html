@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>project.service.js - Documentation</title>
+    <title>alert.service.js - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -29,7 +29,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">project.service.js</h1>
+    <h1 class="page-title">alert.service.js</h1>
     
 
     
@@ -39,155 +39,87 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>const { ProjectModel } = require("../models/project.model");
-const {
-  projectSchema,
-  deleteProjectSchema,
-} = require("../validators/project.validator");
+            <pre class="prettyprint source linenums"><code>const { AlertModel } = require("../models/alert.model");
 
 /**
- * @typedef {Object} NodeInput
- * @property {number} id - ID del nodo.
- * @property {string} [name] - Nombre del nodo.
+ * Servicio para la gestión de alertas.
+ * Este servicio proporciona funciones para crear, actualizar, eliminar y obtener alertas,
+ * centralizando la lógica de negocio relacionada a estos componentes.
  */
-
-/**
- * Servicio para la gestión de proyectos.
- * Incluye creación, actualización, eliminación y obtención de proyectos,
- * validando los datos y controlando las reglas de negocio.
- */
-class ProjectService {
+class AlertService {
   /**
-   * Crea un nuevo proyecto después de validar los datos y verificar que no exista uno con el mismo nombre.
-   *
-   * @param {string} name - Nombre del proyecto.
-   * @param {string} description - Descripción del proyecto.
-   * @param {number|string} companyId - ID de la empresa asociada.
-   * @param {NodeInput[]} [nodes=[]] - IDs de los nodos asociados al proyecto.
-   *
-   * @returns {Promise&lt;Project>} Proyecto creado exitosamente.
-   *
-   * @throws {Error} Si los datos son inválidos o el proyecto ya existe.
+   * Crea una nueva alerta.
+   * @param {Object} alertData - Datos de la alerta a crear.
+   * @returns {Promise&lt;Object>} Alerta creada.
+   * @throws {Error} Si ocurre un error durante la creación.
    */
-  static async createProject(name, description, companyId, nodes = []) {
+  static async createAlert(alertData) {
+    // Llama al modelo para crear una nueva alerta con los datos proporcionados
     try {
-      const { value, error } = projectSchema.validate(
-        { name, description, companyId, nodes },
-        { convert: true },
-      );
-
-      if (error) throw new Error(`Datos inválidos: ${error.message}`);
-      // Check if the project already exists
-      const existingProject = await ProjectModel.getProjectByName(value.name);
-      if (existingProject) {
-        throw new Error(`El proyecto con el nombre ${value.name} ya existe`);
-      }
-      return await ProjectModel.createProject(
-        value.name,
-        value.description,
-        value.companyId,
-        value.nodes,
-      );
+      return await AlertModel.createAlert(alertData);
     } catch (error) {
-      throw new Error(`Error al crear el proyecto: ${error.message}`);
+      throw new Error(`Error creating alert: ${error.message}`);
     }
   }
 
   /**
-   * Actualiza un proyecto existente con nuevos valores.
-   *
-   * @param {number} id - ID del proyecto a actualizar.
-   * @param {string} name - Nuevo nombre del proyecto.
-   * @param {string} description - Nueva descripción.
-   * @param {number|string} companyId - ID de la empresa asociada.
-   * @param {NodeInput[]} [nodes=[]] - IDs de los nodos a vincular.
-   *
-   * @returns {Promise&lt;Project>} Proyecto actualizado.
-   *
-   * @throws {Error} Si los datos son inválidos o ocurre un error en la base de datos.
+   * Obtiene una alerta por su ID.
+   * @param {string} id - ID de la alerta a buscar.
+   * @returns {Promise&lt;Object>} Alerta encontrada.
+   * @throws {Error} Si ocurre un error durante la búsqueda.
    */
-  static async updateProject(id, name, description, companyId, nodes = []) {
+  static async getAlertById(id) {
     try {
-      const { value, error } = projectSchema.validate(
-        {
-          id,
-          name,
-          description,
-          companyId,
-          nodes,
-        },
-        { convert: true },
-      );
-
-      if (error) throw new Error(`Datos inválidos: ${error.message}`);
-
-      return await ProjectModel.updateProject(
-        value.id,
-        value.name,
-        value.description,
-        value.companyId,
-        value.nodes,
-      );
+      return await AlertModel.getAlertById(id);
     } catch (error) {
-      throw new Error(`Error al actualizar el proyecto: ${error.message}`);
+      throw new Error(`Error fetching alert by ID: ${error.message}`);
     }
   }
 
   /**
-   * Elimina un proyecto por su ID.
-   *
-   * @param {number} id - ID del proyecto a eliminar.
-   *
-   * @returns {Promise&lt;boolean>} `true` si se eliminó correctamente.
-   *
+   * Obtiene todas las alertas.
+   * @returns {Promise&lt;Array>} Lista de todas las alertas.
+   * @throws {Error} Si ocurre un error durante la obtención.
+   */
+  static async getAllAlerts() {
+    try {
+      return await AlertModel.getAllAlerts();
+    } catch (error) {
+      throw new Error(`Error fetching all alerts: ${error.message}`);
+    }
+  }
+
+  /**
+   * Actualiza una alerta existente.
+   * @param {string} id - ID de la alerta a actualizar.
+   * @param {Object} alertData - Datos nuevos para la alerta.
+   * @returns {Promise&lt;Object>} Alerta actualizada.
+   * @throws {Error} Si ocurre un error durante la actualización.
+   */
+  static async updateAlert(id, alertData) {
+    try {
+      return await AlertModel.updateAlert(id, alertData);
+    } catch (error) {
+      throw new Error(`Error updating alert: ${error.message}`);
+    }
+  }
+
+  /**
+   * Elimina una alerta por su ID.
+   * @param {string} id - ID de la alerta a eliminar.
+   * @returns {Promise&lt;Object>} Resultado de la eliminación.
    * @throws {Error} Si ocurre un error durante la eliminación.
    */
-  static async deleteProject(id) {
+  static async deleteAlert(id) {
     try {
-      const { value, error } = deleteProjectSchema.validate(
-        { id },
-        { convert: true },
-      );
-
-      if (error) throw new Error(`Datos inválidos: ${error.message}`);
-      return await ProjectModel.deleteProject(value.id);
+      return await AlertModel.deleteAlert(id);
     } catch (error) {
-      throw new Error(`Error al eliminar el proyecto: ${error.message}`);
-    }
-  }
-
-  /**
-   * Obtiene todos los proyectos existentes junto con sus empresas asociadas y nodos.
-   *
-   * @returns {Promise&lt;Array&lt;Object>>} Lista de proyectos en formato DTO,
-   * incluyendo la información básica de la empresa asociada.
-   *
-   * @throws {Error} Si ocurre un error al obtener los proyectos.
-   */
-  static async getAllProjects() {
-    try {
-      const projects = await ProjectModel.getAllProjects();
-      const projectsDto = projects.map((project) => ({
-        id: project.id,
-        name: project.name,
-        description: project.description,
-        companyId: project.company_id,
-        nodes: project.nodes,
-        company: project.companies
-          ? {
-              id: project.companies.id,
-              name: project.companies.name,
-            }
-          : null,
-      }));
-      return projectsDto;
-    } catch (error) {
-      throw new Error(`Error al obtener los proyectos: ${error.message}`);
+      throw new Error(`Error deleting alert: ${error.message}`);
     }
   }
 }
 
-module.exports = { ProjectService };
+module.exports = { AlertService };
 </code></pre>
         </article>
     </section>

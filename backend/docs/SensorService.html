@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>ProjectService - Documentation</title>
+    <title>SensorService - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -29,7 +29,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">ProjectService</h1>
+    <h1 class="page-title">SensorService</h1>
     
 
     
@@ -42,12 +42,13 @@
 <header>
     
         <h2>
-        ProjectService
+        SensorService
         </h2>
         
-            <div class="class-description">Servicio para la gestión de proyectos.
-Incluye creación, actualización, eliminación y obtención de proyectos,
-validando los datos y controlando las reglas de negocio.</div>
+            <div class="class-description">Servicio para la gestión de sensores y sus tipos.
+
+Este servicio permite crear, obtener, actualizar y eliminar sensores y tipos de sensores,
+centralizando la lógica de negocio relacionada a estos componentes.</div>
         
     
 </header>
@@ -62,7 +63,7 @@ validando los datos y controlando las reglas de negocio.</div>
     <h2>Constructor</h2>
     
 
-    <h4 class="name" id="ProjectService"><span class="type-signature"></span>new ProjectService<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="SensorService"><span class="type-signature"></span>new SensorService<span class="signature">()</span><span class="type-signature"></span></h4>
 
     
 
@@ -101,7 +102,7 @@ validando los datos y controlando las reglas de negocio.</div>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="project.service.js.html">project.service.js</a>, <a href="project.service.js.html#line18">line 18</a>
+        <a href="sensor.service.js.html">sensor.service.js</a>, <a href="sensor.service.js.html#line10">line 10</a>
     </li></ul></dd>
     
 
@@ -159,14 +160,14 @@ validando los datos y controlando las reglas de negocio.</div>
 
     
 
-    <h4 class="name" id=".createProject"><span class="type-signature">(async, static) </span>createProject<span class="signature">(name, description, companyId, nodes<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Project>}</span></h4>
+    <h4 class="name" id=".createSensor"><span class="type-signature">(async, static) </span>createSensor<span class="signature">(sensorData)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
 
     
 
 
 
 <div class="description">
-    Crea un nuevo proyecto después de validar los datos y verificar que no exista uno con el mismo nombre.
+    Crea un nuevo sensor con los datos proporcionados.
 </div>
 
 
@@ -202,7 +203,7 @@ validando los datos y controlando las reglas de negocio.</div>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="project.service.js.html">project.service.js</a>, <a href="project.service.js.html#line31">line 31</a>
+        <a href="sensor.service.js.html">sensor.service.js</a>, <a href="sensor.service.js.html#line18">line 18</a>
     </li></ul></dd>
     
 
@@ -234,11 +235,7 @@ validando los datos y controlando las reglas de negocio.</div>
         <th>Type</th>
 
         
-        <th>Attributes</th>
-        
 
-        
-        <th>Default</th>
         
 
         <th class="last">Description</th>
@@ -250,157 +247,24 @@ validando los datos y controlando las reglas de negocio.</div>
 
         <tr>
             
-                <td class="name"><code>name</code></td>
+                <td class="name"><code>sensorData</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><code>string</code></span>
+<span class="param-type"><code>Object</code></span>
 
 
             
             </td>
 
             
-                <td class="attributes">
-                
 
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                </td>
             
 
             <td class="description last">
-                Nombre del proyecto.
-                
-            </td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>description</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>string</code></span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                </td>
-            
-
-            <td class="description last">
-                Descripción del proyecto.
-                
-            </td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>companyId</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>number</code></span>
-|
-
-<span class="param-type"><code>string</code></span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                </td>
-            
-
-            <td class="description last">
-                ID de la empresa asociada.
-                
-            </td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>nodes</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>Array.&lt;<a href="global.html#NodeInput">NodeInput</a>></code></span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                    []
-                
-                </td>
-            
-
-            <td class="description last">
-                IDs de los nodos asociados al proyecto.
+                Datos del sensor (nombre, ubicación, estado, etc.).
                 
             </td>
         </tr>
@@ -428,7 +292,7 @@ validando los datos y controlando las reglas de negocio.</div>
 <dl>
     <dt>
         <div class="param-desc">
-        Si los datos son inválidos o el proyecto ya existe.
+        Si ocurre un error al crear el sensor.
         </div>
     </dt>
     <dd></dd>
@@ -465,7 +329,7 @@ validando los datos y controlando las reglas de negocio.</div>
     </dt>
     <dd>
         
-<span class="param-type"><code>Promise.&lt;Project></code></span>
+<span class="param-type"><code>Promise.&lt;Object></code></span>
 
 
     </dd>
@@ -473,7 +337,7 @@ validando los datos y controlando las reglas de negocio.</div>
 
 
 <div class="param-desc">
-    Proyecto creado exitosamente.
+    Sensor creado exitosamente.
 </div>
 
     
@@ -488,14 +352,14 @@ validando los datos y controlando las reglas de negocio.</div>
 
     
 
-    <h4 class="name" id=".deleteProject"><span class="type-signature">(async, static) </span>deleteProject<span class="signature">(id)</span><span class="type-signature"> &rarr; {Promise.&lt;boolean>}</span></h4>
+    <h4 class="name" id=".createSensorType"><span class="type-signature">(async, static) </span>createSensorType<span class="signature">(sensorTypeData)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
 
     
 
 
 
 <div class="description">
-    Elimina un proyecto por su ID.
+    Crea un nuevo tipo de sensor.
 </div>
 
 
@@ -531,7 +395,199 @@ validando los datos y controlando las reglas de negocio.</div>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="project.service.js.html">project.service.js</a>, <a href="project.service.js.html#line104">line 104</a>
+        <a href="sensor.service.js.html">sensor.service.js</a>, <a href="sensor.service.js.html#line95">line 95</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>sensorTypeData</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>Object</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                Datos del tipo de sensor (nombre, unidad, etc.).
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section-throws">
+<h5>Throws:</h5>
+
+        
+
+<dl>
+    <dt>
+        <div class="param-desc">
+        Si ocurre un error al crear el tipo de sensor.
+        </div>
+    </dt>
+    <dd></dd>
+    <dt>
+        <dl>
+            <dt>
+                Type
+            </dt>
+            <dd>
+                
+<span class="param-type"><code>Error</code></span>
+
+
+            </dd>
+        </dl>
+    </dt>
+    <dd></dd>
+</dl>
+
+
+    
+</div>
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code>Promise.&lt;Object></code></span>
+
+
+    </dd>
+</dl>
+
+
+<div class="param-desc">
+    Tipo de sensor creado.
+</div>
+
+    
+</div>
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id=".deleteSensor"><span class="type-signature">(async, static) </span>deleteSensor<span class="signature">(id)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Elimina un sensor por su ID.
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="sensor.service.js.html">sensor.service.js</a>, <a href="sensor.service.js.html#line78">line 78</a>
     </li></ul></dd>
     
 
@@ -582,6 +638,9 @@ validando los datos y controlando las reglas de negocio.</div>
             
                 
 <span class="param-type"><code>number</code></span>
+|
+
+<span class="param-type"><code>string</code></span>
 
 
             
@@ -592,7 +651,7 @@ validando los datos y controlando las reglas de negocio.</div>
             
 
             <td class="description last">
-                ID del proyecto a eliminar.
+                ID del sensor a eliminar.
                 
             </td>
         </tr>
@@ -620,7 +679,7 @@ validando los datos y controlando las reglas de negocio.</div>
 <dl>
     <dt>
         <div class="param-desc">
-        Si ocurre un error durante la eliminación.
+        Si ocurre un error al eliminar el sensor.
         </div>
     </dt>
     <dd></dd>
@@ -657,7 +716,7 @@ validando los datos y controlando las reglas de negocio.</div>
     </dt>
     <dd>
         
-<span class="param-type"><code>Promise.&lt;boolean></code></span>
+<span class="param-type"><code>Promise.&lt;Object></code></span>
 
 
     </dd>
@@ -665,7 +724,7 @@ validando los datos y controlando las reglas de negocio.</div>
 
 
 <div class="param-desc">
-    `true` si se eliminó correctamente.
+    Resultado de la operación.
 </div>
 
     
@@ -680,14 +739,14 @@ validando los datos y controlando las reglas de negocio.</div>
 
     
 
-    <h4 class="name" id=".getAllProjects"><span class="type-signature">(async, static) </span>getAllProjects<span class="signature">()</span><span class="type-signature"> &rarr; {Promise.&lt;Array.&lt;Object>>}</span></h4>
+    <h4 class="name" id=".deleteSensorType"><span class="type-signature">(async, static) </span>deleteSensorType<span class="signature">(id)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
 
     
 
 
 
 <div class="description">
-    Obtiene todos los proyectos existentes junto con sus empresas asociadas y nodos.
+    Elimina un tipo de sensor por su ID.
 </div>
 
 
@@ -723,7 +782,202 @@ validando los datos y controlando las reglas de negocio.</div>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="project.service.js.html">project.service.js</a>, <a href="project.service.js.html#line126">line 126</a>
+        <a href="sensor.service.js.html">sensor.service.js</a>, <a href="sensor.service.js.html#line140">line 140</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>number</code></span>
+|
+
+<span class="param-type"><code>string</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                ID del tipo de sensor a eliminar.
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section-throws">
+<h5>Throws:</h5>
+
+        
+
+<dl>
+    <dt>
+        <div class="param-desc">
+        Si ocurre un error al eliminar el tipo de sensor.
+        </div>
+    </dt>
+    <dd></dd>
+    <dt>
+        <dl>
+            <dt>
+                Type
+            </dt>
+            <dd>
+                
+<span class="param-type"><code>Error</code></span>
+
+
+            </dd>
+        </dl>
+    </dt>
+    <dd></dd>
+</dl>
+
+
+    
+</div>
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code>Promise.&lt;Object></code></span>
+
+
+    </dd>
+</dl>
+
+
+<div class="param-desc">
+    Resultado de la operación.
+</div>
+
+    
+</div>
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id=".getAllSensorTypes"><span class="type-signature">(async, static) </span>getAllSensorTypes<span class="signature">()</span><span class="type-signature"> &rarr; {Promise.&lt;Array.&lt;Object>>}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Obtiene todos los tipos de sensores registrados.
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="sensor.service.js.html">sensor.service.js</a>, <a href="sensor.service.js.html#line109">line 109</a>
     </li></ul></dd>
     
 
@@ -760,7 +1014,7 @@ validando los datos y controlando las reglas de negocio.</div>
 <dl>
     <dt>
         <div class="param-desc">
-        Si ocurre un error al obtener los proyectos.
+        Si ocurre un error al obtener los tipos de sensores.
         </div>
     </dt>
     <dd></dd>
@@ -805,8 +1059,7 @@ validando los datos y controlando las reglas de negocio.</div>
 
 
 <div class="param-desc">
-    Lista de proyectos en formato DTO,
-incluyendo la información básica de la empresa asociada.
+    Lista de tipos de sensores.
 </div>
 
     
@@ -821,14 +1074,14 @@ incluyendo la información básica de la empresa asociada.
 
     
 
-    <h4 class="name" id=".updateProject"><span class="type-signature">(async, static) </span>updateProject<span class="signature">(id, name, description, companyId, nodes<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;Project>}</span></h4>
+    <h4 class="name" id=".getAllSensors"><span class="type-signature">(async, static) </span>getAllSensors<span class="signature">()</span><span class="type-signature"> &rarr; {Promise.&lt;Array.&lt;Object>>}</span></h4>
 
     
 
 
 
 <div class="description">
-    Actualiza un proyecto existente con nuevos valores.
+    Obtiene todos los sensores registrados.
 </div>
 
 
@@ -864,7 +1117,7 @@ incluyendo la información básica de la empresa asociada.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="project.service.js.html">project.service.js</a>, <a href="project.service.js.html#line68">line 68</a>
+        <a href="sensor.service.js.html">sensor.service.js</a>, <a href="sensor.service.js.html#line47">line 47</a>
     </li></ul></dd>
     
 
@@ -881,233 +1134,6 @@ incluyendo la información básica de la empresa asociada.
 
 
 
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-        <th>Attributes</th>
-        
-
-        
-        <th>Default</th>
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>id</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>number</code></span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                </td>
-            
-
-            <td class="description last">
-                ID del proyecto a actualizar.
-                
-            </td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>name</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>string</code></span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                </td>
-            
-
-            <td class="description last">
-                Nuevo nombre del proyecto.
-                
-            </td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>description</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>string</code></span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                </td>
-            
-
-            <td class="description last">
-                Nueva descripción.
-                
-            </td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>companyId</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>number</code></span>
-|
-
-<span class="param-type"><code>string</code></span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                </td>
-            
-
-            <td class="description last">
-                ID de la empresa asociada.
-                
-            </td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>nodes</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>Array.&lt;<a href="global.html#NodeInput">NodeInput</a>></code></span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-
-                
-                </td>
-            
-
-            
-                <td class="default">
-                
-                    []
-                
-                </td>
-            
-
-            <td class="description last">
-                IDs de los nodos a vincular.
-                
-            </td>
-        </tr>
-
-    
-    </tbody>
-</table>
 
 
 
@@ -1128,7 +1154,7 @@ incluyendo la información básica de la empresa asociada.
 <dl>
     <dt>
         <div class="param-desc">
-        Si los datos son inválidos o ocurre un error en la base de datos.
+        Si ocurre un error al obtener los sensores.
         </div>
     </dt>
     <dd></dd>
@@ -1165,7 +1191,7 @@ incluyendo la información básica de la empresa asociada.
     </dt>
     <dd>
         
-<span class="param-type"><code>Promise.&lt;Project></code></span>
+<span class="param-type"><code>Promise.&lt;Array.&lt;Object>></code></span>
 
 
     </dd>
@@ -1173,7 +1199,644 @@ incluyendo la información básica de la empresa asociada.
 
 
 <div class="param-desc">
-    Proyecto actualizado.
+    Lista de sensores.
+</div>
+
+    
+</div>
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id=".getSensorById"><span class="type-signature">(async, static) </span>getSensorById<span class="signature">(id)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Obtiene un sensor por su ID.
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="sensor.service.js.html">sensor.service.js</a>, <a href="sensor.service.js.html#line33">line 33</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>number</code></span>
+|
+
+<span class="param-type"><code>string</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                ID del sensor a buscar.
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section-throws">
+<h5>Throws:</h5>
+
+        
+
+<dl>
+    <dt>
+        <div class="param-desc">
+        Si ocurre un error durante la búsqueda.
+        </div>
+    </dt>
+    <dd></dd>
+    <dt>
+        <dl>
+            <dt>
+                Type
+            </dt>
+            <dd>
+                
+<span class="param-type"><code>Error</code></span>
+
+
+            </dd>
+        </dl>
+    </dt>
+    <dd></dd>
+</dl>
+
+
+    
+</div>
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code>Promise.&lt;Object></code></span>
+
+
+    </dd>
+</dl>
+
+
+<div class="param-desc">
+    Sensor encontrado.
+</div>
+
+    
+</div>
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id=".updateSensor"><span class="type-signature">(async, static) </span>updateSensor<span class="signature">(id, sensorData)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Actualiza un sensor existente con nuevos datos.
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="sensor.service.js.html">sensor.service.js</a>, <a href="sensor.service.js.html#line63">line 63</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>number</code></span>
+|
+
+<span class="param-type"><code>string</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                ID del sensor a actualizar.
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>sensorData</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>Object</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                Nuevos datos para el sensor.
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section-throws">
+<h5>Throws:</h5>
+
+        
+
+<dl>
+    <dt>
+        <div class="param-desc">
+        Si ocurre un error durante la actualización.
+        </div>
+    </dt>
+    <dd></dd>
+    <dt>
+        <dl>
+            <dt>
+                Type
+            </dt>
+            <dd>
+                
+<span class="param-type"><code>Error</code></span>
+
+
+            </dd>
+        </dl>
+    </dt>
+    <dd></dd>
+</dl>
+
+
+    
+</div>
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code>Promise.&lt;Object></code></span>
+
+
+    </dd>
+</dl>
+
+
+<div class="param-desc">
+    Sensor actualizado.
+</div>
+
+    
+</div>
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id=".updateSensorType"><span class="type-signature">(async, static) </span>updateSensorType<span class="signature">(id, sensorTypeData)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Actualiza un tipo de sensor existente.
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="sensor.service.js.html">sensor.service.js</a>, <a href="sensor.service.js.html#line125">line 125</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>number</code></span>
+|
+
+<span class="param-type"><code>string</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                ID del tipo de sensor a actualizar.
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>sensorTypeData</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>Object</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                Nuevos datos del tipo de sensor.
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section-throws">
+<h5>Throws:</h5>
+
+        
+
+<dl>
+    <dt>
+        <div class="param-desc">
+        Si ocurre un error durante la actualización.
+        </div>
+    </dt>
+    <dd></dd>
+    <dt>
+        <dl>
+            <dt>
+                Type
+            </dt>
+            <dd>
+                
+<span class="param-type"><code>Error</code></span>
+
+
+            </dd>
+        </dl>
+    </dt>
+    <dd></dd>
+</dl>
+
+
+    
+</div>
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code>Promise.&lt;Object></code></span>
+
+
+    </dd>
+</dl>
+
+
+<div class="param-desc">
+    Tipo de sensor actualizado.
 </div>
 
     

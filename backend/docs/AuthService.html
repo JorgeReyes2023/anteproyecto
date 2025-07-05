@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Global - Documentation</title>
+    <title>AuthService - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -29,7 +29,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">Global</h1>
+    <h1 class="page-title">AuthService</h1>
     
 
     
@@ -42,8 +42,13 @@
 <header>
     
         <h2>
-        
+        AuthService
         </h2>
+        
+            <div class="class-description">Servicio de autenticación.
+
+Este servicio maneja el registro, inicio de sesión y verificación de tokens.
+También se encarga del cifrado de contraseñas usando bcrypt y de la generación/verificación de JWTs.</div>
         
     
 </header>
@@ -52,8 +57,20 @@
     <div class="container-overview">
     
         
+<div class="section-method">
 
-        
+    
+    <h2>Constructor</h2>
+    
+
+    <h4 class="name" id="AuthService"><span class="type-signature"></span>new AuthService<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+
+
 
 
 <dl class="details">
@@ -83,6 +100,11 @@
     
 
     
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="auth.service.js.html">auth.service.js</a>, <a href="auth.service.js.html#line12">line 12</a>
+    </li></ul></dd>
+    
 
     
 
@@ -92,7 +114,28 @@
 </dl>
 
 
-        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
     
     </div>
 
@@ -117,14 +160,14 @@
 
     
 
-    <h4 class="name" id="generateToken"><span class="type-signature"></span>generateToken<span class="signature">(payload)</span><span class="type-signature"> &rarr; {string}</span></h4>
+    <h4 class="name" id=".checkPassword"><span class="type-signature">(async, static) </span>checkPassword<span class="signature">(password, hashedPassword)</span><span class="type-signature"> &rarr; {Promise.&lt;boolean>}</span></h4>
 
     
 
 
 
 <div class="description">
-    Genera un token para un usuario dado.
+    Verifica si una contraseña coincide con su hash cifrado.
 </div>
 
 
@@ -160,7 +203,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="token.service.js.html">token.service.js</a>, <a href="token.service.js.html#line8">line 8</a>
+        <a href="auth.service.js.html">auth.service.js</a>, <a href="auth.service.js.html#line38">line 38</a>
     </li></ul></dd>
     
 
@@ -204,13 +247,13 @@
 
         <tr>
             
-                <td class="name"><code>payload</code></td>
+                <td class="name"><code>password</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><code>Object</code></span>
+<span class="param-type"><code>string</code></span>
 
 
             
@@ -221,7 +264,33 @@
             
 
             <td class="description last">
-                Datos a incluir en el token (id, rol, email, etc.).
+                Contraseña en texto plano.
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>hashedPassword</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>string</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                Contraseña cifrada.
                 
             </td>
         </tr>
@@ -241,6 +310,38 @@
 
 
 
+<div class="section-throws">
+<h5>Throws:</h5>
+
+        
+
+<dl>
+    <dt>
+        <div class="param-desc">
+        Si ocurre un error durante la comparación.
+        </div>
+    </dt>
+    <dd></dd>
+    <dt>
+        <dl>
+            <dt>
+                Type
+            </dt>
+            <dd>
+                
+<span class="param-type"><code>Error</code></span>
+
+
+            </dd>
+        </dl>
+    </dt>
+    <dd></dd>
+</dl>
+
+
+    
+</div>
+
 
 
 <div class="section-returns">
@@ -254,7 +355,7 @@
     </dt>
     <dd>
         
-<span class="param-type"><code>string</code></span>
+<span class="param-type"><code>Promise.&lt;boolean></code></span>
 
 
     </dd>
@@ -262,7 +363,7 @@
 
 
 <div class="param-desc">
-    El token firmado.
+    `true` si las contraseñas coinciden.
 </div>
 
     
@@ -277,14 +378,14 @@
 
     
 
-    <h4 class="name" id="verifyToken"><span class="type-signature"></span>verifyToken<span class="signature">(token)</span><span class="type-signature"> &rarr; {Object}</span></h4>
+    <h4 class="name" id=".hashPassword"><span class="type-signature">(async, static) </span>hashPassword<span class="signature">(password)</span><span class="type-signature"> &rarr; {Promise.&lt;string>}</span></h4>
 
     
 
 
 
 <div class="description">
-    Verifica y decodifica un token.
+    Cifra una contraseña utilizando bcrypt.
 </div>
 
 
@@ -320,7 +421,788 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="token.service.js.html">token.service.js</a>, <a href="token.service.js.html#line20">line 20</a>
+        <a href="auth.service.js.html">auth.service.js</a>, <a href="auth.service.js.html#line20">line 20</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>password</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>string</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                Contraseña en texto plano.
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section-throws">
+<h5>Throws:</h5>
+
+        
+
+<dl>
+    <dt>
+        <div class="param-desc">
+        Si ocurre un error al cifrar la contraseña.
+        </div>
+    </dt>
+    <dd></dd>
+    <dt>
+        <dl>
+            <dt>
+                Type
+            </dt>
+            <dd>
+                
+<span class="param-type"><code>Error</code></span>
+
+
+            </dd>
+        </dl>
+    </dt>
+    <dd></dd>
+</dl>
+
+
+    
+</div>
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code>Promise.&lt;string></code></span>
+
+
+    </dd>
+</dl>
+
+
+<div class="param-desc">
+    Contraseña cifrada (hash).
+</div>
+
+    
+</div>
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id=".login"><span class="type-signature">(async, static) </span>login<span class="signature">(email, password)</span><span class="type-signature"> &rarr; {Promise.&lt;{user: Object, token: string}>}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Autentica a un usuario con su correo electrónico y contraseña.
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="auth.service.js.html">auth.service.js</a>, <a href="auth.service.js.html#line55">line 55</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>email</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>string</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                Correo electrónico del usuario.
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>password</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>string</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                Contraseña en texto plano.
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section-throws">
+<h5>Throws:</h5>
+
+        
+
+<dl>
+    <dt>
+        <div class="param-desc">
+        Si los datos son inválidos o la autenticación falla.
+        </div>
+    </dt>
+    <dd></dd>
+    <dt>
+        <dl>
+            <dt>
+                Type
+            </dt>
+            <dd>
+                
+<span class="param-type"><code>Error</code></span>
+
+
+            </dd>
+        </dl>
+    </dt>
+    <dd></dd>
+</dl>
+
+
+    
+</div>
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code>Promise.&lt;{user: Object, token: string}></code></span>
+
+
+    </dd>
+</dl>
+
+
+<div class="param-desc">
+    Objeto con los datos del usuario autenticado y su token JWT.
+</div>
+
+    
+</div>
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id=".register"><span class="type-signature">(async, static) </span>register<span class="signature">(username, email, password, role<span class="signature-attributes">opt</span>, company<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {Promise.&lt;{user: Object, token: string}>}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Registra un nuevo usuario en el sistema.
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="auth.service.js.html">auth.service.js</a>, <a href="auth.service.js.html#line98">line 98</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>username</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>string</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">
+                Nombre del usuario.
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>email</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>string</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">
+                Correo electrónico.
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>password</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>string</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">
+                Contraseña en texto plano.
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>role</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>string</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    "user"
+                
+                </td>
+            
+
+            <td class="description last">
+                Rol asignado al usuario (por defecto: "user").
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>company</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>string</code></span>
+|
+
+<span class="param-type"><code>null</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    null
+                
+                </td>
+            
+
+            <td class="description last">
+                Empresa asociada al usuario.
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section-throws">
+<h5>Throws:</h5>
+
+        
+
+<dl>
+    <dt>
+        <div class="param-desc">
+        Si el registro falla.
+        </div>
+    </dt>
+    <dd></dd>
+    <dt>
+        <dl>
+            <dt>
+                Type
+            </dt>
+            <dd>
+                
+<span class="param-type"><code>Error</code></span>
+
+
+            </dd>
+        </dl>
+    </dt>
+    <dd></dd>
+</dl>
+
+
+    
+</div>
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code>Promise.&lt;{user: Object, token: string}></code></span>
+
+
+    </dd>
+</dl>
+
+
+<div class="param-desc">
+    Objeto con el usuario creado y su token JWT.
+</div>
+
+    
+</div>
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id=".verifyToken"><span class="type-signature">(async, static) </span>verifyToken<span class="signature">(token)</span><span class="type-signature"> &rarr; {Object}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Verifica y decodifica un token JWT.
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="auth.service.js.html">auth.service.js</a>, <a href="auth.service.js.html#line133">line 133</a>
     </li></ul></dd>
     
 
@@ -381,7 +1263,7 @@
             
 
             <td class="description last">
-                El token a verificar.
+                Token JWT a verificar.
                 
             </td>
         </tr>
@@ -409,7 +1291,7 @@
 <dl>
     <dt>
         <div class="param-desc">
-        Si el token es inválido o ha expirado.
+        Si el token no es válido o ha expirado.
         </div>
     </dt>
     <dd></dd>
@@ -454,7 +1336,7 @@
 
 
 <div class="param-desc">
-    Los datos del token decodificado si es válido.
+    Datos decodificados del token.
 </div>
 
     
@@ -466,175 +1348,6 @@
         
     
 
-    
-        <h3 class="subsection-title">Type Definitions</h3>
-
-        
-                
-<div class="section-members">
-<h4 class="name" id="NodeInput">NodeInput</h4>
-
-
-
-
-
-
-
-
-    <h5 class="subsection-title">Properties:</h5>
-
-    
-
-<table class="props">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-        <th>Attributes</th>
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>id</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>number</code></span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">ID del nodo.</td>
-        </tr>
-
-        
-
-    
-
-        <tr>
-            
-                <td class="name"><code>name</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><code>string</code></span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-                    &lt;optional><br>
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">Nombre del nodo.</td>
-        </tr>
-
-        
-
-    
-    </tbody>
-</table>
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="project.service.js.html">project.service.js</a>, <a href="project.service.js.html#line7">line 7</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type"><code>Object</code></span>
-
-
-        </li>
-    </ul>
-
-
-
-
-
-</div>
-
-            
     
 
     

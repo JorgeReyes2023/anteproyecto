@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>project.service.js - Documentation</title>
+    <title>company.service.js - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -29,7 +29,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">project.service.js</h1>
+    <h1 class="page-title">company.service.js</h1>
     
 
     
@@ -39,155 +39,108 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>const { ProjectModel } = require("../models/project.model");
-const {
-  projectSchema,
-  deleteProjectSchema,
-} = require("../validators/project.validator");
+            <pre class="prettyprint source linenums"><code>const { CompanyModel } = require("../models/company.model");
 
 /**
- * @typedef {Object} NodeInput
- * @property {number} id - ID del nodo.
- * @property {string} [name] - Nombre del nodo.
+ * Servicio para la gestión de empresas.
+ *
+ * Este servicio proporciona funciones para crear, actualizar, eliminar y obtener empresas,
+ * controlando errores como duplicación de nombres o restricciones de integridad referencial.
  */
-
-/**
- * Servicio para la gestión de proyectos.
- * Incluye creación, actualización, eliminación y obtención de proyectos,
- * validando los datos y controlando las reglas de negocio.
- */
-class ProjectService {
+class CompanyService {
   /**
-   * Crea un nuevo proyecto después de validar los datos y verificar que no exista uno con el mismo nombre.
+   * Crea una nueva empresa si no existe ya una con el mismo nombre.
    *
-   * @param {string} name - Nombre del proyecto.
-   * @param {string} description - Descripción del proyecto.
-   * @param {number|string} companyId - ID de la empresa asociada.
-   * @param {NodeInput[]} [nodes=[]] - IDs de los nodos asociados al proyecto.
-   *
-   * @returns {Promise&lt;Project>} Proyecto creado exitosamente.
-   *
-   * @throws {Error} Si los datos son inválidos o el proyecto ya existe.
+   * @param {string} name - Nombre de la empresa.
+   * @param {string} address - Dirección de la empresa.
+   * @returns {Promise&lt;Object>} Empresa creada exitosamente.
+   * @throws {Error} Si la empresa ya existe o ocurre un error en la base de datos.
    */
-  static async createProject(name, description, companyId, nodes = []) {
+  static async createCompany(name, address) {
     try {
-      const { value, error } = projectSchema.validate(
-        { name, description, companyId, nodes },
-        { convert: true },
-      );
-
-      if (error) throw new Error(`Datos inválidos: ${error.message}`);
-      // Check if the project already exists
-      const existingProject = await ProjectModel.getProjectByName(value.name);
-      if (existingProject) {
-        throw new Error(`El proyecto con el nombre ${value.name} ya existe`);
+      // Check if the company already exists
+      const existingCompany = await CompanyModel.getCompanyByName(name);
+      if (existingCompany) {
+        throw new Error(`La empresa con el nombre ${name} ya existe`);
       }
-      return await ProjectModel.createProject(
-        value.name,
-        value.description,
-        value.companyId,
-        value.nodes,
-      );
+
+      return await CompanyModel.createCompany(name, address);
     } catch (error) {
-      throw new Error(`Error al crear el proyecto: ${error.message}`);
+      throw new Error(`Error al crear la empresa: ${error.message}`);
     }
   }
 
   /**
-   * Actualiza un proyecto existente con nuevos valores.
+   * Actualiza una empresa existente por su ID.
    *
-   * @param {number} id - ID del proyecto a actualizar.
-   * @param {string} name - Nuevo nombre del proyecto.
-   * @param {string} description - Nueva descripción.
-   * @param {number|string} companyId - ID de la empresa asociada.
-   * @param {NodeInput[]} [nodes=[]] - IDs de los nodos a vincular.
-   *
-   * @returns {Promise&lt;Project>} Proyecto actualizado.
-   *
-   * @throws {Error} Si los datos son inválidos o ocurre un error en la base de datos.
+   * @param {number|string} id - ID de la empresa a actualizar.
+   * @param {string} name - Nuevo nombre de la empresa.
+   * @param {string} address - Nueva dirección de la empresa.
+   * @returns {Promise&lt;Object>} Empresa actualizada.
+   * @throws {Error} Si ocurre un error durante la actualización.
    */
-  static async updateProject(id, name, description, companyId, nodes = []) {
+  static async updateCompany(id, name, address) {
     try {
-      const { value, error } = projectSchema.validate(
-        {
-          id,
-          name,
-          description,
-          companyId,
-          nodes,
-        },
-        { convert: true },
-      );
-
-      if (error) throw new Error(`Datos inválidos: ${error.message}`);
-
-      return await ProjectModel.updateProject(
-        value.id,
-        value.name,
-        value.description,
-        value.companyId,
-        value.nodes,
-      );
+      const numberId = parseInt(id, 10);
+      return await CompanyModel.updateCompany(numberId, name, address);
     } catch (error) {
-      throw new Error(`Error al actualizar el proyecto: ${error.message}`);
+      throw new Error(`Error al actualizar la empresa: ${error.message}`);
     }
   }
 
   /**
-   * Elimina un proyecto por su ID.
+   * Elimina una empresa por su ID.
    *
-   * @param {number} id - ID del proyecto a eliminar.
-   *
-   * @returns {Promise&lt;boolean>} `true` si se eliminó correctamente.
-   *
-   * @throws {Error} Si ocurre un error durante la eliminación.
+   * @param {number|string} id - ID de la empresa a eliminar.
+   * @returns {Promise&lt;Object>} Resultado de la eliminación.
+   * @throws {Error} Si la empresa tiene usuarios o proyectos asociados, o si ocurre otro error.
    */
-  static async deleteProject(id) {
+  static async deleteCompany(id) {
     try {
-      const { value, error } = deleteProjectSchema.validate(
-        { id },
-        { convert: true },
-      );
-
-      if (error) throw new Error(`Datos inválidos: ${error.message}`);
-      return await ProjectModel.deleteProject(value.id);
+      const numberId = parseInt(id, 10);
+      return await CompanyModel.deleteCompany(numberId);
     } catch (error) {
-      throw new Error(`Error al eliminar el proyecto: ${error.message}`);
+      if (error.code === "P2003") {
+        // P2003 is the error code for foreign key constraint violation
+        throw new Error(
+          `No se puede eliminar la empresa porque tiene usuarios o proyectos asociados.`,
+        );
+      } else {
+        throw new Error(`Error al eliminar la empresa: ${error.message}`);
+      }
     }
   }
 
   /**
-   * Obtiene todos los proyectos existentes junto con sus empresas asociadas y nodos.
+   * Obtiene todas las empresas registradas.
    *
-   * @returns {Promise&lt;Array&lt;Object>>} Lista de proyectos en formato DTO,
-   * incluyendo la información básica de la empresa asociada.
-   *
-   * @throws {Error} Si ocurre un error al obtener los proyectos.
+   * @returns {Promise&lt;Array&lt;Object>>} Lista de todas las empresas.
+   * @throws {Error} Si ocurre un error al obtener los datos.
    */
-  static async getAllProjects() {
+  static async getAllCompanies() {
     try {
-      const projects = await ProjectModel.getAllProjects();
-      const projectsDto = projects.map((project) => ({
-        id: project.id,
-        name: project.name,
-        description: project.description,
-        companyId: project.company_id,
-        nodes: project.nodes,
-        company: project.companies
-          ? {
-              id: project.companies.id,
-              name: project.companies.name,
-            }
-          : null,
-      }));
-      return projectsDto;
+      return await CompanyModel.getAllCompanies();
     } catch (error) {
-      throw new Error(`Error al obtener los proyectos: ${error.message}`);
+      throw new Error(`Error al obtener las empresas: ${error.message}`);
+    }
+  }
+
+  /**
+   * Obtiene una empresa por su ID.
+   *
+   * @param {number|string} id - ID de la empresa.
+   * @returns {Promise&lt;Object>} Empresa encontrada.
+   * @throws {Error} Si ocurre un error al buscar la empresa.
+   */
+  static async getCompanyById(id) {
+    try {
+      return await CompanyModel.getCompanyById(id);
+    } catch (error) {
+      throw new Error(`Error al obtener la empresa por ID: ${error.message}`);
     }
   }
 }
-
-module.exports = { ProjectService };
+module.exports = { CompanyService };
 </code></pre>
         </article>
     </section>

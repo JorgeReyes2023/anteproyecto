@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>project.service.js - Documentation</title>
+    <title>sensor.service.js - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -29,7 +29,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">project.service.js</h1>
+    <h1 class="page-title">sensor.service.js</h1>
     
 
     
@@ -39,155 +39,154 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>const { ProjectModel } = require("../models/project.model");
-const {
-  projectSchema,
-  deleteProjectSchema,
-} = require("../validators/project.validator");
+            <pre class="prettyprint source linenums"><code>const { SensorModel } = require("../models/sensor.model.js");
+const { SensorTypeModel } = require("../models/sensor-type.model.js");
 
 /**
- * @typedef {Object} NodeInput
- * @property {number} id - ID del nodo.
- * @property {string} [name] - Nombre del nodo.
+ * Servicio para la gestión de sensores y sus tipos.
+ *
+ * Este servicio permite crear, obtener, actualizar y eliminar sensores y tipos de sensores,
+ * centralizando la lógica de negocio relacionada a estos componentes.
  */
-
-/**
- * Servicio para la gestión de proyectos.
- * Incluye creación, actualización, eliminación y obtención de proyectos,
- * validando los datos y controlando las reglas de negocio.
- */
-class ProjectService {
+class SensorService {
   /**
-   * Crea un nuevo proyecto después de validar los datos y verificar que no exista uno con el mismo nombre.
+   * Crea un nuevo sensor con los datos proporcionados.
    *
-   * @param {string} name - Nombre del proyecto.
-   * @param {string} description - Descripción del proyecto.
-   * @param {number|string} companyId - ID de la empresa asociada.
-   * @param {NodeInput[]} [nodes=[]] - IDs de los nodos asociados al proyecto.
-   *
-   * @returns {Promise&lt;Project>} Proyecto creado exitosamente.
-   *
-   * @throws {Error} Si los datos son inválidos o el proyecto ya existe.
+   * @param {Object} sensorData - Datos del sensor (nombre, ubicación, estado, etc.).
+   * @returns {Promise&lt;Object>} Sensor creado exitosamente.
+   * @throws {Error} Si ocurre un error al crear el sensor.
    */
-  static async createProject(name, description, companyId, nodes = []) {
+  static async createSensor(sensorData) {
     try {
-      const { value, error } = projectSchema.validate(
-        { name, description, companyId, nodes },
-        { convert: true },
-      );
-
-      if (error) throw new Error(`Datos inválidos: ${error.message}`);
-      // Check if the project already exists
-      const existingProject = await ProjectModel.getProjectByName(value.name);
-      if (existingProject) {
-        throw new Error(`El proyecto con el nombre ${value.name} ya existe`);
-      }
-      return await ProjectModel.createProject(
-        value.name,
-        value.description,
-        value.companyId,
-        value.nodes,
-      );
+      return await SensorModel.createSensor(sensorData);
     } catch (error) {
-      throw new Error(`Error al crear el proyecto: ${error.message}`);
+      throw new Error(`Error creating sensor: ${error.message}`);
     }
   }
 
   /**
-   * Actualiza un proyecto existente con nuevos valores.
+   * Obtiene un sensor por su ID.
    *
-   * @param {number} id - ID del proyecto a actualizar.
-   * @param {string} name - Nuevo nombre del proyecto.
-   * @param {string} description - Nueva descripción.
-   * @param {number|string} companyId - ID de la empresa asociada.
-   * @param {NodeInput[]} [nodes=[]] - IDs de los nodos a vincular.
-   *
-   * @returns {Promise&lt;Project>} Proyecto actualizado.
-   *
-   * @throws {Error} Si los datos son inválidos o ocurre un error en la base de datos.
+   * @param {number|string} id - ID del sensor a buscar.
+   * @returns {Promise&lt;Object>} Sensor encontrado.
+   * @throws {Error} Si ocurre un error durante la búsqueda.
    */
-  static async updateProject(id, name, description, companyId, nodes = []) {
+  static async getSensorById(id) {
     try {
-      const { value, error } = projectSchema.validate(
-        {
-          id,
-          name,
-          description,
-          companyId,
-          nodes,
-        },
-        { convert: true },
-      );
-
-      if (error) throw new Error(`Datos inválidos: ${error.message}`);
-
-      return await ProjectModel.updateProject(
-        value.id,
-        value.name,
-        value.description,
-        value.companyId,
-        value.nodes,
-      );
+      return await SensorModel.getSensorById(id);
     } catch (error) {
-      throw new Error(`Error al actualizar el proyecto: ${error.message}`);
+      throw new Error(`Error fetching sensor by ID: ${error.message}`);
     }
   }
 
   /**
-   * Elimina un proyecto por su ID.
+   * Obtiene todos los sensores registrados.
    *
-   * @param {number} id - ID del proyecto a eliminar.
-   *
-   * @returns {Promise&lt;boolean>} `true` si se eliminó correctamente.
-   *
-   * @throws {Error} Si ocurre un error durante la eliminación.
+   * @returns {Promise&lt;Array&lt;Object>>} Lista de sensores.
+   * @throws {Error} Si ocurre un error al obtener los sensores.
    */
-  static async deleteProject(id) {
+  static async getAllSensors() {
     try {
-      const { value, error } = deleteProjectSchema.validate(
-        { id },
-        { convert: true },
-      );
-
-      if (error) throw new Error(`Datos inválidos: ${error.message}`);
-      return await ProjectModel.deleteProject(value.id);
+      return await SensorModel.getAllSensors();
     } catch (error) {
-      throw new Error(`Error al eliminar el proyecto: ${error.message}`);
+      throw new Error(`Error fetching all sensors: ${error.message}`);
     }
   }
 
   /**
-   * Obtiene todos los proyectos existentes junto con sus empresas asociadas y nodos.
+   * Actualiza un sensor existente con nuevos datos.
    *
-   * @returns {Promise&lt;Array&lt;Object>>} Lista de proyectos en formato DTO,
-   * incluyendo la información básica de la empresa asociada.
-   *
-   * @throws {Error} Si ocurre un error al obtener los proyectos.
+   * @param {number|string} id - ID del sensor a actualizar.
+   * @param {Object} sensorData - Nuevos datos para el sensor.
+   * @returns {Promise&lt;Object>} Sensor actualizado.
+   * @throws {Error} Si ocurre un error durante la actualización.
    */
-  static async getAllProjects() {
+  static async updateSensor(id, sensorData) {
     try {
-      const projects = await ProjectModel.getAllProjects();
-      const projectsDto = projects.map((project) => ({
-        id: project.id,
-        name: project.name,
-        description: project.description,
-        companyId: project.company_id,
-        nodes: project.nodes,
-        company: project.companies
-          ? {
-              id: project.companies.id,
-              name: project.companies.name,
-            }
-          : null,
-      }));
-      return projectsDto;
+      return await SensorModel.updateSensor(id, sensorData);
     } catch (error) {
-      throw new Error(`Error al obtener los proyectos: ${error.message}`);
+      throw new Error(`Error updating sensor: ${error.message}`);
+    }
+  }
+
+  /**
+   * Elimina un sensor por su ID.
+   *
+   * @param {number|string} id - ID del sensor a eliminar.
+   * @returns {Promise&lt;Object>} Resultado de la operación.
+   * @throws {Error} Si ocurre un error al eliminar el sensor.
+   */
+  static async deleteSensor(id) {
+    try {
+      return await SensorModel.deleteSensor(id);
+    } catch (error) {
+      throw new Error(`Error deleting sensor: ${error.message}`);
+    }
+  }
+
+  // ────────────────────────────────────────────────────────────────
+
+  /**
+   * Crea un nuevo tipo de sensor.
+   *
+   * @param {Object} sensorTypeData - Datos del tipo de sensor (nombre, unidad, etc.).
+   * @returns {Promise&lt;Object>} Tipo de sensor creado.
+   * @throws {Error} Si ocurre un error al crear el tipo de sensor.
+   */
+  static async createSensorType(sensorTypeData) {
+    try {
+      return await SensorTypeModel.createSensorType(sensorTypeData);
+    } catch (error) {
+      throw new Error(`Error creating sensor type: ${error.message}`);
+    }
+  }
+
+  /**
+   * Obtiene todos los tipos de sensores registrados.
+   *
+   * @returns {Promise&lt;Array&lt;Object>>} Lista de tipos de sensores.
+   * @throws {Error} Si ocurre un error al obtener los tipos de sensores.
+   */
+  static async getAllSensorTypes() {
+    try {
+      return await SensorTypeModel.getAllSensorTypes();
+    } catch (error) {
+      throw new Error(`Error fetching all sensor types: ${error.message}`);
+    }
+  }
+
+  /**
+   * Actualiza un tipo de sensor existente.
+   *
+   * @param {number|string} id - ID del tipo de sensor a actualizar.
+   * @param {Object} sensorTypeData - Nuevos datos del tipo de sensor.
+   * @returns {Promise&lt;Object>} Tipo de sensor actualizado.
+   * @throws {Error} Si ocurre un error durante la actualización.
+   */
+  static async updateSensorType(id, sensorTypeData) {
+    try {
+      return await SensorTypeModel.updateSensorType(id, sensorTypeData);
+    } catch (error) {
+      throw new Error(`Error updating sensor type: ${error.message}`);
+    }
+  }
+
+  /**
+   * Elimina un tipo de sensor por su ID.
+   *
+   * @param {number|string} id - ID del tipo de sensor a eliminar.
+   * @returns {Promise&lt;Object>} Resultado de la operación.
+   * @throws {Error} Si ocurre un error al eliminar el tipo de sensor.
+   */
+  static async deleteSensorType(id) {
+    try {
+      return await SensorTypeModel.deleteSensorType(id);
+    } catch (error) {
+      throw new Error(`Error deleting sensor type: ${error.message}`);
     }
   }
 }
-
-module.exports = { ProjectService };
+module.exports = { SensorService };
 </code></pre>
         </article>
     </section>

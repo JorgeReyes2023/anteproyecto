@@ -2,7 +2,30 @@ const { Router } = require("express");
 const { AlertService } = require("../services/alert.service");
 
 const alertRoutes = Router();
-// Ruta para crear una alerta
+/**
+ * @swagger
+ * /alerts:
+ *   post:
+ *     summary: Crear una nueva alerta
+ *     tags:
+ *       - Alertas
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *               type:
+ *                 type: string
+ *     responses:
+ *       201:
+ *         description: Alerta creada
+ *       400:
+ *         description: Faltan datos requeridos
+ */
 alertRoutes.post("/", async (req, res) => {
   try {
     const alertData = req.body;
@@ -15,7 +38,40 @@ alertRoutes.post("/", async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
-// Ruta para actualizar una alerta
+
+/**
+ * @swagger
+ * /alerts/{id}:
+ *   put:
+ *     summary: Actualizar una alerta existente
+ *     tags:
+ *       - Alertas
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID de la alerta a actualizar
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *               type:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Alerta actualizada correctamente
+ *       400:
+ *         description: Faltan datos requeridos
+ *       500:
+ *         description: Error interno del servidor
+ */
 alertRoutes.put("/:id", async (req, res) => {
   try {
     const { id } = req.params;
@@ -29,7 +85,28 @@ alertRoutes.put("/:id", async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
-// Ruta para eliminar una alerta
+
+/**
+ * @swagger
+ * /alerts/{id}:
+ *   delete:
+ *     summary: Eliminar una alerta por ID
+ *     tags:
+ *       - Alertas
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID de la alerta a eliminar
+ *     responses:
+ *       204:
+ *         description: Alerta eliminada exitosamente
+ *       500:
+ *         description: Error al eliminar la alerta
+ */
+
 alertRoutes.delete("/:id", async (req, res) => {
   try {
     const { id } = req.params;
@@ -39,7 +116,34 @@ alertRoutes.delete("/:id", async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
-// Ruta para obtener todas las alertas
+
+/**
+ * @swagger
+ * /alerts:
+ *   get:
+ *     summary: Obtener todas las alertas
+ *     tags:
+ *       - Alertas
+ *     responses:
+ *       200:
+ *         description: Lista de alertas
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   id:
+ *                     type: integer
+ *                   name:
+ *                     type: string
+ *                   type:
+ *                     type: string
+ *       500:
+ *         description: Error interno del servidor
+ */
+
 alertRoutes.get("/", async (req, res) => {
   try {
     const alerts = await AlertService.getAllAlerts();
@@ -48,7 +152,41 @@ alertRoutes.get("/", async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
-// Ruta para obtener una alerta por ID
+
+/**
+ * @swagger
+ * /alerts/{id}:
+ *   get:
+ *     summary: Obtener una alerta por ID
+ *     tags:
+ *       - Alertas
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID de la alerta
+ *     responses:
+ *       200:
+ *         description: Detalle de la alerta
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 id:
+ *                   type: integer
+ *                 name:
+ *                   type: string
+ *                 type:
+ *                   type: string
+ *       404:
+ *         description: Alerta no encontrada
+ *       500:
+ *         description: Error interno del servidor
+ */
+
 alertRoutes.get("/:id", async (req, res) => {
   try {
     const { id } = req.params;
