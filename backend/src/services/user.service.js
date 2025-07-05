@@ -3,7 +3,17 @@ const { RoleModel } = require("../models/role.model");
 const bcrypt = require("bcryptjs");
 const { CompanyModel } = require("../models/company.model");
 
+/** * Servicio para la gestión de usuarios.
+ *  Este servicio permite crear, obtener, actualizar y eliminar usuarios,
+ *  así como cambiar contraseñas y manejar roles y empresas asociadas.
+ */
 class UserService {
+  /**
+   * Obtiene todos los usuarios registrados.
+   *
+   * @returns {Promise<Array<Object>>} Lista de usuarios con sus roles y empresas.
+   * @throws {Error} Si ocurre un error al obtener los usuarios.
+   */
   static async getAllUsers() {
     try {
       const users = await UserModel.getAllUsers();
@@ -19,6 +29,13 @@ class UserService {
     }
   }
 
+  /**
+   * Obtiene un usuario por su ID.
+   *
+   * @param {number|string} id - ID del usuario a buscar.
+   * @returns {Promise<Object>} Usuario encontrado.
+   * @throws {Error} Si ocurre un error durante la búsqueda.
+   */
   static async getUserById(id) {
     try {
       if (!id) {
@@ -33,6 +50,13 @@ class UserService {
       throw new Error(`Error fetching user by ID: ${error.message}`);
     }
   }
+
+  /**
+   * Recupera un usuario por su correo electrónico.
+   * @param {string} email - Correo electrónico del usuario.
+   * @returns {Promise<Object>} Usuario encontrado.
+   * @throws {Error} Si ocurre un error durante la búsqueda o si el usuario no existe.
+   */
   static async getUserByEmail(email) {
     try {
       if (!email) {
@@ -47,6 +71,14 @@ class UserService {
       throw new Error(`Error fetching user by email: ${error.message}`);
     }
   }
+
+  /**
+   * Actualiza un usuario existente con nuevos datos.
+   * @param {number|string} id - ID del usuario a actualizar.
+   * @param {Object} updates - Nuevos datos para el usuario.
+   * @returns {Promise<Object>} Usuario actualizado.
+   * @throws {Error} Si ocurre un error durante la actualización o si los datos son inválidos.
+   */
   static async updateUser(id, updates) {
     try {
       if (!id || !updates) {
@@ -92,6 +124,12 @@ class UserService {
     }
   }
 
+  /**
+   * Elimina un usuario por su ID.
+   * @param {number|string} id - ID del usuario a eliminar.
+   * @returns {Promise<Object>} Resultado de la eliminación.
+   * @throws {Error} Si el ID es inválido o si ocurre un error durante la eliminación.
+   */
   static async deleteUser(id) {
     try {
       if (!id) {
@@ -112,6 +150,16 @@ class UserService {
       throw new Error(`Error deleting user: ${error.message}`);
     }
   }
+
+  /**
+   * Cambia la contraseña de un usuario.
+   * @param {number|string} id - ID del usuario.
+   * @param {string} currentPassword - Contraseña actual del usuario.
+   * @param {string} newPassword - Nueva contraseña para el usuario.
+   * @returns {Promise<Object>} Mensaje de éxito y datos del usuario actualizado.
+   * @throws {Error} Si los datos son inválidos, si el usuario no existe,
+   *                 o si la contraseña actual no coincide.
+   */
   static async changePassword(id, currentPassword, newPassword) {
     try {
       if (!id || !currentPassword || !newPassword) {
@@ -139,7 +187,7 @@ class UserService {
           id: updatedUser.id,
           name: updatedUser.name,
           email: updatedUser.email,
-          role: updatedUser.user_roles.name, // Assuming user_roles is included in the model
+          role: updatedUser.user_roles.name,
         },
       };
     } catch (error) {

@@ -2,7 +2,24 @@ const { NodeModel } = require("../models/node.model");
 const { State } = require("../constants/states");
 const { nodeSchema, nodeSchemaId } = require("../validators/node.validator");
 
+/**
+ * Servicio para la gestión de nodos.
+ *
+ * Este servicio permite crear, actualizar, eliminar y obtener nodos,
+ * validando los datos de entrada y normalizando los estados usando un enumerado.
+ */
 class NodeService {
+  /**
+   * Crea un nuevo nodo validando sus datos y asociándolo a un proyecto.
+   *
+   * @param {string} name - Nombre del nodo.
+   * @param {string} location - Ubicación del nodo.
+   * @param {string} status - Estado del nodo (clave del enum State).
+   * @param {number|string} projectId - ID del proyecto al que pertenece.
+   *
+   * @returns {Promise<Object>} Nodo creado con estado transformado.
+   * @throws {Error} Si los datos son inválidos o ocurre un error en la base de datos.
+   */
   static async createNode(name, location, status, projectId) {
     try {
       // Validar los parámetros de entrada
@@ -33,6 +50,13 @@ class NodeService {
     }
   }
 
+  /**
+   * Obtiene un nodo por su ID y transforma su estado usando el enum State.
+   *
+   * @param {number|string} id - ID del nodo a buscar.
+   * @returns {Promise<Object>} Nodo encontrado con estado y proyecto asociados.
+   * @throws {Error} Si los datos son inválidos o ocurre un error.
+   */
   static async getNodeById(id) {
     try {
       const { value, error } = nodeSchemaId.validate({ id }, { convert: true });
@@ -50,6 +74,18 @@ class NodeService {
     }
   }
 
+  /**
+   * Actualiza un nodo existente con nuevos datos.
+   *
+   * @param {number|string} id - ID del nodo a actualizar.
+   * @param {string} name - Nuevo nombre.
+   * @param {string} location - Nueva ubicación.
+   * @param {string} status - Nuevo estado.
+   * @param {number|string} projectId - Nuevo ID de proyecto.
+   *
+   * @returns {Promise<Object>} Nodo actualizado.
+   * @throws {Error} Si los datos son inválidos o falla la actualización.
+   */
   static async updateNode(id, name, location, status, projectId) {
     try {
       const { value, error } = nodeSchema.validate(
@@ -84,6 +120,13 @@ class NodeService {
     }
   }
 
+  /**
+   * Elimina un nodo por su ID.
+   *
+   * @param {number|string} id - ID del nodo a eliminar.
+   * @returns {Promise<Object>} Resultado de la operación.
+   * @throws {Error} Si los datos son inválidos o ocurre un error en la base de datos.
+   */
   static async deleteNode(id) {
     try {
       const { value, error } = nodeSchemaId.validate({ id }, { convert: true });
@@ -94,6 +137,12 @@ class NodeService {
     }
   }
 
+  /**
+   * Obtiene todos los nodos registrados, transformando el estado a un valor del enum State.
+   *
+   * @returns {Promise<Array<Object>>} Lista de nodos con sus proyectos asociados.
+   * @throws {Error} Si ocurre un error al obtener los datos.
+   */
   static async getAllNodes() {
     try {
       const nodes = await NodeModel.getAllNodes();

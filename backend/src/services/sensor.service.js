@@ -1,8 +1,20 @@
-// gestion de sensores (types y data)
 const { SensorModel } = require("../models/sensor.model.js");
 const { SensorTypeModel } = require("../models/sensor-type.model.js");
 
+/**
+ * Servicio para la gestión de sensores y sus tipos.
+ *
+ * Este servicio permite crear, obtener, actualizar y eliminar sensores y tipos de sensores,
+ * centralizando la lógica de negocio relacionada a estos componentes.
+ */
 class SensorService {
+  /**
+   * Crea un nuevo sensor con los datos proporcionados.
+   *
+   * @param {Object} sensorData - Datos del sensor (nombre, ubicación, estado, etc.).
+   * @returns {Promise<Object>} Sensor creado exitosamente.
+   * @throws {Error} Si ocurre un error al crear el sensor.
+   */
   static async createSensor(sensorData) {
     try {
       return await SensorModel.createSensor(sensorData);
@@ -11,6 +23,13 @@ class SensorService {
     }
   }
 
+  /**
+   * Obtiene un sensor por su ID.
+   *
+   * @param {number|string} id - ID del sensor a buscar.
+   * @returns {Promise<Object>} Sensor encontrado.
+   * @throws {Error} Si ocurre un error durante la búsqueda.
+   */
   static async getSensorById(id) {
     try {
       return await SensorModel.getSensorById(id);
@@ -19,6 +38,12 @@ class SensorService {
     }
   }
 
+  /**
+   * Obtiene todos los sensores registrados.
+   *
+   * @returns {Promise<Array<Object>>} Lista de sensores.
+   * @throws {Error} Si ocurre un error al obtener los sensores.
+   */
   static async getAllSensors() {
     try {
       return await SensorModel.getAllSensors();
@@ -27,6 +52,14 @@ class SensorService {
     }
   }
 
+  /**
+   * Actualiza un sensor existente con nuevos datos.
+   *
+   * @param {number|string} id - ID del sensor a actualizar.
+   * @param {Object} sensorData - Nuevos datos para el sensor.
+   * @returns {Promise<Object>} Sensor actualizado.
+   * @throws {Error} Si ocurre un error durante la actualización.
+   */
   static async updateSensor(id, sensorData) {
     try {
       return await SensorModel.updateSensor(id, sensorData);
@@ -35,6 +68,13 @@ class SensorService {
     }
   }
 
+  /**
+   * Elimina un sensor por su ID.
+   *
+   * @param {number|string} id - ID del sensor a eliminar.
+   * @returns {Promise<Object>} Resultado de la operación.
+   * @throws {Error} Si ocurre un error al eliminar el sensor.
+   */
   static async deleteSensor(id) {
     try {
       return await SensorModel.deleteSensor(id);
@@ -43,6 +83,15 @@ class SensorService {
     }
   }
 
+  // ────────────────────────────────────────────────────────────────
+
+  /**
+   * Crea un nuevo tipo de sensor.
+   *
+   * @param {Object} sensorTypeData - Datos del tipo de sensor (nombre, unidad, etc.).
+   * @returns {Promise<Object>} Tipo de sensor creado.
+   * @throws {Error} Si ocurre un error al crear el tipo de sensor.
+   */
   static async createSensorType(sensorTypeData) {
     try {
       return await SensorTypeModel.createSensorType(sensorTypeData);
@@ -51,6 +100,12 @@ class SensorService {
     }
   }
 
+  /**
+   * Obtiene todos los tipos de sensores registrados.
+   *
+   * @returns {Promise<Array<Object>>} Lista de tipos de sensores.
+   * @throws {Error} Si ocurre un error al obtener los tipos de sensores.
+   */
   static async getAllSensorTypes() {
     try {
       return await SensorTypeModel.getAllSensorTypes();
@@ -59,6 +114,14 @@ class SensorService {
     }
   }
 
+  /**
+   * Actualiza un tipo de sensor existente.
+   *
+   * @param {number|string} id - ID del tipo de sensor a actualizar.
+   * @param {Object} sensorTypeData - Nuevos datos del tipo de sensor.
+   * @returns {Promise<Object>} Tipo de sensor actualizado.
+   * @throws {Error} Si ocurre un error durante la actualización.
+   */
   static async updateSensorType(id, sensorTypeData) {
     try {
       return await SensorTypeModel.updateSensorType(id, sensorTypeData);
@@ -67,6 +130,13 @@ class SensorService {
     }
   }
 
+  /**
+   * Elimina un tipo de sensor por su ID.
+   *
+   * @param {number|string} id - ID del tipo de sensor a eliminar.
+   * @returns {Promise<Object>} Resultado de la operación.
+   * @throws {Error} Si ocurre un error al eliminar el tipo de sensor.
+   */
   static async deleteSensorType(id) {
     try {
       return await SensorTypeModel.deleteSensorType(id);
