@@ -94,9 +94,13 @@ export class AddSensorsDialogComponent implements OnInit {
 
   ngOnInit(): void {
     this.sensorService.getSensorsWithoutNode().then((s) => this.sensors.set(s));
+    this.fetchSensorTypes();
+  }
+
+  fetchSensorTypes() {
     this.sensorService.getSensorsTypes().subscribe((types) => {
       this.sensorTypes = types;
-      types.forEach((t) => this.sensorTypesMap.set(t.id, t));
+      this.sensorTypes.forEach((t) => this.sensorTypesMap.set(t.id, t));
       // Set default type if not already set
       if (!this.newSensorForm.get('typeIds')?.value?.length) {
         this.newSensorForm.patchValue({
@@ -204,12 +208,13 @@ export class AddSensorsDialogComponent implements OnInit {
         .afterClosed()
         .subscribe((newType: Type | null) => {
           if (newType) {
-            this.sensorTypes.push(newType);
-            this.sensorTypesMap.set(newType.id, newType);
-
-            this.newSensorForm.patchValue({
-              typeIds: [...currentTypes, newType.id],
-            });
+            this.sensorService
+              .createSensorType(newType)
+              .subscribe((createdType) => {
+                // Update the sensorTypesMap with the new type
+                this.sensorTypesMap.set(createdType.id, createdType);
+                this.fetchSensorTypes(); // Refresh the sensor types list
+              });
           } else {
             this.newSensorForm.patchValue({ typeIds: currentTypes });
           }

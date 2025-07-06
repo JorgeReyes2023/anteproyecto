@@ -1,6 +1,11 @@
 import { Injectable } from '@angular/core';
 import { GeneralService } from './general.service';
-import { Sensor, SensorCreate, SensorType } from '../models/sensor';
+import {
+  Sensor,
+  SensorCreate,
+  SensorType,
+  SensorTypeCreate,
+} from '../models/sensor';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -15,10 +20,6 @@ export class SensorService {
     return Promise.resolve([]);
   }
 
-  getSensorsTypes(): Observable<SensorType[]> {
-    return this.gService.getData('sensors/types');
-  }
-
   createSensor(sensor: SensorCreate): Observable<Sensor> {
     return this.gService.postData('sensors', sensor);
   }
@@ -28,5 +29,14 @@ export class SensorService {
     sensors: SensorCreate[]
   ): Observable<Sensor[]> {
     return this.gService.postData(`nodes/${nodeId}/sensors`, sensors);
+  }
+
+  // -- sensor types
+  getSensorsTypes(): Observable<SensorType[]> {
+    return this.gService.getData('sensors/types');
+  }
+
+  createSensorType(type: SensorTypeCreate): Observable<SensorType> {
+    return this.gService.postData('sensors/types', type);
   }
 }
