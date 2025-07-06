@@ -5,6 +5,7 @@ const {
   nodeSchema,
   nodeSchemaId,
 } = require("../src/validators/node.validator");
+const { sensors, projects } = require("../src/prisma");
 
 jest.mock("../src/models/node.model");
 jest.mock("../src/validators/node.validator");
@@ -135,15 +136,43 @@ describe("NodeService", () => {
   describe("getAllNodes", () => {
     it("should return all nodes formatted", async () => {
       NodeModel.getAllNodes.mockResolvedValue([
-        { id: 1, name: "N1", status: "ONLINE", project_id: 2 },
-        { id: 2, name: "N2", status: "OFFLINE", project_id: 3, projects: [] },
+        {
+          id: 1,
+          name: "N1",
+          status: "ACTIVE",
+          sensors: [],
+          project_id: 2,
+          projects: [],
+        },
+        {
+          id: 2,
+          name: "N2",
+          status: "INACTIVE",
+          sensors: [],
+          project_id: 3,
+          projects: [],
+        },
       ]);
 
       const result = await NodeService.getAllNodes();
 
       expect(result).toEqual([
-        { id: 1, name: "N1", status: State.ONLINE, projectId: 2, project: [] },
-        { id: 2, name: "N2", status: State.OFFLINE, projectId: 3, project: [] },
+        {
+          id: 1,
+          name: "N1",
+          status: State.ACTIVE,
+          projectId: 2,
+          project: [],
+          sensors: [],
+        },
+        {
+          id: 2,
+          name: "N2",
+          status: State.INACTIVE,
+          projectId: 3,
+          project: [],
+          sensors: [],
+        },
       ]);
     });
 

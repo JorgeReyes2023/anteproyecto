@@ -64,7 +64,7 @@
       <mat-error *ngIf="updateNodeForm.submitted && !localNode.status">
         El estado es obligatorio
       </mat-error>
-      <mat-hint *ngIf="!localNode.project">
+      <mat-hint *ngIf="!localNode.projectId">
         El estado solo se puede actualizar si se ha seleccionado un proyecto.
       </mat-hint>
     </mat-form-field>

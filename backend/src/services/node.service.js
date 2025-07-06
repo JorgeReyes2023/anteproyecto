@@ -1,6 +1,7 @@
 const { NodeModel } = require("../models/node.model");
 const { State } = require("../constants/states");
 const { nodeSchema, nodeSchemaId } = require("../validators/node.validator");
+const { sensors } = require("../prisma");
 
 /**
  * Servicio para la gestión de nodos.
@@ -153,6 +154,7 @@ class NodeService {
         status: State[node.status],
         projectId: node.project_id, // Asegurarse de que projectId esté presente
         project: node.projects || [], // Asegurarse de que projects esté presente
+        sensors: node.sensors || [], // Asegurarse de que sensors esté presente
       }));
     } catch (error) {
       throw new Error(`Error al obtener los nodos: ${error.message}`);

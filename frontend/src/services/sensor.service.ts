@@ -25,8 +25,8 @@ export class SensorService {
 
   attachSensorsToNode(
     nodeId: number,
-    sensorIds: number[]
+    sensors: SensorCreate[]
   ): Observable<Sensor[]> {
-    return this.gService.postData(`nodes/${nodeId}/sensors`, sensorIds);
+    return this.gService.postData(`nodes/${nodeId}/sensors`, sensors);
   }
 }

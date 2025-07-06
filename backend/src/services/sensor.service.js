@@ -1,5 +1,8 @@
 const { SensorModel } = require("../models/sensor.model.js");
 const { SensorTypeModel } = require("../models/sensor-type.model.js");
+const {
+  SensorSupportedTypeModel,
+} = require("../models/sensor-supported-type.model.js");
 
 const {
   sensorSchemaId,

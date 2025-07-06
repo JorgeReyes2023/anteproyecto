@@ -58,9 +58,8 @@ describe("TokenService", () => {
 
     it("should throw error if token is invalid", () => {
       const mockToken = "invalid.jwt.token";
-
-      jwt.verify.mockImplementation((_, __, callback) => {
-        callback(new Error("invalid token"), null);
+      jwt.verify.mockImplementation(() => {
+        throw new Error("invalid token");
       });
 
       expect(() => verifyToken(mockToken)).toThrow("Token inválido o expirado");

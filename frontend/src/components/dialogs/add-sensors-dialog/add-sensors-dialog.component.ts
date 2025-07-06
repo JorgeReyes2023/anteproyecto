@@ -157,12 +157,11 @@ export class AddSensorsDialogComponent implements OnInit {
     );
 
     const allSensors = [...this.selectedSensors(), ...created];
-    this.sensorService.attachSensorsToNode(
-      this.node.id,
-      allSensors.map((s) => s!.id)
-    );
-
-    this.dialogRef.close(true);
+    this.sensorService
+      .attachSensorsToNode(this.node.id, this.newSensorsDraft())
+      .subscribe(() => {
+        this.dialogRef.close(true);
+      });
   }
 
   onCancel() {
@@ -177,7 +176,6 @@ export class AddSensorsDialogComponent implements OnInit {
     if ((value || '').trim()) {
       const sensor: SensorCreate = {
         name: value.trim(),
-        nodeId: this.node.id,
         status: Status.INACTIVE,
       };
       this.newSensorsDraft.set([...this.newSensorsDraft(), sensor]);
