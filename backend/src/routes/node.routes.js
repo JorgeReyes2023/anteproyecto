@@ -6,7 +6,6 @@ const nodeRoutes = Router();
 // Ruta para crear un nodo
 nodeRoutes.post("/", async (req, res) => {
   try {
-    console.log("Creando nodo con datos:", req.body);
     const { name, location, status, projectId } = req.body;
     if (!name) {
       return res.status(400).json({ error: "Faltan datos requeridos" });

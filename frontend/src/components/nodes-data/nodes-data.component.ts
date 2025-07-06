@@ -8,6 +8,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { AlertService } from '../../app/_alert/alert.service';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 // add dialogs and services
 import { Node } from '../../models/node';
@@ -15,6 +16,7 @@ import { NodeService } from '../../services/node.service';
 import { Status } from '../../models/status';
 import { CreateNodeDialogComponent } from '../dialogs/create-node-dialog/create-node-dialog.component';
 import { UpdateNodeDialogComponent } from '../dialogs/update-node-dialog/update-node-dialog.component';
+import { AddSensorsDialogComponent } from '../dialogs/add-sensors-dialog/add-sensors-dialog.component';
 
 @Component({
   standalone: true,
@@ -26,6 +28,7 @@ import { UpdateNodeDialogComponent } from '../dialogs/update-node-dialog/update-
     MatIconModule,
     MatButtonModule,
     MatDialogModule,
+    MatTooltipModule,
   ],
   templateUrl: './nodes-data.component.html',
   styleUrl: './nodes-data.component.css',
@@ -59,13 +62,40 @@ export class NodesDataComponent implements OnDestroy {
       .subscribe({
         next: (nodes: Node[]) => {
           this.nodes = nodes;
-          console.log('Fetched nodes:', this.nodes);
         },
         error: (error) => {
           this.alertService.error('Failed to fetch nodes');
           console.error('Error fetching nodes:', error);
         },
       });
+  }
+
+  openAddSensorsDialog(node: Node) {
+    const dialogRef = this.dialog.open(AddSensorsDialogComponent, {
+      width: '600px',
+      minHeight: '400px',
+      maxHeight: '90vh',
+      data: node,
+    });
+
+    dialogRef.afterClosed().subscribe((result: Node | undefined) => {
+      if (result) {
+        this.nodeService.addSensorsToNode(result.id, result.sensors).subscribe({
+          next: (updatedNode) => {
+            this.fetchNodes(); // Refresh the list after adding sensors
+            this.alertService.success(
+              `Sensores añadidos al nodo ${updatedNode.name} correctamente`
+            );
+          },
+          error: (error) => {
+            this.alertService.error(
+              'Error al añadir sensores al nodo. Por favor, inténtelo de nuevo.'
+            );
+            console.error('Error adding sensors:', error);
+          },
+        });
+      }
+    });
   }
 
   openCreateDialog() {
@@ -79,11 +109,13 @@ export class NodesDataComponent implements OnDestroy {
           next: (newNode) => {
             this.fetchNodes(); // Refresh the list after creation
             this.alertService.success(
-              `Node ${newNode.name} created successfully`
+              `Nodo ${newNode.name} creado correctamente`
             );
           },
           error: (error) => {
-            this.alertService.error('Failed to create node');
+            this.alertService.error(
+              'Error al crear el nodo. Por favor, inténtelo de nuevo.'
+            );
             console.error('Error creating node:', error);
           },
         });
@@ -103,11 +135,13 @@ export class NodesDataComponent implements OnDestroy {
           next: (updatedNode) => {
             this.fetchNodes(); // Refresh the list after update
             this.alertService.success(
-              `Node ${updatedNode.name} updated successfully`
+              `Nodo ${updatedNode.name} actualizado correctamente`
             );
           },
           error: (error) => {
-            this.alertService.error('Failed to update node');
+            this.alertService.error(
+              'Error al actualizar el nodo. Por favor, inténtelo de nuevo.'
+            );
             console.error('Error updating node:', error);
           },
         });
@@ -118,11 +152,13 @@ export class NodesDataComponent implements OnDestroy {
   onDelete(Node: Node) {
     this.nodeService.deleteNode(Node.id).subscribe({
       next: () => {
-        this.alertService.success(`Node ${Node.name} deleted successfully`);
+        this.alertService.success(`Nodo ${Node.name} eliminado correctamente`);
         this.fetchNodes(); // Refresh the list after deletion
       },
       error: (error) => {
-        this.alertService.error('Failed to delete node');
+        this.alertService.error(
+          'Error al eliminar el nodo. Por favor, inténtelo de nuevo.'
+        );
         console.error('Error deleting node:', error);
       },
     });
@@ -132,8 +168,19 @@ export class NodesDataComponent implements OnDestroy {
     return node.id; // Assuming each node has a unique 'id' property
   }
 
+  hasSensors(node: Node): boolean {
+    return node.sensors && node.sensors.length > 0;
+  }
+
+  hasProject(node: Node): boolean {
+    return node.project && !!node.project.id;
+  }
+
+  hasLocation(node: Node): boolean {
+    return !!node.location;
+  }
+
   getStatusColor(status: Status): 'primary' | 'warn' | 'accent' | undefined {
-    console.log('getStatusColor called with status:', status);
     switch (status) {
       case Status.ACTIVE:
         return 'primary';

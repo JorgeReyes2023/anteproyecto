@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { GeneralService } from './general.service';
 import { Node, NodeCreate } from '../models/node';
 import { Observable } from 'rxjs';
+import { SensorCreate } from '../models/sensor';
 
 @Injectable({
   providedIn: 'root',
@@ -27,5 +28,9 @@ export class NodeService {
 
   deleteNode(id: number): Observable<void> {
     return this.gService.deleteData(`nodes/${id}`);
+  }
+
+  addSensorsToNode(nodeId: number, sensors: SensorCreate[]): Observable<Node> {
+    return this.gService.postData(`nodes/${nodeId}/sensors`, sensors);
   }
 }

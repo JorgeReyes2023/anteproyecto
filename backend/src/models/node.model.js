@@ -10,6 +10,10 @@ const NodeModel = {
         status: status,
         project_id: projectId,
       },
+      include: {
+        projects: true, // Include the project relation if needed
+        sensors: true, // Include the sensors relation if needed
+      },
     });
   },
 
@@ -28,6 +32,10 @@ const NodeModel = {
         status: status,
         project_id: projectId,
       },
+      include: {
+        projects: true, // Include the project relation if needed
+        sensors: true, // Include the sensors relation if needed
+      },
     });
   },
 
@@ -38,7 +46,12 @@ const NodeModel = {
   },
 
   async getAllNodes() {
-    return prisma.nodes.findMany();
+    return prisma.nodes.findMany({
+      include: {
+        projects: true, // Include the project relation if needed
+        sensors: true, // Include the sensors relation if needed
+      },
+    });
   },
 };
 module.exports = { NodeModel };

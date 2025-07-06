@@ -11,6 +11,6 @@ export interface NodeCreate {
 
 export interface Node extends NodeCreate {
   id: number;
-  project?: Project;
-  sensors?: Sensor[];
+  project: Project;
+  sensors: Sensor[];
 }

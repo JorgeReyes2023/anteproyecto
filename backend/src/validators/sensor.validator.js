@@ -7,11 +7,10 @@ const statusMap = {
   error: "ERROR",
 };
 
-const nodeSchema = Joi.object({
+const sensorSupportedTypeSchema = Joi.object({
   id: Joi.number().integer().positive(),
   name: Joi.string().min(2).max(255).required(),
-  location: Joi.string().min(2).max(255).allow("", null),
-  projectId: Joi.number().integer().positive().allow(null),
+  nodeId: Joi.number().integer().positive().allow(null),
   status: Joi.string()
     .custom((value, helpers) => {
       if (["ACTIVE", "INACTIVE", "MAINTENANCE", "ERROR"].includes(value)) {
@@ -25,8 +24,8 @@ const nodeSchema = Joi.object({
     .default("INACTIVE"),
 });
 
-const nodeSchemaId = Joi.object({
+const sensorSchemaId = Joi.object({
   id: Joi.number().integer().positive().required(),
 });
 
-module.exports = { nodeSchema, nodeSchemaId };
+module.exports = { sensorSupportedTypeSchema, sensorSchemaId };

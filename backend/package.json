@@ -13,7 +13,7 @@
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
     "mqtt": "node src/mqtt/mqttServer.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "seed": "node prisma/seed.js",
     "seed:generate": "node prisma/exportSeed.js",
     "prisma:reset": "prisma migrate reset --force",
@@ -22,6 +22,9 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "engines": {
+    "node": ">=18"
+  },
   "dependencies": {
     "@prisma/client": "^6.10.1",
     "bcryptjs": "^3.0.2",
@@ -31,7 +34,9 @@
     "joi": "^17.13.3",
     "jsonwebtoken": "^9.0.2",
     "mqtt": "^5.13.1",
-    "pg": "^8.16.0"
+    "pg": "^8.16.0",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.29.0",
@@ -40,11 +45,23 @@
     "eslint-config-prettier": "^10.1.5",
     "eslint-plugin-prettier": "^5.4.1",
     "globals": "^16.2.0",
+    "jest": "^30.0.4",
     "jsdoc": "^4.0.4",
     "minami": "^1.2.3",
     "nodemon": "^3.1.10",
     "prettier": "^3.5.3",
     "prisma": "^6.10.1",
     "taffydb": "^2.7.3"
+  },
+  "jest": {
+    "collectCoverage": true,
+    "coverageDirectory": "coverage",
+    "coverageReporters": [
+      "text",
+      "html"
+    ],
+    "collectCoverageFrom": [
+      "src/services/**/*.js"
+    ]
   }
 }

@@ -3,3 +3,7 @@ node_modules
 .env
 
 /src/generated/prisma
+
+# To delete after ok
+coverage/
+docs/
