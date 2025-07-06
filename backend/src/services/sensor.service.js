@@ -1,19 +1,61 @@
 // gestion de sensores (types y data)
 const { SensorModel } = require("../models/sensor.model.js");
 const { SensorTypeModel } = require("../models/sensor-type.model.js");
+const {
+  SensorSupportedTypeModel,
+} = require("../models/sensor-supported-type.model.js");
+
+const {
+  sensorSchemaId,
+  sensorSupportedTypeSchema,
+} = require("../validators/sensor.validator.js");
 
 class SensorService {
-  static async createSensor(sensorData) {
+  static async createSensor(name, nodeId, status) {
     try {
-      return await SensorModel.createSensor(sensorData);
+      const { value, error } = sensorSupportedTypeSchema.validate(
+        { name, nodeId, status },
+        { convert: true },
+      );
+
+      if (error) throw new Error(`Datos inválidos: ${error.message}`);
+
+      const existingSensor = await SensorModel.getSensorByName(value.name);
+      if (existingSensor) {
+        throw new Error(`El sensor con el nombre ${value.name} ya existe`);
+      }
+
+      const newSensor = await SensorModel.createSensor(
+        value.name,
+        value.nodeId,
+        value.status,
+      );
+
+      if (value.typeIds && value.typeIds.length > 0) {
+        await Promise.all(
+          value.typeIds.map((typeId) =>
+            SensorSupportedTypeModel.createSensorSupportedType({
+              sensor_id: newSensor.id,
+              type_id: typeId,
+            }),
+          ),
+        );
+      }
+      return newSensor;
     } catch (error) {
-      throw new Error(`Error creating sensor: ${error.message}`);
+      throw new Error(`Error al crear el sensor: ${error.message}`);
     }
   }
 
   static async getSensorById(id) {
     try {
-      return await SensorModel.getSensorById(id);
+      const { value, error } = sensorSchemaId.validate(
+        { id },
+        { convert: true },
+      );
+      if (error) throw new Error(`ID inválido: ${error.message}`);
+
+      return await SensorModel.getSensorById(value.id);
     } catch (error) {
       throw new Error(`Error fetching sensor by ID: ${error.message}`);
     }
@@ -72,6 +114,45 @@ class SensorService {
       return await SensorTypeModel.deleteSensorType(id);
     } catch (error) {
       throw new Error(`Error deleting sensor type: ${error.message}`);
+    }
+  }
+
+  static async createSensorSupportedType(sensorSupportedTypeData) {
+    try {
+      return await SensorSupportedTypeModel.createSensorSupportedType(
+        sensorSupportedTypeData,
+      );
+    } catch (error) {
+      throw new Error(`Error creating sensor supported type: ${error.message}`);
+    }
+  }
+
+  static async getAllSensorSupportedTypes() {
+    try {
+      return await SensorSupportedTypeModel.getAllSensorSupportedTypes();
+    } catch (error) {
+      throw new Error(
+        `Error fetching all sensor supported types: ${error.message}`,
+      );
+    }
+  }
+
+  static async updateSensorSupportedType(id, sensorSupportedTypeData) {
+    try {
+      return await SensorSupportedTypeModel.updateSensorSupportedType(
+        id,
+        sensorSupportedTypeData,
+      );
+    } catch (error) {
+      throw new Error(`Error updating sensor supported type: ${error.message}`);
+    }
+  }
+
+  static async deleteSensorSupportedType(id) {
+    try {
+      return await SensorSupportedTypeModel.deleteSensorSupportedType(id);
+    } catch (error) {
+      throw new Error(`Error deleting sensor supported type: ${error.message}`);
     }
   }
 }
