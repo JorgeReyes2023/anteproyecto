@@ -14,6 +14,7 @@ import {
   FormsModule,
 } from '@angular/forms';
 import {
+  MatDialog,
   MatDialogRef,
   MAT_DIALOG_DATA,
   MatDialogModule,
@@ -36,6 +37,8 @@ import { Status } from '../../../models/status';
 import { Node } from '../../../models/node';
 import { Type } from '../../../models/type';
 import { SensorService } from '../../../services/sensor.service';
+
+import { AddSensorTypeDialogComponent } from '../add-sensor-type-dialog/add-sensor-type-dialog.component';
 
 @Component({
   selector: 'app-add-sensors-dialog',
@@ -82,7 +85,8 @@ export class AddSensorsDialogComponent implements OnInit {
 
   constructor(
     private dialogRef: MatDialogRef<AddSensorsDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) node: Node
+    @Inject(MAT_DIALOG_DATA) node: Node,
+    private dialog: MatDialog
   ) {
     this.node = node;
     this.selectedSensors.set(node.sensors);
@@ -187,5 +191,26 @@ export class AddSensorsDialogComponent implements OnInit {
     }
   }
 
-  onTypeSelect(): void {}
+  onSensorTypeChange(selectedTypeIds: number[]): void {
+    if (selectedTypeIds.includes(-1)) {
+      const currentTypes =
+        this.newSensorForm.value.typeIds?.filter((id) => id !== -1) ?? [];
+
+      this.dialog
+        .open(AddSensorTypeDialogComponent, { width: '400px' })
+        .afterClosed()
+        .subscribe((newType: Type | null) => {
+          if (newType) {
+            this.sensorTypes.push(newType);
+            this.sensorTypesMap.set(newType.id, newType);
+
+            this.newSensorForm.patchValue({
+              typeIds: [...currentTypes, newType.id],
+            });
+          } else {
+            this.newSensorForm.patchValue({ typeIds: currentTypes });
+          }
+        });
+    }
+  }
 }

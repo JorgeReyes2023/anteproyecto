@@ -57,12 +57,27 @@
           formControlName="typeIds"
           multiple
           [compareWith]="compareFn"
+          (selectionChange)="onSensorTypeChange($event.value)"
         >
+          <!-- Options normales avec case à cocher -->
           <mat-option *ngFor="let t of sensorTypes" [value]="t.id">
             {{ t.name }} ({{ t.unit }})
           </mat-option>
+
           <mat-divider></mat-divider>
-          <mat-option value="custom">Personalizado</mat-option>
+
+          <!-- Option spéciale sans case à cocher -->
+          <mat-option
+            class="no-checkbox-option"
+            [value]="-1"
+            [disabled]="false"
+            disableRipple
+          >
+            <span style="display: flex; align-items: center">
+              <mat-icon style="margin-right: 8px">add</mat-icon>
+              Añadir nuevo tipo de lectura
+            </span>
+          </mat-option>
         </mat-select>
       </mat-form-field>
 
