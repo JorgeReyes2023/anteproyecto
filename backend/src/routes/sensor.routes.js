@@ -3,29 +3,159 @@ const { Router } = require("express");
 const { SensorService } = require("../services/sensor.service");
 
 const sensorRoutes = Router();
-// Ruta para crear un sensor type
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     SensorType:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: integer
+ *           description: ID del tipo de sensor
+ *         name:
+ *           type: string
+ *           description: Nombre del tipo de sensor
+ *         description:
+ *           type: string
+ *           description: Descripción del tipo de sensor
+ *       required:
+ *         - name
+ *         - description
+ *     Sensor:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: integer
+ *           description: ID del sensor
+ *         name:
+ *           type: string
+ *           description: Nombre del sensor
+ *         typeId:
+ *           type: integer
+ *           description: ID del tipo de sensor al que pertenece
+ *       required:
+ *         - name
+ *         - typeId
+ */
+
+/**
+ * @swagger
+ * /api/sensors/types:
+ *   post:
+ *     summary: Crea un nuevo tipo de sensor
+ *     tags: [Sensors]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/SensorType'
+ *     responses:
+ *       201:
+ *         description: Tipo de sensor creado exitosamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/SensorType'
+ *       400:
+ *         description: Datos requeridos faltantes
+ *       500:
+ *         description: Error interno del servidor
+ *     description: Esta ruta permite crear un nuevo tipo de sensor. Se requiere que el cuerpo de la solicitud contenga el nombre y la descripción del tipo de sensor.
+ */
 sensorRoutes.post("/types", async (req, res) => {
   try {
-    const sensorTypeData = req.body;
-    if (!sensorTypeData.name || !sensorTypeData.description) {
+    const { name, unit, description } = req.body;
+    if (!name || !unit) {
       return res.status(400).json({ error: "Faltan datos requeridos" });
     }
-    const sensorType = await SensorService.createSensorType(sensorTypeData);
-    res.status(201).json(sensorType);
+    const createdSensorType = await SensorService.createSensorType(
+      name,
+      unit,
+      description,
+    );
+    res.status(201).json(createdSensorType);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 });
-// Ruta para obtener todos los sensor types
+
+/**
+ * @swagger
+ * /api/sensors/types:
+ *   get:
+ *     summary: Obtiene todos los tipos de sensores
+ *     tags: [Sensors]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Lista de tipos de sensores obtenida exitosamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/SensorType'
+ *       500:
+ *         description: Error interno del servidor
+ *     description: Esta ruta permite obtener todos los tipos de sensores registrados en el sistema.
+ */
 sensorRoutes.get("/types", async (req, res) => {
   try {
     const sensorTypes = await SensorService.getAllSensorTypes();
+    // Ensure sensorTypes is always an array before mapping or returning
+    if (!Array.isArray(sensorTypes)) {
+      return res
+        .status(500)
+        .json({ error: "Los tipos de sensores no son un arreglo" });
+    }
     res.status(200).json(sensorTypes);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 });
-// Ruta para actualizar un sensor type
+
+/**
+ * @swagger
+ * /api/sensors/types/{id}:
+ *   put:
+ *     summary: Actualiza un tipo de sensor existente
+ *     tags: [Sensors]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID del tipo de sensor a actualizar
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/SensorType'
+ *     responses:
+ *       200:
+ *         description: Tipo de sensor actualizado exitosamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/SensorType'
+ *       400:
+ *         description: Datos requeridos faltantes
+ *       404:
+ *         description: Tipo de sensor no encontrado
+ *       500:
+ *         description: Error interno del servidor
+ *     description: Esta ruta permite actualizar un tipo de sensor existente. Se requiere que el cuerpo de la solicitud contenga el nombre y la descripción del tipo de sensor. El ID del tipo de sensor a actualizar se pasa como parámetro en la URL.
+ */
 sensorRoutes.put("/types/:id", async (req, res) => {
   try {
     const { id } = req.params;
@@ -34,12 +164,39 @@ sensorRoutes.put("/types/:id", async (req, res) => {
       return res.status(400).json({ error: "Faltan datos requeridos" });
     }
     const sensorType = await SensorService.updateSensorType(id, sensorTypeData);
+    if (!sensorType) {
+      return res.status(404).json({ error: "Tipo de sensor no encontrado" });
+    }
     res.status(200).json(sensorType);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 });
-// Ruta para eliminar un sensor type
+
+/**
+ * @swagger
+ * /api/sensors/types/{id}:
+ *   delete:
+ *     summary: Elimina un tipo de sensor por ID
+ *     tags: [Sensors]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID del tipo de sensor a eliminar
+ *     responses:
+ *       204:
+ *         description: Tipo de sensor eliminado exitosamente
+ *       404:
+ *         description: Tipo de sensor no encontrado
+ *       500:
+ *         description: Error interno del servidor
+ *     description: Esta ruta permite eliminar un tipo de sensor existente. El ID del tipo de sensor a eliminar se pasa como parámetro en la URL.
+ */
 sensorRoutes.delete("/types/:id", async (req, res) => {
   try {
     const { id } = req.params;
@@ -49,7 +206,36 @@ sensorRoutes.delete("/types/:id", async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
-// Ruta para crear un sensor
+
+//----------------------------------------------
+
+/**
+ * @swagger
+ * /api/sensors:
+ *   post:
+ *     summary: Crea un nuevo sensor
+ *     tags: [Sensors]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Sensor'
+ *     responses:
+ *       201:
+ *         description: Sensor creado exitosamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Sensor'
+ *       400:
+ *         description: Datos requeridos faltantes
+ *       500:
+ *         description: Error interno del servidor
+ *     description: Esta ruta permite crear un nuevo sensor. Se requiere que el cuerpo de la solicitud contenga el nombre y el ID del tipo de sensor al que pertenece.
+ */
 sensorRoutes.post("/", async (req, res) => {
   try {
     const sensorData = req.body;
@@ -62,7 +248,23 @@ sensorRoutes.post("/", async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
-// Ruta para obtener un sensor por ID
+
+/**
+ * @swagger
+ * /api/sensors/{id}:
+ *  get:
+ *  summary: Obtiene un sensor por ID
+ *  tags: [Sensors]
+ *  security:
+ *    - bearerAuth: []
+ *  parameters:
+ *    - in: path
+ *      name: id
+ *      required: true
+ *      schema:
+ *        type: integer
+ *      description: ID del sensor a obtener
+ */
 sensorRoutes.get("/:id", async (req, res) => {
   try {
     const { id } = req.params;
@@ -75,7 +277,27 @@ sensorRoutes.get("/:id", async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
-// Ruta para obtener todos los sensores
+
+/**
+ * @swagger
+ * /api/sensors:
+ *   get:
+ *     summary: Obtiene todos los sensores
+ *     tags: [Sensors]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Lista de sensores obtenida exitosamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Sensor'
+ *       500:
+ *         description: Error interno del servidor
+ */
 sensorRoutes.get("/", async (req, res) => {
   try {
     const sensors = await SensorService.getAllSensors();
@@ -84,7 +306,42 @@ sensorRoutes.get("/", async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
-// Ruta para actualizar un sensor
+
+/**
+ * @swagger
+ * /api/sensors/{id}:
+ *   put:
+ *     summary: Actualiza un sensor existente
+ *     tags: [Sensors]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID del sensor a actualizar
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Sensor'
+ *     responses:
+ *       200:
+ *         description: Sensor actualizado exitosamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Sensor'
+ *       400:
+ *         description: Datos requeridos faltantes
+ *       404:
+ *         description: Sensor no encontrado
+ *       500:
+ *         description: Error interno del servidor
+ */
 sensorRoutes.put("/:id", async (req, res) => {
   try {
     const { id } = req.params;
@@ -98,7 +355,30 @@ sensorRoutes.put("/:id", async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
-// Ruta para eliminar un sensor
+
+/**
+ * @swagger
+ * /api/sensors/{id}:
+ *   delete:
+ *     summary: Elimina un sensor por ID
+ *     tags: [Sensors]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID del sensor a eliminar
+ *     responses:
+ *       204:
+ *         description: Sensor eliminado exitosamente
+ *       404:
+ *         description: Sensor no encontrado
+ *       500:
+ *         description: Error interno del servidor
+ */
 sensorRoutes.delete("/:id", async (req, res) => {
   try {
     const { id } = req.params;

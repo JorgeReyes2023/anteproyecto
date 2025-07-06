@@ -7,6 +7,41 @@ const statusMap = {
   error: "ERROR",
 };
 
+// ---- Sensor Reading Type Schema ----
+const SensorReadingTypeSchema = Joi.object({
+  id: Joi.number().integer().positive().required(),
+  name: Joi.string()
+    .custom((value, helpers) => {
+      const normalized = value
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase();
+      return normalized;
+    })
+    .min(2)
+    .max(255)
+    .required(),
+  unit: Joi.string().min(1).max(50).lowercase().required(),
+  description: Joi.string().min(5).max(500).allow(null),
+});
+
+const SensorReadingTypeSchemaWithoutId = Joi.object({
+  name: Joi.string()
+    .custom((value, helpers) => {
+      const normalized = value
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase();
+      return normalized;
+    })
+    .min(2)
+    .max(255)
+    .required(),
+  unit: Joi.string().min(1).max(50).lowercase().required(),
+  description: Joi.string().min(5).max(500).allow(null),
+});
+
+// ---- Sensor Supported Type Schema ----
 const sensorSupportedTypeSchema = Joi.object({
   id: Joi.number().integer().positive(),
   name: Joi.string().min(2).max(255).required(),
@@ -28,4 +63,9 @@ const sensorSchemaId = Joi.object({
   id: Joi.number().integer().positive().required(),
 });
 
-module.exports = { sensorSupportedTypeSchema, sensorSchemaId };
+module.exports = {
+  sensorSupportedTypeSchema,
+  sensorSchemaId,
+  SensorReadingTypeSchema,
+  SensorReadingTypeSchemaWithoutId,
+};

@@ -25,6 +25,3 @@ class SensorSupportedTypeModel {
   }
 }
 module.exports = { SensorSupportedTypeModel };
-
-// This code defines a model for managing sensor supported types in a database using Prisma.
-// It includes methods to create, retrieve, update, and delete sensor supported types.

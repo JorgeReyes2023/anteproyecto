@@ -1,5 +1,7 @@
 const { SensorModel } = require("../models/sensor.model.js");
-const { SensorTypeModel } = require("../models/sensor-type.model.js");
+const {
+  SensorReadingTypeModel,
+} = require("../models/sensor-reading-type.model.js");
 const {
   SensorSupportedTypeModel,
 } = require("../models/sensor-supported-type.model.js");
@@ -7,6 +9,8 @@ const {
 const {
   sensorSchemaId,
   sensorSupportedTypeSchema,
+  SensorReadingTypeSchema,
+  SensorReadingTypeSchemaWithoutId,
 } = require("../validators/sensor.validator.js");
 
 /**
@@ -130,13 +134,31 @@ class SensorService {
   /**
    * Crea un nuevo tipo de sensor.
    *
-   * @param {Object} sensorTypeData - Datos del tipo de sensor (nombre, unidad, etc.).
+   * @param {string} name - Nombre del tipo de sensor.
+   * @param {string} unit - Unidad de medida del tipo de sensor.
+   * @param {string} description - Descripción del tipo de sensor.
    * @returns {Promise<Object>} Tipo de sensor creado.
    * @throws {Error} Si ocurre un error al crear el tipo de sensor.
    */
-  static async createSensorType(sensorTypeData) {
+  static async createSensorType(name, unit, description) {
     try {
-      return await SensorTypeModel.createSensorType(sensorTypeData);
+      console.log("Creating sensor type with data:", {
+        name,
+        unit,
+        description,
+      });
+      const { value, error } = SensorReadingTypeSchemaWithoutId.validate(
+        { name, unit, description },
+        { convert: true },
+      );
+
+      if (error) throw new Error(`Datos inválidos: ${error.message}`);
+
+      return await SensorReadingTypeModel.createSensorReadingType(
+        value.name,
+        value.unit,
+        value.description,
+      );
     } catch (error) {
       throw new Error(`Error creating sensor type: ${error.message}`);
     }
@@ -150,7 +172,7 @@ class SensorService {
    */
   static async getAllSensorTypes() {
     try {
-      return await SensorTypeModel.getAllSensorTypes();
+      return await SensorReadingTypeModel.getAllSensorReadingTypes();
     } catch (error) {
       throw new Error(`Error fetching all sensor types: ${error.message}`);
     }
@@ -166,7 +188,10 @@ class SensorService {
    */
   static async updateSensorType(id, sensorTypeData) {
     try {
-      return await SensorTypeModel.updateSensorType(id, sensorTypeData);
+      return await SensorReadingTypeModel.updateSensorReadingType(
+        id,
+        sensorTypeData,
+      );
     } catch (error) {
       throw new Error(`Error updating sensor type: ${error.message}`);
     }
@@ -181,12 +206,13 @@ class SensorService {
    */
   static async deleteSensorType(id) {
     try {
-      return await SensorTypeModel.deleteSensorType(id);
+      return await SensorReadingTypeModel.deleteSensorReadingType(id);
     } catch (error) {
       throw new Error(`Error deleting sensor type: ${error.message}`);
     }
   }
 
+  // ────────────────────────────────────────────────────────────────
   static async createSensorSupportedType(sensorSupportedTypeData) {
     try {
       return await SensorSupportedTypeModel.createSensorSupportedType(
