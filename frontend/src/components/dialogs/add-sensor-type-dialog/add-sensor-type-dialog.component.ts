@@ -1,25 +1,36 @@
-import { Component, Inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatIconModule } from '@angular/material/icon';
 import {
+  MatDialogModule,
   MatDialogRef,
   MAT_DIALOG_DATA,
-  MatDialogModule,
 } from '@angular/material/dialog';
-import {
-  FormBuilder,
-  Validators,
-  ReactiveFormsModule,
-  FormsModule,
-  NgForm,
-} from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { Component, Inject } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
+  standalone: true,
   selector: 'app-add-sensor-type-dialog',
-  imports: [CommonModule, MatDialogModule, ReactiveFormsModule, FormsModule],
+  imports: [
+    CommonModule,
+    MatDialogModule,
+    FormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatIconModule,
+    MatButtonModule,
+  ],
   templateUrl: './add-sensor-type-dialog.component.html',
-  styleUrl: './add-sensor-type-dialog.component.css',
+  styleUrls: ['./add-sensor-type-dialog.component.css'],
 })
 export class AddSensorTypeDialogComponent {
+  name: string = '';
+  unit: string = '';
+  description: string = '';
+
   constructor(
     public dialogRef: MatDialogRef<AddSensorTypeDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
@@ -29,15 +40,11 @@ export class AddSensorTypeDialogComponent {
     this.dialogRef.close();
   }
 
-  onSubmit(form: NgForm) {
-    if (form.valid) {
-      this.dialogRef.close({
-        name: form.value.name,
-        unit: form.value.unit,
-        description: form.value.description,
-      });
-    } else {
-      console.error('Form is invalid');
-    }
+  confirm() {
+    this.dialogRef.close({
+      name: this.name,
+      unit: this.unit,
+      description: this.description,
+    });
   }
 }

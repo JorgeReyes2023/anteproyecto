@@ -197,7 +197,10 @@ export class AddSensorsDialogComponent implements OnInit {
         this.newSensorForm.value.typeIds?.filter((id) => id !== -1) ?? [];
 
       this.dialog
-        .open(AddSensorTypeDialogComponent, { width: '400px' })
+        .open(AddSensorTypeDialogComponent, {
+          width: '400px',
+          data: {},
+        })
         .afterClosed()
         .subscribe((newType: Type | null) => {
           if (newType) {
