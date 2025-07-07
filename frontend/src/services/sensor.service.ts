@@ -1,6 +1,11 @@
 import { Injectable } from '@angular/core';
 import { GeneralService } from './general.service';
-import { Sensor, SensorCreate, SensorType } from '../models/sensor';
+import {
+  Sensor,
+  SensorCreate,
+  SensorType,
+  SensorTypeCreate,
+} from '../models/sensor';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -10,23 +15,41 @@ export class SensorService {
   constructor(private gService: GeneralService) {}
 
   getSensorsWithoutNode(): Promise<Sensor[]> {
-    // This method should return a promise that resolves to an array of sensors
-    // For now, we return an empty array as a placeholder
     return Promise.resolve([]);
   }
 
-  getSensorsTypes(): Observable<SensorType[]> {
-    return this.gService.getData('sensors/types');
+  getSensors(): Observable<Sensor[]> {
+    return this.gService.getData('sensors');
+  }
+
+  getSensorById(id: number): Observable<Sensor> {
+    return this.gService.getData(`sensors/${id}`);
   }
 
   createSensor(sensor: SensorCreate): Observable<Sensor> {
     return this.gService.postData('sensors', sensor);
   }
 
-  attachSensorsToNode(
-    nodeId: number,
-    sensors: SensorCreate[]
-  ): Observable<Sensor[]> {
-    return this.gService.postData(`nodes/${nodeId}/sensors`, sensors);
+  attachSensorsToNode(nodeId: number, sensors: Sensor[]): Observable<Sensor[]> {
+    const sensorIds = sensors
+      .map((sensor) => sensor.id)
+      .filter((id): id is number => typeof id === 'number');
+    return this.gService.putData(`sensors/attach/node`, {
+      idNode: nodeId,
+      sensorIds,
+    });
+  }
+
+  deleteSensor(id: number): Observable<void> {
+    return this.gService.deleteData(`sensors/${id}`);
+  }
+
+  // -- sensor types
+  getSensorsTypes(): Observable<SensorType[]> {
+    return this.gService.getData('sensors/types');
+  }
+
+  createSensorType(type: SensorTypeCreate): Observable<SensorType> {
+    return this.gService.postData('sensors/types', type);
   }
 }

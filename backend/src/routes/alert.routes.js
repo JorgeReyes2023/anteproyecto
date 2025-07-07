@@ -4,7 +4,7 @@ const { AlertService } = require("../services/alert.service");
 const alertRoutes = Router();
 /**
  * @swagger
- * /alerts:
+ * /api/alerts:
  *   post:
  *     summary: Crear una nueva alerta
  *     tags:
@@ -41,7 +41,7 @@ alertRoutes.post("/", async (req, res) => {
 
 /**
  * @swagger
- * /alerts/{id}:
+ * /api/alerts/{id}:
  *   put:
  *     summary: Actualizar una alerta existente
  *     tags:
@@ -88,7 +88,7 @@ alertRoutes.put("/:id", async (req, res) => {
 
 /**
  * @swagger
- * /alerts/{id}:
+ * /api/alerts/{id}:
  *   delete:
  *     summary: Eliminar una alerta por ID
  *     tags:
@@ -119,7 +119,7 @@ alertRoutes.delete("/:id", async (req, res) => {
 
 /**
  * @swagger
- * /alerts:
+ * /api/alerts:
  *   get:
  *     summary: Obtener todas las alertas
  *     tags:
@@ -155,7 +155,7 @@ alertRoutes.get("/", async (req, res) => {
 
 /**
  * @swagger
- * /alerts/{id}:
+ * /api/alerts/{id}:
  *   get:
  *     summary: Obtener una alerta por ID
  *     tags:

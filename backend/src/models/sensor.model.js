@@ -2,7 +2,6 @@ const prisma = require("../prisma"); //Se importa el cliente Prisma para interac
 
 class SensorModel {
   static async createSensor(name, nodeId = null, status = "INACTIVE") {
-    // Método para crear un nuevo sensor
     return prisma.sensors.create({
       data: {
         name: name,
@@ -11,13 +10,27 @@ class SensorModel {
       },
     });
   }
-  // Método para obtener un sensor por su ID
+
+  static async getSensorByName(name) {
+    return prisma.sensors.findUnique({
+      where: { name: name },
+    });
+  }
+
   static async getSensorById(id) {
     return prisma.sensors.findUnique({
       where: { id: id },
+      include: {
+        supported_types: {
+          include: {
+            type: true,
+          },
+        },
+        nodes: true,
+      },
     });
   }
-  // Método para obtener todos los sensores
+
   static async getAllSensors() {
     return prisma.sensors.findMany();
   }
@@ -26,6 +39,38 @@ class SensorModel {
     return prisma.sensors.update({
       where: { id: id },
       data: sensorData,
+    });
+  }
+
+  static async unsetSensorsFromNode(nodeId, sensorIds) {
+    return prisma.sensors.updateMany({
+      where: {
+        node_id: nodeId,
+        NOT: {
+          id: { in: sensorIds },
+        },
+      },
+      data: { node_id: null },
+    });
+  }
+
+  static async setSensorsToNode(nodeId, sensorIds) {
+    return prisma.sensors.updateMany({
+      where: { id: { in: sensorIds } },
+      data: { node_id: nodeId },
+    });
+  }
+
+  static async getSensorsByIds(sensorIds) {
+    return prisma.sensors.findMany({
+      where: { id: { in: sensorIds } },
+    });
+  }
+  static async updateSensorsForNode(nodeId, sensorIds) {
+    return await prisma.$transaction(async (prisma) => {
+      await this.unsetSensorsFromNode(nodeId, sensorIds);
+      await this.setSensorsToNode(nodeId, sensorIds);
+      return this.getSensorsByIds(sensorIds);
     });
   }
 

@@ -1,5 +1,7 @@
 const { SensorModel } = require("../models/sensor.model.js");
-const { SensorTypeModel } = require("../models/sensor-type.model.js");
+const {
+  SensorReadingTypeModel,
+} = require("../models/sensor-reading-type.model.js");
 const {
   SensorSupportedTypeModel,
 } = require("../models/sensor-supported-type.model.js");
@@ -7,6 +9,9 @@ const {
 const {
   sensorSchemaId,
   sensorSupportedTypeSchema,
+  SensorReadingTypeSchema,
+  SensorReadingTypeSchemaWithoutId,
+  attachingSensorsToNodeSchema,
 } = require("../validators/sensor.validator.js");
 
 /**
@@ -23,10 +28,10 @@ class SensorService {
    * @returns {Promise<Object>} Sensor creado exitosamente.
    * @throws {Error} Si ocurre un error al crear el sensor.
    */
-  static async createSensor(name, nodeId, status) {
+  static async createSensor(name, status, typeIds) {
     try {
       const { value, error } = sensorSupportedTypeSchema.validate(
-        { name, nodeId, status },
+        { name, status, typeIds },
         { convert: true },
       );
 
@@ -39,20 +44,21 @@ class SensorService {
 
       const newSensor = await SensorModel.createSensor(
         value.name,
-        value.nodeId,
+        null, // nodeId is set to null by default
         value.status,
       );
 
-      if (value.typeIds && value.typeIds.length > 0) {
-        await Promise.all(
-          value.typeIds.map((typeId) =>
-            SensorSupportedTypeModel.createSensorSupportedType({
-              sensor_id: newSensor.id,
-              type_id: typeId,
-            }),
-          ),
-        );
-      }
+      await Promise.all(
+        value.typeIds && Array.isArray(value.typeIds)
+          ? value.typeIds.map((typeId) =>
+              SensorSupportedTypeModel.createSensorSupportedType({
+                sensor_id: newSensor.id,
+                type_id: typeId,
+              }),
+            )
+          : [],
+      );
+
       return newSensor;
     } catch (error) {
       throw new Error(`Error al crear el sensor: ${error.message}`);
@@ -74,7 +80,30 @@ class SensorService {
       );
       if (error) throw new Error(`ID inválido: ${error.message}`);
 
-      return await SensorModel.getSensorById(value.id);
+      const sensor = await SensorModel.getSensorById(value.id);
+
+      if (!sensor) return null;
+
+      const sensorDto = {
+        id: sensor.id,
+        name: sensor.name,
+        nodeId: sensor.node_id,
+        status: sensor.status,
+        types: sensor.supported_types.map((supportedType) => ({
+          id: supportedType.id,
+          name: supportedType.type.name,
+          unit: supportedType.type.unit,
+          description: supportedType.type.description || "No disponible",
+        })),
+        node: sensor.nodes
+          ? {
+              id: sensor.nodes.id,
+              name: sensor.nodes.name,
+            }
+          : null,
+      };
+
+      return sensorDto;
     } catch (error) {
       throw new Error(`Error fetching sensor by ID: ${error.message}`);
     }
@@ -88,7 +117,15 @@ class SensorService {
    */
   static async getAllSensors() {
     try {
-      return await SensorModel.getAllSensors();
+      const sensors = await SensorModel.getAllSensors();
+      return sensors.map((sensor) => {
+        return {
+          id: sensor.id,
+          name: sensor.name,
+          nodeId: sensor.node_id,
+          status: sensor.status,
+        };
+      });
     } catch (error) {
       throw new Error(`Error fetching all sensors: ${error.message}`);
     }
@@ -111,6 +148,31 @@ class SensorService {
   }
 
   /**
+   * Asocia una lista de sensores a un nodo específico.
+   *
+   * @param {number|string} idNode - ID del nodo al que se asociarán los sensores.
+   * @param {Array<number|string>} sensorIds - Lista de IDs de sensores a asociar al nodo.
+   * @returns {Promise<Array<Object>>} Sensores actualizados.
+   * @throws {Error} Si ocurre un error durante la asociación.
+   */
+  static async attachSensorsToNode(idNode, sensorIds) {
+    try {
+      const { value, error } = attachingSensorsToNodeSchema.validate(
+        { idNode, sensorIds },
+        { convert: true },
+      );
+      if (error) throw new Error(`Datos inválidos: ${error.message}`);
+
+      return await SensorModel.updateSensorsForNode(
+        value.idNode,
+        value.sensorIds,
+      );
+    } catch (error) {
+      throw new Error(`Error attaching sensors for node: ${error.message}`);
+    }
+  }
+
+  /**
    * Elimina un sensor por su ID.
    *
    * @param {number|string} id - ID del sensor a eliminar.
@@ -119,7 +181,12 @@ class SensorService {
    */
   static async deleteSensor(id) {
     try {
-      return await SensorModel.deleteSensor(id);
+      const { value, error } = sensorSchemaId.validate(
+        { id },
+        { convert: true },
+      );
+      if (error) throw new Error(`ID inválido: ${error.message}`);
+      return await SensorModel.deleteSensor(value.id);
     } catch (error) {
       throw new Error(`Error deleting sensor: ${error.message}`);
     }
@@ -130,13 +197,31 @@ class SensorService {
   /**
    * Crea un nuevo tipo de sensor.
    *
-   * @param {Object} sensorTypeData - Datos del tipo de sensor (nombre, unidad, etc.).
+   * @param {string} name - Nombre del tipo de sensor.
+   * @param {string} unit - Unidad de medida del tipo de sensor.
+   * @param {string} description - Descripción del tipo de sensor.
    * @returns {Promise<Object>} Tipo de sensor creado.
    * @throws {Error} Si ocurre un error al crear el tipo de sensor.
    */
-  static async createSensorType(sensorTypeData) {
+  static async createSensorType(name, unit, description) {
     try {
-      return await SensorTypeModel.createSensorType(sensorTypeData);
+      console.log("Creating sensor type with data:", {
+        name,
+        unit,
+        description,
+      });
+      const { value, error } = SensorReadingTypeSchemaWithoutId.validate(
+        { name, unit, description },
+        { convert: true },
+      );
+
+      if (error) throw new Error(`Datos inválidos: ${error.message}`);
+
+      return await SensorReadingTypeModel.createSensorReadingType(
+        value.name,
+        value.unit,
+        value.description,
+      );
     } catch (error) {
       throw new Error(`Error creating sensor type: ${error.message}`);
     }
@@ -150,7 +235,7 @@ class SensorService {
    */
   static async getAllSensorTypes() {
     try {
-      return await SensorTypeModel.getAllSensorTypes();
+      return await SensorReadingTypeModel.getAllSensorReadingTypes();
     } catch (error) {
       throw new Error(`Error fetching all sensor types: ${error.message}`);
     }
@@ -166,7 +251,10 @@ class SensorService {
    */
   static async updateSensorType(id, sensorTypeData) {
     try {
-      return await SensorTypeModel.updateSensorType(id, sensorTypeData);
+      return await SensorReadingTypeModel.updateSensorReadingType(
+        id,
+        sensorTypeData,
+      );
     } catch (error) {
       throw new Error(`Error updating sensor type: ${error.message}`);
     }
@@ -181,12 +269,13 @@ class SensorService {
    */
   static async deleteSensorType(id) {
     try {
-      return await SensorTypeModel.deleteSensorType(id);
+      return await SensorReadingTypeModel.deleteSensorReadingType(id);
     } catch (error) {
       throw new Error(`Error deleting sensor type: ${error.message}`);
     }
   }
 
+  // ────────────────────────────────────────────────────────────────
   static async createSensorSupportedType(sensorSupportedTypeData) {
     try {
       return await SensorSupportedTypeModel.createSensorSupportedType(

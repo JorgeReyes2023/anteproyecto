@@ -54,14 +54,17 @@ model projects {
 }
 
 model sensor_reading_types {
-  id          Int                    @id @default(autoincrement())
-  name        String                 @unique @db.VarChar(50)
-  unit        String                 @db.VarChar(20)
-  description String?                @db.VarChar(255)
-  readings    sensor_readings[]
-  thresholds  thresholds[]
+  id           Int                      @id @default(autoincrement())
+  name         String                   @db.VarChar(50)
+  unit         String                   @db.VarChar(20)
+  description  String?                  @db.VarChar(255)
+  readings     sensor_readings[]
+  thresholds   thresholds[]
   supported_by sensor_supported_types[]
+
+  @@unique([name, unit])
 }
+
 
 model sensor_readings {
   id           Int                   @id @default(autoincrement())
