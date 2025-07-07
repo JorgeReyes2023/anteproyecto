@@ -356,6 +356,65 @@ sensorRoutes.put("/:id", async (req, res) => {
   }
 });
 
+// actualiza una lista de sensores a un nodo
+/**
+ * @swagger
+ * /api/sensors/node:
+ *   put:
+ *     summary: Actualiza los sensores de un nodo
+ *     tags: [Sensors]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               idNode:
+ *                 type: integer
+ *                 description: ID del nodo al que se asignarán los sensores
+ *               sensorIds:
+ *                 type: array
+ *                 items:
+ *                   type: integer
+ *                 description: Lista de IDs de sensores a asignar al nodo
+ *     responses:
+ *       200:
+ *         description: Sensores actualizados exitosamente para el nodo
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Sensor'
+ *       400:
+ *         description: Datos requeridos faltantes
+ *       500:
+ *         description: Error interno del servidor
+ */
+sensorRoutes.put("/node", async (req, res) => {
+  try {
+    console.log("Updating sensors for node:", req.body);
+    const { idNode, sensorIds } = req.body;
+
+    if (!idNode || !Array.isArray(sensorIds) || sensorIds.length === 0) {
+      return res.status(400).json({
+        error: "Faltan datos requeridos en el cuerpo de la solicitud",
+      });
+    }
+
+    const updatedSensors = await SensorService.attachSensorsToNode(
+      idNode,
+      sensorIds,
+    );
+    res.status(200).json(updatedSensors);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 /**
  * @swagger
  * /api/sensors/{id}:

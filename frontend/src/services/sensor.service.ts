@@ -28,11 +28,12 @@ export class SensorService {
     return this.gService.postData('sensors', sensor);
   }
 
-  attachSensorsToNode(
-    nodeId: number,
-    sensors: SensorCreate[]
-  ): Observable<Sensor[]> {
-    return this.gService.postData(`nodes/${nodeId}/sensors`, sensors);
+  attachSensorsToNode(nodeId: number, sensors: Sensor[]): Observable<Sensor[]> {
+    console.log('Attaching sensors to node:', nodeId, sensors);
+    return this.gService.putData(`sensors/node`, {
+      idNode: nodeId,
+      sensorIds: sensors.map((sensor) => sensor.id),
+    });
   }
 
   // -- sensor types

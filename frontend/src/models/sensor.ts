@@ -8,7 +8,7 @@ export interface Sensor extends SensorCreate {
 
 export interface SensorCreate {
   name: string;
-  nodeId?: number;
+  nodeId?: number | null; // Node ID to which the sensor is attached, can be null if not attached
   status?: string;
   thresholds?: Threshold[];
   typeIds?: number[]; // Array of sensor type IDs

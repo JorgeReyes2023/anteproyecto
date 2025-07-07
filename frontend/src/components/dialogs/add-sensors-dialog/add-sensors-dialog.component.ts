@@ -105,7 +105,6 @@ export class AddSensorsDialogComponent implements OnInit {
           !this.selectedSensors().some((sel) => sel.id === s.id) && !s.nodeId
       );
       this.sensors.set(filtered);
-      console.log('Fetched sensors:', filtered);
     });
   }
 
@@ -159,13 +158,16 @@ export class AddSensorsDialogComponent implements OnInit {
     const dto: SensorCreate = {
       name: this.newSensorForm.value.name!,
       status: Status.INACTIVE,
-      nodeId: undefined,
+      nodeId: null,
       typeIds: this.newSensorForm.value.typeIds!, // array
     };
 
-    this.newSensorsDraft.set([...this.newSensorsDraft(), dto]);
-    this.newSensorForm.reset({ typeIds: [] });
-    this.showNewSensorForm.set(false);
+    this.sensorService.createSensor(dto).subscribe((sensor) => {
+      if (sensor) {
+        this.newSensorsDraft.set([...this.newSensorsDraft(), sensor]);
+        this.cancelNewSensor();
+      }
+    });
   }
 
   async confirm() {
@@ -176,9 +178,12 @@ export class AddSensorsDialogComponent implements OnInit {
       createdObservables.map((obs) => obs.toPromise())
     );
 
-    const allSensors = [...this.selectedSensors(), ...created];
+    const allSensors = [
+      ...this.selectedSensors(),
+      ...created.filter((s): s is Sensor => s !== undefined),
+    ];
     this.sensorService
-      .attachSensorsToNode(this.node.id, this.newSensorsDraft())
+      .attachSensorsToNode(this.node.id, allSensors)
       .subscribe(() => {
         this.dialogRef.close(true);
       });

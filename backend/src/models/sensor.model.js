@@ -11,6 +11,14 @@ class SensorModel {
       },
     });
   }
+
+  static async getSensorByName(name) {
+    // Método para obtener un sensor por su nombre
+    return prisma.sensors.findFirst({
+      where: { name: name },
+    });
+  }
+
   // Método para obtener un sensor por su ID
   static async getSensorById(id) {
     return prisma.sensors.findUnique({
@@ -26,6 +34,14 @@ class SensorModel {
     return prisma.sensors.update({
       where: { id: id },
       data: sensorData,
+    });
+  }
+
+  static async attachSensorsToNode(nodeId, sensorIds) {
+    // Método para asociar sensores a un nodo
+    return prisma.sensors.updateMany({
+      where: { id: { in: sensorIds } },
+      data: { node_id: nodeId },
     });
   }
 

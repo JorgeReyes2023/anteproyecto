@@ -123,6 +123,26 @@ class SensorService {
   }
 
   /**
+   * Asocia una lista de sensores a un nodo específico.
+   *
+   * @param {number|string} idNode - ID del nodo al que se asociarán los sensores.
+   * @param {Array<number|string>} sensorIds - Lista de IDs de sensores a asociar al nodo.
+   * @returns {Promise<Array<Object>>} Sensores actualizados.
+   * @throws {Error} Si ocurre un error durante la asociación.
+   */
+  static async attachSensorsToNode(idNode, sensorIds) {
+    try {
+      console.log("Attaching sensors to node:", {
+        idNode,
+        sensorIds,
+      });
+      return await SensorModel.attachSensorsToNode(idNode, sensorIds);
+    } catch (error) {
+      throw new Error(`Error attaching sensors for node: ${error.message}`);
+    }
+  }
+
+  /**
    * Elimina un sensor por su ID.
    *
    * @param {number|string} id - ID del sensor a eliminar.
