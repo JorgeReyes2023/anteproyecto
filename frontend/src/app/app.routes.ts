@@ -46,6 +46,11 @@ export const routes: Routes = [
     component: NodesDataComponent,
     canActivate: [roleGuard(['admin'])],
   },
+  {
+    path: 'sensor/:id',
+    component: NodesDataComponent, // TODO: Replace with actual sensor component
+    canActivate: [roleGuard(['admin'])],
+  },
   // Redirects
   { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
   { path: '**', redirectTo: '/login' },
