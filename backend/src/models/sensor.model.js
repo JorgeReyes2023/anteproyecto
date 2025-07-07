@@ -45,6 +45,14 @@ class SensorModel {
     });
   }
 
+  static async detachSensorsFromNode(nodeId) {
+    // Método para desasociar todos los sensores de un nodo
+    return prisma.sensors.updateMany({
+      where: { node_id: nodeId },
+      data: { node_id: null },
+    });
+  }
+
   static async deleteSensor(id) {
     return prisma.sensors.delete({
       where: { id: id },

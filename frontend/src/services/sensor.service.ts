@@ -29,10 +29,12 @@ export class SensorService {
   }
 
   attachSensorsToNode(nodeId: number, sensors: Sensor[]): Observable<Sensor[]> {
-    console.log('Attaching sensors to node:', nodeId, sensors);
-    return this.gService.putData(`sensors/node`, {
+    const sensorIds = sensors
+      .map((sensor) => sensor.id)
+      .filter((id): id is number => typeof id === 'number');
+    return this.gService.putData(`sensors/attach/node`, {
       idNode: nodeId,
-      sensorIds: sensors.map((sensor) => sensor.id),
+      sensorIds,
     });
   }
 

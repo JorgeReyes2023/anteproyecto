@@ -63,9 +63,18 @@ const sensorSchemaId = Joi.object({
   id: Joi.number().integer().positive().required(),
 });
 
+const attachingSensorsToNodeSchema = Joi.object({
+  idNode: Joi.number().integer().positive().required(),
+  sensorIds: Joi.array()
+    .items(Joi.number().integer().positive())
+    .min(0)
+    .required(),
+});
+
 module.exports = {
   sensorSupportedTypeSchema,
   sensorSchemaId,
   SensorReadingTypeSchema,
   SensorReadingTypeSchemaWithoutId,
+  attachingSensorsToNodeSchema,
 };

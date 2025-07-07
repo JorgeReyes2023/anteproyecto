@@ -11,6 +11,7 @@ const {
   sensorSupportedTypeSchema,
   SensorReadingTypeSchema,
   SensorReadingTypeSchemaWithoutId,
+  attachingSensorsToNodeSchema,
 } = require("../validators/sensor.validator.js");
 
 /**
@@ -132,11 +133,20 @@ class SensorService {
    */
   static async attachSensorsToNode(idNode, sensorIds) {
     try {
-      console.log("Attaching sensors to node:", {
-        idNode,
-        sensorIds,
-      });
-      return await SensorModel.attachSensorsToNode(idNode, sensorIds);
+      const { value, error } = attachingSensorsToNodeSchema.validate(
+        { idNode, sensorIds },
+        { convert: true },
+      );
+      if (error) throw new Error(`Datos inválidos: ${error.message}`);
+
+      if (value.sensorIds.length === 0) {
+        return await SensorModel.detachSensorsFromNode(value.idNode);
+      }
+
+      return await SensorModel.attachSensorsToNode(
+        value.idNode,
+        value.sensorIds,
+      );
     } catch (error) {
       throw new Error(`Error attaching sensors for node: ${error.message}`);
     }

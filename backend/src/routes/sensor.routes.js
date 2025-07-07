@@ -359,7 +359,7 @@ sensorRoutes.put("/:id", async (req, res) => {
 // actualiza una lista de sensores a un nodo
 /**
  * @swagger
- * /api/sensors/node:
+ * /api/sensors/attach/node:
  *   put:
  *     summary: Actualiza los sensores de un nodo
  *     tags: [Sensors]
@@ -394,12 +394,12 @@ sensorRoutes.put("/:id", async (req, res) => {
  *       500:
  *         description: Error interno del servidor
  */
-sensorRoutes.put("/node", async (req, res) => {
+sensorRoutes.put("/attach/node", async (req, res) => {
   try {
     console.log("Updating sensors for node:", req.body);
     const { idNode, sensorIds } = req.body;
 
-    if (!idNode || !Array.isArray(sensorIds) || sensorIds.length === 0) {
+    if (!idNode || !Array.isArray(sensorIds)) {
       return res.status(400).json({
         error: "Faltan datos requeridos en el cuerpo de la solicitud",
       });

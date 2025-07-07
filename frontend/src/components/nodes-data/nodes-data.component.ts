@@ -13,6 +13,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 // add dialogs and services
 import { Node } from '../../models/node';
 import { NodeService } from '../../services/node.service';
+import { SensorService } from '../../services/sensor.service';
 import { Status } from '../../models/status';
 import { CreateNodeDialogComponent } from '../dialogs/create-node-dialog/create-node-dialog.component';
 import { UpdateNodeDialogComponent } from '../dialogs/update-node-dialog/update-node-dialog.component';
@@ -40,7 +41,8 @@ export class NodesDataComponent implements OnDestroy {
   constructor(
     private dialog: MatDialog,
     private alertService: AlertService,
-    private nodeService: NodeService
+    private nodeService: NodeService,
+    private sensorService: SensorService
   ) {
     // Initialize or fetch nodes data here if needed
     this.fetchNodes();
@@ -78,22 +80,13 @@ export class NodesDataComponent implements OnDestroy {
       data: node,
     });
 
-    dialogRef.afterClosed().subscribe((result: Node | undefined) => {
-      if (result) {
-        this.nodeService.addSensorsToNode(result.id, result.sensors).subscribe({
-          next: (updatedNode) => {
-            this.fetchNodes(); // Refresh the list after adding sensors
-            this.alertService.success(
-              `Sensores añadidos al nodo ${updatedNode.name} correctamente`
-            );
-          },
-          error: (error) => {
-            this.alertService.error(
-              'Error al añadir sensores al nodo. Por favor, inténtelo de nuevo.'
-            );
-            console.error('Error adding sensors:', error);
-          },
-        });
+    dialogRef.afterClosed().subscribe(({ nodeId, sensors }) => {
+      if (sensors) {
+        this.sensorService
+          .attachSensorsToNode(nodeId, sensors)
+          .subscribe(() => {
+            this.fetchNodes();
+          });
       }
     });
   }
