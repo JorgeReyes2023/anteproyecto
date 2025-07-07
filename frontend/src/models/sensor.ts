@@ -3,7 +3,7 @@ import { Threshold } from './threshold';
 
 export interface Sensor extends SensorCreate {
   id: number;
-  nodes?: Node[];
+  node?: Node | null; // Optional node object, can be null if not attached
 }
 
 export interface SensorCreate {
@@ -12,6 +12,7 @@ export interface SensorCreate {
   status?: string;
   thresholds?: Threshold[];
   typeIds?: number[]; // Array of sensor type IDs
+  type?: SensorType; // Optional sensor type object
 }
 
 /// SensorType is used to define the type of sensor, such as temperature, humidity, etc.

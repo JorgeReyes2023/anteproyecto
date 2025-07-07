@@ -1,0 +1,32 @@
+<div class="sensor-details" style="max-width: 400px; margin: auto">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Detalles del sensor</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <mat-list>
+        <mat-list-item>
+          <strong>Nombre:</strong>&nbsp;{{ sensor?.name }}
+        </mat-list-item>
+        <mat-list-item>
+          <strong>Tipo:</strong>&nbsp;{{ sensor?.type?.name }}
+        </mat-list-item>
+        <mat-list-item>
+          <strong>Unidad:</strong>&nbsp;{{ sensor?.type?.unit }}
+        </mat-list-item>
+        <mat-list-item>
+          <strong>Descripción:</strong>&nbsp;{{
+            sensor?.type?.description
+              ? sensor?.type?.description
+              : "No disponible"
+          }}
+        </mat-list-item>
+        <mat-list-item>
+          <strong>ID de nodo:</strong>&nbsp;{{
+            sensor?.nodeId ? sensor?.nodeId : "No disponible"
+          }}
+        </mat-list-item>
+      </mat-list>
+    </mat-card-content>
+  </mat-card>
+</div>

@@ -23,6 +23,10 @@ class SensorModel {
   static async getSensorById(id) {
     return prisma.sensors.findUnique({
       where: { id: id },
+      include: {
+        supported_types: true,
+        nodes: true,
+      },
     });
   }
   // Método para obtener todos los sensores

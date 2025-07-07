@@ -15,13 +15,15 @@ export class SensorService {
   constructor(private gService: GeneralService) {}
 
   getSensorsWithoutNode(): Promise<Sensor[]> {
-    // This method should return a promise that resolves to an array of sensors
-    // For now, we return an empty array as a placeholder
     return Promise.resolve([]);
   }
 
   getSensors(): Observable<Sensor[]> {
     return this.gService.getData('sensors');
+  }
+
+  getSensorById(id: number): Observable<Sensor> {
+    return this.gService.getData(`sensors/${id}`);
   }
 
   createSensor(sensor: SensorCreate): Observable<Sensor> {

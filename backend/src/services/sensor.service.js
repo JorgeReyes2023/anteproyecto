@@ -79,7 +79,23 @@ class SensorService {
       );
       if (error) throw new Error(`ID inválido: ${error.message}`);
 
-      return await SensorModel.getSensorById(value.id);
+      const sensor = await SensorModel.getSensorById(value.id);
+      return {
+        id: sensor.id,
+        name: sensor.name,
+        nodeId: sensor.node_id,
+        node: sensor.node
+          ? {
+              id: sensor.node.id,
+              name: sensor.node.name,
+              location: sensor.node.location,
+            }
+          : null,
+        status: sensor.status,
+        type: sensor.type ? sensor.type.name : null,
+        unit: sensor.type ? sensor.type.unit : null,
+        description: sensor.type ? sensor.type.description : null,
+      };
     } catch (error) {
       throw new Error(`Error fetching sensor by ID: ${error.message}`);
     }

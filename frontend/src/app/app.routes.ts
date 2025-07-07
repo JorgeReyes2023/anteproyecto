@@ -8,6 +8,7 @@ import { UsersDataComponent } from '../components/users-data/users-data.componen
 import { CompaniesDataComponent } from '../components/companies-data/companies-data.component';
 import { ProjectsDataComponent } from '../components/projects-data/projects-data.component';
 import { NodesDataComponent } from '../components/nodes-data/nodes-data.component';
+import { SensorDetailsComponent } from '../components/sensor-details/sensor-details.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -48,7 +49,7 @@ export const routes: Routes = [
   },
   {
     path: 'sensor/:id',
-    component: NodesDataComponent, // TODO: Replace with actual sensor component
+    component: SensorDetailsComponent,
     canActivate: [roleGuard(['admin'])],
   },
   // Redirects
