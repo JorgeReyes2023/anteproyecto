@@ -9,6 +9,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule, MatDialog } from '@angular/material/dialog';
 import { AlertService } from '../../app/_alert/alert.service';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { RouterLink } from '@angular/router';
 
 // add dialogs and services
 import { Node } from '../../models/node';
@@ -30,6 +31,7 @@ import { AddSensorsDialogComponent } from '../dialogs/add-sensors-dialog/add-sen
     MatButtonModule,
     MatDialogModule,
     MatTooltipModule,
+    RouterLink,
   ],
   templateUrl: './nodes-data.component.html',
   styleUrl: './nodes-data.component.css',

@@ -65,7 +65,11 @@
       <span>
         <ng-container *ngIf="hasSensors(node); else noSensors">
           <ul class="sensor-list">
-            <li *ngFor="let sensor of node.sensors">{{ sensor.name }}</li>
+            <li *ngFor="let sensor of node.sensors">
+              <a [routerLink]="['/sensor', sensor.id]" class="sensor-link">
+                {{ sensor.name }}
+              </a>
+            </li>
           </ul>
         </ng-container>
         <ng-template #noSensors>
