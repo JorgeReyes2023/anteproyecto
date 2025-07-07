@@ -5,7 +5,7 @@ const {
 const {
   SensorSupportedTypeModel,
 } = require("../models/sensor-supported-type.model.js");
-
+const { SensorReadingModel } = require("../models/sensor-reading.model.js");
 const {
   sensorSchemaId,
   sensorSupportedTypeSchema,
@@ -312,6 +312,29 @@ class SensorService {
       return await SensorSupportedTypeModel.deleteSensorSupportedType(id);
     } catch (error) {
       throw new Error(`Error deleting sensor supported type: ${error.message}`);
+    }
+  }
+
+  // ────────────────────────────────────────────────────────────────
+  /**
+   * Obtiene las lecturas de un tipo de sensor por su ID.
+   *
+   * @param {number|string} sensorTypeId - ID del tipo de sensor cuyas lecturas se desean obtener.
+   * @returns {Promise<Array<Object>>} Lista de lecturas del tipo de sensor.
+   * @throws {Error} Si ocurre un error al obtener las lecturas.
+   */
+  static async getReadingsBySensorTypeId(sensorTypeId) {
+    try {
+      const { value, error } = sensorSchemaId.validate(
+        { id: sensorTypeId },
+        { convert: true },
+      );
+      if (error) throw new Error(`Invalid sensor type ID: ${error.message}`);
+      return await SensorReadingModel.getReadingsBySensorTypeId(value.id);
+    } catch (error) {
+      throw new Error(
+        `Error fetching readings by sensor type ID: ${error.message}`,
+      );
     }
   }
 }

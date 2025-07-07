@@ -457,4 +457,51 @@ sensorRoutes.delete("/:id", async (req, res) => {
   }
 });
 
+/**
+ * @swagger
+ * /api/sensors/types/{id}/readings:
+ *   get:
+ *     summary: Obtiene las lecturas de un tipo de sensor por ID
+ *     tags: [Sensors]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID del tipo de sensor cuyas lecturas se desean obtener
+ *     responses:
+ *       200:
+ *         description: Lecturas obtenidas exitosamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   timestamp:
+ *                     type: string
+ *                     format: date-time
+ *                     description: Fecha y hora de la lectura
+ *                   value:
+ *                     type: number
+ *                     description: Valor de la lectura del sensor
+ */
+sensorRoutes.get("/types/:id/readings", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const readings = await SensorService.getReadingsBySensorTypeId(id);
+    console.log("Readings for sensor type ID:", id, readings);
+    if (!readings) {
+      return res.status(404).json({ error: "Tipo de sensor no encontrado" });
+    }
+    res.status(200).json(readings);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 module.exports = sensorRoutes;
