@@ -93,8 +93,20 @@ export class AddSensorsDialogComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.sensorService.getSensorsWithoutNode().then((s) => this.sensors.set(s));
+    this.fetchSensors();
     this.fetchSensorTypes();
+  }
+
+  fetchSensors() {
+    this.sensorService.getSensors().subscribe((sensors) => {
+      // Remove sensors that are already selected or have a nodeId (already attached elsewhere)
+      const filtered = sensors.filter(
+        (s) =>
+          !this.selectedSensors().some((sel) => sel.id === s.id) && !s.nodeId
+      );
+      this.sensors.set(filtered);
+      console.log('Fetched sensors:', filtered);
+    });
   }
 
   fetchSensorTypes() {

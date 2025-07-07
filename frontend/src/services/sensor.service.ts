@@ -20,6 +20,10 @@ export class SensorService {
     return Promise.resolve([]);
   }
 
+  getSensors(): Observable<Sensor[]> {
+    return this.gService.getData('sensors');
+  }
+
   createSensor(sensor: SensorCreate): Observable<Sensor> {
     return this.gService.postData('sensors', sensor);
   }

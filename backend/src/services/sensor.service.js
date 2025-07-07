@@ -92,7 +92,15 @@ class SensorService {
    */
   static async getAllSensors() {
     try {
-      return await SensorModel.getAllSensors();
+      const sensors = await SensorModel.getAllSensors();
+      return sensors.map((sensor) => {
+        return {
+          id: sensor.id,
+          name: sensor.name,
+          nodeId: sensor.node_id,
+          status: sensor.status,
+        };
+      });
     } catch (error) {
       throw new Error(`Error fetching all sensors: ${error.message}`);
     }
