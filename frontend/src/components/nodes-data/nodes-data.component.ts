@@ -82,12 +82,22 @@ export class NodesDataComponent implements OnDestroy {
       data: node,
     });
 
-    dialogRef.afterClosed().subscribe(({ nodeId, sensors }) => {
-      if (sensors) {
+    dialogRef.afterClosed().subscribe((result) => {
+      if (result && result.sensors) {
         this.sensorService
-          .attachSensorsToNode(nodeId, sensors)
-          .subscribe(() => {
-            this.fetchNodes();
+          .attachSensorsToNode(result.nodeId, result.sensors)
+          .subscribe({
+            next: () => {
+              this.alertService.success(
+                `Sensores añadidos al nodo ${node.name} correctamente`
+              );
+              this.fetchNodes();
+            },
+            error: () => {
+              this.alertService.error(
+                'Error al añadir sensores al nodo. Por favor, inténtelo de nuevo.'
+              );
+            },
           });
       }
     });

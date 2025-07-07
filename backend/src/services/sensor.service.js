@@ -181,7 +181,12 @@ class SensorService {
    */
   static async deleteSensor(id) {
     try {
-      return await SensorModel.deleteSensor(id);
+      const { value, error } = sensorSchemaId.validate(
+        { id },
+        { convert: true },
+      );
+      if (error) throw new Error(`ID inválido: ${error.message}`);
+      return await SensorModel.deleteSensor(value.id);
     } catch (error) {
       throw new Error(`Error deleting sensor: ${error.message}`);
     }

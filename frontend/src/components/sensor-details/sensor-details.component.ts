@@ -11,6 +11,8 @@ import { ActivatedRoute } from '@angular/router';
 import { Sensor } from '../../models/sensor';
 import { SensorService } from '../../services/sensor.service';
 
+import { AlertService } from '../../app/_alert/alert.service';
+
 @Component({
   standalone: true,
   selector: 'app-sensor-details',
@@ -31,17 +33,22 @@ export class SensorDetailsComponent implements OnInit {
 
   constructor(
     private sensorService: SensorService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private alertService: AlertService
   ) {}
 
   ngOnInit(): void {
     const idParam = this.route.snapshot.paramMap.get('id');
     const id = idParam !== null ? parseInt(idParam, 10) : null;
     if (id !== null) {
-      this.sensorService.getSensorById(id).subscribe((data) => {
-        console.log('Sensor data:', data);
-        this.sensor = data;
-      });
+      this.sensorService.getSensorById(id).subscribe(
+        (data) => {
+          this.sensor = data;
+        },
+        (error) => {
+          this.alertService.error('Error al cargar los detalles del sensor');
+        }
+      );
     }
   }
 

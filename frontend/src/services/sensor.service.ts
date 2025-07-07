@@ -40,6 +40,10 @@ export class SensorService {
     });
   }
 
+  deleteSensor(id: number): Observable<void> {
+    return this.gService.deleteData(`sensors/${id}`);
+  }
+
   // -- sensor types
   getSensorsTypes(): Observable<SensorType[]> {
     return this.gService.getData('sensors/types');

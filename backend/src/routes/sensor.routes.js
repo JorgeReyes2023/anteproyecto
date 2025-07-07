@@ -17,12 +17,15 @@ const sensorRoutes = Router();
  *         name:
  *           type: string
  *           description: Nombre del tipo de sensor
+ *         unit:
+ *           type: string
+ *           description: Unidad de medida del tipo de sensor
  *         description:
  *           type: string
  *           description: Descripción del tipo de sensor
  *       required:
  *         - name
- *         - description
+ *         - unit
  *     Sensor:
  *       type: object
  *       properties:
@@ -32,12 +35,18 @@ const sensorRoutes = Router();
  *         name:
  *           type: string
  *           description: Nombre del sensor
- *         typeId:
- *           type: integer
- *           description: ID del tipo de sensor al que pertenece
+ *         status:
+ *           type: string
+ *           description: Estado del sensor
+ *         typeIds:
+ *           type: array
+ *           items:
+ *             type: integer
+ *           description: IDs de los tipos de sensor a los que pertenece
  *       required:
  *         - name
- *         - typeId
+ *         - status
+ *         - typeIds
  */
 
 /**

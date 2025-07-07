@@ -165,13 +165,41 @@ export class AddSensorsDialogComponent implements OnInit {
     });
   }
 
-  confirm() {
-    const allSensors = [...this.selectedSensors(), ...this.createdSensors()];
-    this.dialogRef.close({ nodeId: this.node.id, sensors: allSensors });
+  // Rollback mechanism: delete created sensors if dialog is cancelled
+  onCancel() {
+    const created = [...this.createdSensors()];
+    if (created.length > 0) {
+      // Delete all created sensors before closing
+      let deletedCount = 0;
+      created.forEach((sensor) => {
+        this.sensorService.deleteSensor(sensor.id).subscribe({
+          complete: () => {
+            deletedCount++;
+            if (deletedCount === created.length) {
+              this.dialogRef.close(false);
+            }
+          },
+          error: () => {
+            // Even if deletion fails, proceed to close dialog
+            deletedCount++;
+            if (deletedCount === created.length) {
+              this.dialogRef.close(false);
+            }
+          },
+        });
+      });
+    } else {
+      this.dialogRef.close(false);
+    }
   }
 
-  onCancel() {
-    this.dialogRef.close(false);
+  confirm() {
+    const sensorMap = new Map<number, Sensor>();
+    [...this.selectedSensors(), ...this.createdSensors()].forEach((sensor) => {
+      if (sensor.id) sensorMap.set(sensor.id, sensor);
+    });
+    const allSensors = Array.from(sensorMap.values());
+    this.dialogRef.close({ nodeId: this.node.id, sensors: allSensors });
   }
 
   onSensorTypeChange(selectedTypeIds: number[]): void {

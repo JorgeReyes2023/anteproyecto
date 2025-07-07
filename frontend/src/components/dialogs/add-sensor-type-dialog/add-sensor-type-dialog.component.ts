@@ -41,10 +41,15 @@ export class AddSensorTypeDialogComponent {
   }
 
   confirm() {
+    if (!this.name.trim() || !this.unit.trim()) {
+      // You can add more validation logic here if needed
+      return;
+    }
+
     this.dialogRef.close({
-      name: this.name,
-      unit: this.unit,
-      description: this.description,
+      name: this.name.trim(),
+      unit: this.unit.trim(),
+      description: this.description.trim(),
     });
   }
 }

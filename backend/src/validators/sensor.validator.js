@@ -14,15 +14,19 @@ const SensorReadingTypeSchema = Joi.object({
     .custom((value, helpers) => {
       const normalized = value
         .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "")
-        .toLowerCase();
+        .replace(
+          /[\u0300-\u036f\u1AB0-\u1AFF\u1DC0-\u1DFF\u20D0-\u20FF\uFE20-\uFE2F]/g,
+          "",
+        )
+        .toLowerCase()
+        .trim();
       return normalized;
     })
     .min(2)
     .max(255)
     .required(),
   unit: Joi.string().min(1).max(50).lowercase().required(),
-  description: Joi.string().min(5).max(500).allow(null),
+  description: Joi.string().min(5).max(500).allow("", null),
 });
 
 const SensorReadingTypeSchemaWithoutId = Joi.object({
@@ -30,15 +34,19 @@ const SensorReadingTypeSchemaWithoutId = Joi.object({
     .custom((value, helpers) => {
       const normalized = value
         .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "")
-        .toLowerCase();
+        .replace(
+          /[\u0300-\u036f\u1AB0-\u1AFF\u1DC0-\u1DFF\u20D0-\u20FF\uFE20-\uFE2F]/g,
+          "",
+        )
+        .toLowerCase()
+        .trim();
       return normalized;
     })
     .min(2)
     .max(255)
     .required(),
   unit: Joi.string().min(1).max(50).lowercase().required(),
-  description: Joi.string().min(5).max(500).allow(null),
+  description: Joi.string().min(5).max(500).allow("", null),
 });
 
 // ---- Sensor Supported Type Schema ----
