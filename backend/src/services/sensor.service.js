@@ -139,11 +139,7 @@ class SensorService {
       );
       if (error) throw new Error(`Datos inválidos: ${error.message}`);
 
-      if (value.sensorIds.length === 0) {
-        return await SensorModel.detachSensorsFromNode(value.idNode);
-      }
-
-      return await SensorModel.attachSensorsToNode(
+      return await SensorModel.updateSensorsForNode(
         value.idNode,
         value.sensorIds,
       );

@@ -37,19 +37,24 @@ class SensorModel {
     });
   }
 
-  static async attachSensorsToNode(nodeId, sensorIds) {
-    // Método para asociar sensores a un nodo
-    return prisma.sensors.updateMany({
+  static async updateSensorsForNode(nodeId, sensorIds) {
+    await prisma.sensors.updateMany({
+      where: {
+        node_id: nodeId,
+        NOT: {
+          id: { in: sensorIds },
+        },
+      },
+      data: { node_id: null },
+    });
+
+    await prisma.sensors.updateMany({
       where: { id: { in: sensorIds } },
       data: { node_id: nodeId },
     });
-  }
 
-  static async detachSensorsFromNode(nodeId) {
-    // Método para desasociar todos los sensores de un nodo
-    return prisma.sensors.updateMany({
-      where: { node_id: nodeId },
-      data: { node_id: null },
+    return prisma.sensors.findMany({
+      where: { id: { in: sensorIds } },
     });
   }
 
