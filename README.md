@@ -39,19 +39,22 @@ Frontend:
 📦 Instalación
 
 1. Clonar el proyecto
-   git clone https://github.com/tu-usuario/tu-repositorio.git
+
+   git clone https://github.com/tu-usuario/tu-repositorio.git  
    cd tu-repositorio
 
 2. Backend
-   cd backend
-   npm install
-   npx prisma generate
-   npx prisma migrate dev --name init
+
+   cd backend  
+   npm install  
+   npx prisma generate  
+   npx prisma migrate dev --name init  
    npm run dev
 
 3. Frontend
-   cd frontend
-   npm install
+
+   cd frontend  
+   npm install  
    ng serve
 
 ---
