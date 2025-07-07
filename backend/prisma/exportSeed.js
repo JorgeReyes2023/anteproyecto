@@ -6,21 +6,21 @@ const prisma = new PrismaClient();
 async function main() {
   // Orden correcto de las tablas, respetando las dependencias entre ellas
   const tablesOrder = [
-    "companies", // utilisé par projects, users
-    "projects", // utilisé par nodes
-    "nodes", // utilisé par sensors
-    "sensor_reading_types", // utilisé par sensor_readings et thresholds
-    "user_roles", // utilisé par users
-    "users", // dépend de companies et user_roles
-    "sensors", // dépend de nodes
-    "sensor_readings", // dépend de sensors + sensor_reading_types
-    "thresholds", // dépend de sensors + sensor_reading_types
-    "alerts", // dépend de sensors
+    "companies",
+    "projects",
+    "nodes",
+    "sensor_reading_types",
+    "user_roles",
+    "users",
+    "sensors",
+    "sensor_readings",
+    "thresholds",
+    "alerts",
   ];
 
   const tables = {};
 
-  // 🔄 Extraemos los datos actuales de la base de datos y eliminamos los campos id / created_at
+  //  Extraemos los datos actuales de la base de datos y eliminamos los campos id / created_at
   for (const table of tablesOrder) {
     const rows = await prisma[table].findMany();
     tables[table] = rows.map(({ id, created_at, ...rest }) => rest);
@@ -28,12 +28,12 @@ async function main() {
 
   const lines = [];
 
-  // 🧱 Cabecera del archivo seed.js
+  //  Cabecera del archivo seed.js
   lines.push(`const { PrismaClient } = require('@prisma/client');`);
   lines.push(`const prisma = new PrismaClient();\n`);
   lines.push(`async function main() {`);
 
-  // 📥 Insertamos los datos extraídos
+  //  Insertamos los datos extraídos
   lines.push(`\n  // Inserción de datos`);
   for (const [table, rows] of Object.entries(tables)) {
     if (!rows || rows.length === 0) continue;

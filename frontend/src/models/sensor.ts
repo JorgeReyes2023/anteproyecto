@@ -15,7 +15,7 @@ export interface SensorCreate {
   types?: SensorType[]; // Optional sensor type object
 }
 
-/// SensorType is used to define the type of sensor, such as temperature, humidity, etc.
+// SensorType interface represents the type of sensor, which includes its name, description, and unit of measurement.
 export interface SensorType extends SensorTypeCreate {
   id: number;
 }
