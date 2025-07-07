@@ -63,10 +63,11 @@ Frontend:
 
 Crea un archivo `.env` en la carpeta `backend`:
 
-eje:
-DATABASE_URL=mysql://usuario:contraseña@localhost:3306/iot_system
-JWT_SECRET=miClaveSuperSecreta
-MQTT_BROKER_URL=mqtt://localhost:1883
+Ejemplo:
+
+   DATABASE_URL=mysql://usuario:contraseña@localhost:3306/iot_system  
+   JWT_SECRET=miClaveSuperSecreta  
+   MQTT_BROKER_URL=mqtt://localhost:1883
 
 ---
 
