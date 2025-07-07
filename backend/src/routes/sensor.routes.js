@@ -261,18 +261,29 @@ sensorRoutes.post("/", async (req, res) => {
 /**
  * @swagger
  * /api/sensors/{id}:
- *  get:
- *  summary: Obtiene un sensor por ID
- *  tags: [Sensors]
- *  security:
- *    - bearerAuth: []
- *  parameters:
- *    - in: path
- *      name: id
- *      required: true
- *      schema:
- *        type: integer
- *      description: ID del sensor a obtener
+ *   get:
+ *     summary: Obtiene un sensor por ID
+ *     tags: [Sensors]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID del sensor a obtener
+ *     responses:
+ *       200:
+ *         description: Sensor encontrado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Sensor'
+ *       404:
+ *         description: Sensor no encontrado
+ *       500:
+ *         description: Error del servidor
  */
 sensorRoutes.get("/:id", async (req, res) => {
   try {
@@ -365,7 +376,6 @@ sensorRoutes.put("/:id", async (req, res) => {
   }
 });
 
-// actualiza una lista de sensores a un nodo
 /**
  * @swagger
  * /api/sensors/attach/node:

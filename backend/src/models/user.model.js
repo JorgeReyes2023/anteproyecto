@@ -5,8 +5,8 @@ class UserModel {
     try {
       const users = await prisma.users.findMany({
         include: {
-          user_roles: true, // Include the user role information
-          companies: true, // Include the company information
+          user_roles: true,
+          companies: true,
         },
       });
       return users;
@@ -16,7 +16,6 @@ class UserModel {
   }
 
   static async createUser(username, email, password, role, company = null) {
-    //get roleId from role name
     const roleId = await prisma.user_roles
       .findFirst({
         where: { name: role },
@@ -32,7 +31,7 @@ class UserModel {
           ? {
               connect: { id: company },
             }
-          : undefined, // Connect to company if provided
+          : undefined,
         user_roles: {
           connect: { id: roleId },
         },
@@ -45,8 +44,8 @@ class UserModel {
       const user = await prisma.users.findUnique({
         where: { email: email },
         include: {
-          user_roles: true, // Include the user role information
-          companies: true, // Include the company information
+          user_roles: true,
+          companies: true,
         },
       });
       return user;
@@ -64,7 +63,7 @@ class UserModel {
       const user = await prisma.users.findUnique({
         where: { id: numericId },
         include: {
-          user_roles: true, // Include the user role information
+          user_roles: true,
         },
       });
       return user;

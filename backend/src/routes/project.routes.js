@@ -3,7 +3,72 @@ const { Router } = require("express");
 const { ProjectService } = require("../services/project.service");
 
 const projectRoutes = Router();
-// Ruta para crear un proyecto
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Project:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: integer
+ *           example: 1
+ *         name:
+ *           type: string
+ *           example: "Proyecto A"
+ *         description:
+ *           type: string
+ *           example: "Sistema de monitoreo ambiental"
+ *         companyId:
+ *           type: integer
+ *           example: 2
+ *         nodes:
+ *           type: array
+ *           items:
+ *             type: integer
+ *           example: [1, 2, 3]
+ *       required:
+ *         - name
+ */
+
+/**
+ * @swagger
+ * /api/projects:
+ *   post:
+ *     summary: Crea un nuevo proyecto
+ *     tags: [Project]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - name
+ *             properties:
+ *               name:
+ *                 type: string
+ *               description:
+ *                 type: string
+ *               companyId:
+ *                 type: integer
+ *               nodes:
+ *                 type: array
+ *                 items:
+ *                   type: integer
+ *     responses:
+ *       201:
+ *         description: Proyecto creado exitosamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Project'
+ *       400:
+ *         description: Faltan datos requeridos
+ *       500:
+ *         description: Error interno del servidor
+ */
 projectRoutes.post("/", async (req, res) => {
   try {
     const { name, description, companyId, nodes } = req.body;
@@ -21,7 +86,51 @@ projectRoutes.post("/", async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
-// Ruta para actualizar un proyecto
+
+/**
+ * @swagger
+ * /api/projects/{id}:
+ *   put:
+ *     summary: Actualiza un proyecto por su ID
+ *     tags: [Project]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID del proyecto
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - name
+ *             properties:
+ *               name:
+ *                 type: string
+ *               description:
+ *                 type: string
+ *               companyId:
+ *                 type: integer
+ *               nodes:
+ *                 type: array
+ *                 items:
+ *                   type: integer
+ *     responses:
+ *       200:
+ *         description: Proyecto actualizado exitosamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Project'
+ *       400:
+ *         description: Faltan datos requeridos
+ *       500:
+ *         description: Error interno del servidor
+ */
 projectRoutes.put("/:id", async (req, res) => {
   try {
     const { id } = req.params;
@@ -41,7 +150,26 @@ projectRoutes.put("/:id", async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
-// Ruta para eliminar un proyecto
+
+/**
+ * @swagger
+ * /api/projects/{id}:
+ *   delete:
+ *     summary: Elimina un proyecto por su ID
+ *     tags: [Project]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID del proyecto
+ *     responses:
+ *       204:
+ *         description: Proyecto eliminado exitosamente
+ *       500:
+ *         description: Error interno del servidor
+ */
 projectRoutes.delete("/:id", async (req, res) => {
   try {
     const { id } = req.params;
@@ -51,7 +179,25 @@ projectRoutes.delete("/:id", async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
-// Ruta para obtener todos los proyectos
+
+/**
+ * @swagger
+ * /api/projects:
+ *   get:
+ *     summary: Obtiene todos los proyectos
+ *     tags: [Project]
+ *     responses:
+ *       200:
+ *         description: Lista de proyectos
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Project'
+ *       500:
+ *         description: Error interno del servidor
+ */
 projectRoutes.get("/", async (req, res) => {
   try {
     const projects = await ProjectService.getAllProjects();
@@ -60,7 +206,32 @@ projectRoutes.get("/", async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
-// Ruta para obtener un proyecto por ID
+
+/**
+ * @swagger
+ * /api/projects/{id}:
+ *   get:
+ *     summary: Obtiene un proyecto por su ID
+ *     tags: [Project]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID del proyecto
+ *     responses:
+ *       200:
+ *         description: Proyecto encontrado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Project'
+ *       404:
+ *         description: Proyecto no encontrado
+ *       500:
+ *         description: Error interno del servidor
+ */
 projectRoutes.get("/:id", async (req, res) => {
   try {
     const { id } = req.params;

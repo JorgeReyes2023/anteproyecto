@@ -2,7 +2,90 @@ const { Router } = require("express");
 const { AuthService } = require("../services/auth.service");
 
 const authRoutes = Router();
-// Ruta para registrar un nuevo usuario
+/**
+ * @swagger
+ * components:
+ *   securitySchemes:
+ *     bearerAuth:
+ *       type: http
+ *       scheme: bearer
+ *       bearerFormat: JWT
+ */
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     User:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: integer
+ *           description: ID del usuario
+ *         name:
+ *           type: string
+ *           description: Nombre del usuario
+ *         email:
+ *           type: string
+ *           description: Correo electrónico del usuario
+ *         role:
+ *           type: string
+ *           description: Rol del usuario (admin, user, etc.)
+ *         company:
+ *           type: string
+ *           description: Empresa asociada al usuario (opcional)
+ *       required:
+ *         - name
+ *         - email
+ *         - password
+ *         - role
+ *       example:
+ *         id: 1
+ *         name: "Juan Perez"
+ *         email: "juan.perez@example.com"
+ *         role: "user"
+ *         company: "Empresa XYZ"
+ */
+
+/** * @swagger
+ * /api/auth/register:
+ *   post:
+ *     summary: Registra un nuevo usuario
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/User'
+ *     responses:
+ *       201:
+ *         description: Usuario registrado exitosamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ *       400:
+ *         description: Error de validación, faltan datos requeridos
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   description: Mensaje de error
+ *       500:
+ *         description: Error interno del servidor
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   description: Mensaje de error
+ * */
 authRoutes.post("/register", async (req, res) => {
   try {
     const { name, email, password, role, company } = req.body;
@@ -28,7 +111,59 @@ authRoutes.post("/register", async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
-// Ruta para iniciar sesión
+
+/**
+ * @swagger
+ * /api/auth/login:
+ *   post:
+ *     summary: Inicia sesión con email y contraseña
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - email
+ *               - password
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 example: "juan.perez@example.com"
+ *               password:
+ *                 type: string
+ *                 example: "securePassword123"
+ *     responses:
+ *       200:
+ *         description: Inicio de sesión exitoso
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/AuthResponse'
+ *       400:
+ *         description: Faltan datos requeridos
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: "Faltan datos requeridos"
+ *       401:
+ *         description: Credenciales inválidas
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: "Credenciales inválidas"
+ *       500:
+ *         description: Error interno del servidor
+ */
 authRoutes.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -44,7 +179,33 @@ authRoutes.post("/login", async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
-// Ruta para verificar el token
+
+/**
+ * @swagger
+ * /api/auth/verify:
+ *   get:
+ *     summary: Verifica si un token JWT es válido
+ *     tags: [Auth]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Token válido
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/VerifyResponse'
+ *       401:
+ *         description: Token inválido o no proporcionado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: "Token inválido o expirado"
+ */
 authRoutes.get("/verify", async (req, res) => {
   try {
     const token = req.headers.authorization?.split(" ")[1];

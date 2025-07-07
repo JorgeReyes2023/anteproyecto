@@ -3,7 +3,52 @@ const { UserService } = require("../services/user.service");
 
 const userRoutes = Router();
 
-// Ruta para obtener todos los usuarios
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     User:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: string
+ *           example: "64ecf7d8e0b9ad00125b5f01"
+ *         name:
+ *           type: string
+ *           example: "Maria Lopez"
+ *         email:
+ *           type: string
+ *           example: "maria@example.com"
+ *         role:
+ *           type: string
+ *           example: "user"
+ *         company:
+ *           type: string
+ *           example: "Empresa S.A."
+ *       required:
+ *         - name
+ *         - email
+ *         - role
+ */
+
+/**
+ * @swagger
+ * /api/users:
+ *   get:
+ *     summary: Obtener todos los usuarios
+ *     tags: [Users]
+ *     responses:
+ *       200:
+ *         description: Lista de usuarios
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/User'
+ *       500:
+ *         description: Error interno del servidor
+ */
 userRoutes.get("/", async (req, res) => {
   try {
     const users = await UserService.getAllUsers();
@@ -13,7 +58,31 @@ userRoutes.get("/", async (req, res) => {
   }
 });
 
-// Ruta para obtener un usuario por ID
+/**
+ * @swagger
+ * /api/users/{id}:
+ *   get:
+ *     summary: Obtener un usuario por su ID
+ *     tags: [Users]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID del usuario
+ *     responses:
+ *       200:
+ *         description: Usuario encontrado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ *       400:
+ *         description: ID inválido
+ *       500:
+ *         description: Error interno del servidor
+ */
 userRoutes.get("/:id", async (req, res) => {
   try {
     const userId = req.params.id;
@@ -27,7 +96,46 @@ userRoutes.get("/:id", async (req, res) => {
   }
 });
 
-// Ruta para actualizar un usuario
+/**
+ * @swagger
+ * /api/users/{id}:
+ *   put:
+ *     summary: Actualizar información de un usuario
+ *     tags: [Users]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID del usuario
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *               role:
+ *                 type: string
+ *               company:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Usuario actualizado exitosamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ *       400:
+ *         description: Datos faltantes
+ *       500:
+ *         description: Error interno del servidor
+ */
 userRoutes.put("/:id", async (req, res) => {
   try {
     const userId = req.params.id;
@@ -45,7 +153,27 @@ userRoutes.put("/:id", async (req, res) => {
   }
 });
 
-// Ruta para eliminar un usuario
+/**
+ * @swagger
+ * /api/users/{id}:
+ *   delete:
+ *     summary: Eliminar un usuario
+ *     tags: [Users]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID del usuario
+ *     responses:
+ *       200:
+ *         description: Usuario eliminado exitosamente
+ *       400:
+ *         description: ID inválido
+ *       500:
+ *         description: Error interno del servidor
+ */
 userRoutes.delete("/:id", async (req, res) => {
   try {
     const userId = req.params.id;
@@ -58,7 +186,44 @@ userRoutes.delete("/:id", async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
-// Ruta para update el password de un usuario
+
+/**
+ * @swagger
+ * /api/users/{id}/password:
+ *   put:
+ *     summary: Cambiar la contraseña de un usuario
+ *     tags: [Users]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID del usuario
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - currentPassword
+ *               - newPassword
+ *             properties:
+ *               currentPassword:
+ *                 type: string
+ *                 example: "oldpass123"
+ *               newPassword:
+ *                 type: string
+ *                 example: "newpass456"
+ *     responses:
+ *       200:
+ *         description: Contraseña actualizada exitosamente
+ *       400:
+ *         description: Faltan datos requeridos
+ *       500:
+ *         description: Error interno del servidor
+ */
 userRoutes.put("/:id/password", async (req, res) => {
   try {
     const userId = req.params.id;

@@ -3,7 +3,67 @@ const { Router } = require("express");
 const { NodeService } = require("../services/node.service");
 const nodeRoutes = Router();
 
-// Ruta para crear un nodo
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Node:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: integer
+ *           example: 1
+ *         name:
+ *           type: string
+ *           example: "Nodo Principal"
+ *         location:
+ *           type: string
+ *           example: "Edificio A, Piso 2"
+ *         status:
+ *           type: string
+ *           example: "activo"
+ *         projectId:
+ *           type: integer
+ *           example: 3
+ *       required:
+ *         - name
+ */
+
+/**
+ * @swagger
+ * /api/nodes:
+ *   post:
+ *     summary: Crea un nuevo nodo
+ *     tags: [Node]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - name
+ *             properties:
+ *               name:
+ *                 type: string
+ *               location:
+ *                 type: string
+ *               status:
+ *                 type: string
+ *               projectId:
+ *                 type: integer
+ *     responses:
+ *       201:
+ *         description: Nodo creado exitosamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Node'
+ *       400:
+ *         description: Datos faltantes
+ *       500:
+ *         description: Error interno del servidor
+ */
 nodeRoutes.post("/", async (req, res) => {
   try {
     const { name, location, status, projectId } = req.body;
@@ -21,7 +81,49 @@ nodeRoutes.post("/", async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
-// Ruta para actualizar un nodo
+
+/**
+ * @swagger
+ * /api/nodes/{id}:
+ *   put:
+ *     summary: Actualiza un nodo por su ID
+ *     tags: [Node]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID del nodo
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - name
+ *             properties:
+ *               name:
+ *                 type: string
+ *               location:
+ *                 type: string
+ *               status:
+ *                 type: string
+ *               projectId:
+ *                 type: integer
+ *     responses:
+ *       200:
+ *         description: Nodo actualizado exitosamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Node'
+ *       400:
+ *         description: Datos faltantes
+ *       500:
+ *         description: Error interno del servidor
+ */
 nodeRoutes.put("/:id", async (req, res) => {
   try {
     const { id } = req.params;
@@ -41,7 +143,26 @@ nodeRoutes.put("/:id", async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
-// Ruta para eliminar un nodo
+
+/**
+ * @swagger
+ * /api/nodes/{id}:
+ *   delete:
+ *     summary: Elimina un nodo por su ID
+ *     tags: [Node]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID del nodo
+ *     responses:
+ *       204:
+ *         description: Nodo eliminado exitosamente
+ *       500:
+ *         description: Error interno del servidor
+ */
 nodeRoutes.delete("/:id", async (req, res) => {
   try {
     const { id } = req.params;
@@ -51,7 +172,25 @@ nodeRoutes.delete("/:id", async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
-// Ruta para obtener todos los nodos
+
+/**
+ * @swagger
+ * /api/nodes:
+ *   get:
+ *     summary: Obtiene todos los nodos
+ *     tags: [Node]
+ *     responses:
+ *       200:
+ *         description: Lista de nodos
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Node'
+ *       500:
+ *         description: Error interno del servidor
+ */
 nodeRoutes.get("/", async (req, res) => {
   try {
     const nodes = await NodeService.getAllNodes();
@@ -60,7 +199,32 @@ nodeRoutes.get("/", async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
-// Ruta para obtener un nodo por ID
+
+/**
+ * @swagger
+ * /api/nodes/{id}:
+ *   get:
+ *     summary: Obtiene un nodo por su ID
+ *     tags: [Node]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID del nodo
+ *     responses:
+ *       200:
+ *         description: Nodo encontrado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Node'
+ *       404:
+ *         description: Nodo no encontrado
+ *       500:
+ *         description: Error interno del servidor
+ */
 nodeRoutes.get("/:id", async (req, res) => {
   try {
     const { id } = req.params;
