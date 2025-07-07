@@ -64,6 +64,28 @@ describe("NodeService", () => {
       });
     });
 
+    it("should return node with empty project array if projects is undefined", async () => {
+      const mockNode = {
+        id: 1,
+        name: "Node A",
+        project_id: 101,
+        projects: undefined, // simulate no project linked
+        status: "INACTIVE",
+      };
+
+      NodeModel.getNodeById.mockResolvedValue(mockNode);
+
+      const result = await NodeService.getNodeById(1);
+
+      expect(result).toEqual({
+        id: 1,
+        name: "Node A",
+        status: "inactivo",
+        projectId: 101,
+        project: [],
+      });
+    });
+
     it("should throw validation error", async () => {
       nodeSchemaId.validate.mockReturnValue({ error: new Error("bad id") });
       await expect(NodeService.getNodeById(null)).rejects.toThrow(

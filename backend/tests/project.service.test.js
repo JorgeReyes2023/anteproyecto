@@ -25,6 +25,42 @@ describe("ProjectService", () => {
       expect(result).toEqual({ id: 1, name: "P1" });
     });
 
+    it("should create a new project with empty nodes array", async () => {
+      const mockProject = {
+        id: 1,
+        name: "Project X",
+        description: "Test project",
+        companyId: 123,
+        nodes: [],
+      };
+
+      projectSchema.validate.mockReturnValue({
+        value: {
+          name: "Project X",
+          description: "Test project",
+          companyId: 123,
+          nodes: [],
+        },
+      });
+      ProjectModel.getProjectByName.mockResolvedValue(null);
+      ProjectModel.createProject.mockResolvedValue(mockProject);
+
+      const result = await ProjectService.createProject(
+        "Project X",
+        "Test project",
+        123,
+      );
+
+      expect(ProjectModel.getProjectByName).toHaveBeenCalledWith("Project X");
+      expect(ProjectModel.createProject).toHaveBeenCalledWith(
+        "Project X",
+        "Test project",
+        123,
+        [],
+      );
+      expect(result).toEqual(mockProject);
+    });
+
     it("should throw if project exists", async () => {
       projectSchema.validate.mockReturnValue({
         value: { name: "P1", description: "desc", companyId: 1, nodes: [] },
@@ -34,6 +70,18 @@ describe("ProjectService", () => {
       await expect(
         ProjectService.createProject("P1", "desc", 1, []),
       ).rejects.toThrow("El proyecto con el nombre P1 ya existe");
+    });
+
+    it("should throw validation error", async () => {
+      projectSchema.validate.mockReturnValue({
+        error: new Error("Invalid data"),
+      });
+
+      await expect(
+        ProjectService.createProject("", "", null, []),
+      ).rejects.toThrow(
+        "Error al crear el proyecto: Datos inválidos: Invalid data",
+      );
     });
   });
 
@@ -53,6 +101,18 @@ describe("ProjectService", () => {
       const result = await ProjectService.updateProject(1, "P2", "desc", 1, []);
       expect(result).toEqual({ id: 1, name: "P2" });
     });
+
+    it("should throw validation error on update", async () => {
+      projectSchema.validate.mockReturnValue({
+        error: new Error("Invalid data"),
+      });
+
+      await expect(
+        ProjectService.updateProject(1, "", "", null, []),
+      ).rejects.toThrow(
+        "Error al actualizar el proyecto: Datos inválidos: Invalid data",
+      );
+    });
   });
 
   describe("deleteProject", () => {
@@ -62,6 +122,16 @@ describe("ProjectService", () => {
 
       const result = await ProjectService.deleteProject(1);
       expect(result).toBe(true);
+    });
+
+    it("should throw validation error on delete", async () => {
+      deleteProjectSchema.validate.mockReturnValue({
+        error: new Error("Invalid ID"),
+      });
+
+      await expect(ProjectService.deleteProject(null)).rejects.toThrow(
+        "Error al eliminar el proyecto: Datos inválidos: Invalid ID",
+      );
     });
   });
 
