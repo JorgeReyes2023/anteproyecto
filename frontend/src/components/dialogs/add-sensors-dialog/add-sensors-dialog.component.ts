@@ -149,7 +149,7 @@ export class AddSensorsDialogComponent implements OnInit {
     if (this.newSensorForm.invalid) return;
 
     const dto: SensorCreate = {
-      name: this.newSensorForm.value.name!,
+      name: this.newSensorForm.value.name!.toUpperCase(),
       status: Status.INACTIVE,
       nodeId: null,
       typeIds: this.newSensorForm.value.typeIds!,
@@ -157,7 +157,9 @@ export class AddSensorsDialogComponent implements OnInit {
 
     this.sensorService.createSensor(dto).subscribe((sensor) => {
       if (sensor) {
+        this.fetchSensors();
         this.createdSensors.update((prev) => [...prev, sensor]);
+        this.selectedSensors.update((prev) => [...prev, sensor]);
         this.cancelNewSensor();
       }
     });

@@ -24,7 +24,11 @@ class SensorModel {
     return prisma.sensors.findUnique({
       where: { id: id },
       include: {
-        supported_types: true,
+        supported_types: {
+          include: {
+            type: true,
+          },
+        },
         nodes: true,
       },
     });

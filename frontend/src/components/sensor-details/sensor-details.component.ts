@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatListModule } from '@angular/material/list';
@@ -12,6 +12,7 @@ import { Sensor } from '../../models/sensor';
 import { SensorService } from '../../services/sensor.service';
 
 @Component({
+  standalone: true,
   selector: 'app-sensor-details',
   imports: [
     CommonModule,
@@ -23,18 +24,31 @@ import { SensorService } from '../../services/sensor.service';
     MatListModule,
   ],
   templateUrl: './sensor-details.component.html',
-  styleUrl: './sensor-details.component.css',
+  styleUrls: ['./sensor-details.component.css'],
 })
-export class SensorDetailsComponent {
+export class SensorDetailsComponent implements OnInit {
   sensor: Sensor | null = null;
 
   constructor(
     private sensorService: SensorService,
     private route: ActivatedRoute
-  ) {
-    const sensorId = this.route.snapshot.params['id'];
-    this.sensorService.getSensorById(sensorId).subscribe((data) => {
-      this.sensor = data;
-    });
+  ) {}
+
+  ngOnInit(): void {
+    const idParam = this.route.snapshot.paramMap.get('id');
+    const id = idParam !== null ? parseInt(idParam, 10) : null;
+    if (id !== null) {
+      this.sensorService.getSensorById(id).subscribe((data) => {
+        console.log('Sensor data:', data);
+        this.sensor = data;
+      });
+    }
+  }
+
+  sensorTypesDisplay(): string {
+    if (!this.sensor || !this.sensor.types || this.sensor.types.length === 0) {
+      return 'No types available';
+    }
+    return this.sensor.types.map((type) => type.name).join(', ');
   }
 }

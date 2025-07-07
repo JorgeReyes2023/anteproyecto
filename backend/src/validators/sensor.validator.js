@@ -57,6 +57,10 @@ const sensorSupportedTypeSchema = Joi.object({
       return helpers.error("any.invalid");
     })
     .default("INACTIVE"),
+  typeIds: Joi.array()
+    .items(Joi.number().integer().positive())
+    .min(0)
+    .required(),
 });
 
 const sensorSchemaId = Joi.object({

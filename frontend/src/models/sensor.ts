@@ -12,7 +12,7 @@ export interface SensorCreate {
   status?: string;
   thresholds?: Threshold[];
   typeIds?: number[]; // Array of sensor type IDs
-  type?: SensorType; // Optional sensor type object
+  types?: SensorType[]; // Optional sensor type object
 }
 
 /// SensorType is used to define the type of sensor, such as temperature, humidity, etc.

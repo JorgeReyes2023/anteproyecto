@@ -238,11 +238,11 @@ sensorRoutes.delete("/types/:id", async (req, res) => {
  */
 sensorRoutes.post("/", async (req, res) => {
   try {
-    const sensorData = req.body;
-    if (!sensorData.name || !sensorData.typeId) {
+    const { name, status, typeIds } = req.body;
+    if (!name || !status || !typeIds) {
       return res.status(400).json({ error: "Faltan datos requeridos" });
     }
-    const sensor = await SensorService.createSensor(sensorData);
+    const sensor = await SensorService.createSensor(name, status, typeIds);
     res.status(201).json(sensor);
   } catch (error) {
     res.status(500).json({ error: error.message });

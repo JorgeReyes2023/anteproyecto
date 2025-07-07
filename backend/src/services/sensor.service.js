@@ -28,10 +28,10 @@ class SensorService {
    * @returns {Promise<Object>} Sensor creado exitosamente.
    * @throws {Error} Si ocurre un error al crear el sensor.
    */
-  static async createSensor(name, nodeId, status) {
+  static async createSensor(name, status, typeIds) {
     try {
       const { value, error } = sensorSupportedTypeSchema.validate(
-        { name, nodeId, status },
+        { name, status, typeIds },
         { convert: true },
       );
 
@@ -44,20 +44,21 @@ class SensorService {
 
       const newSensor = await SensorModel.createSensor(
         value.name,
-        value.nodeId,
+        null, // nodeId is set to null by default
         value.status,
       );
 
-      if (value.typeIds && value.typeIds.length > 0) {
-        await Promise.all(
-          value.typeIds.map((typeId) =>
-            SensorSupportedTypeModel.createSensorSupportedType({
-              sensor_id: newSensor.id,
-              type_id: typeId,
-            }),
-          ),
-        );
-      }
+      await Promise.all(
+        value.typeIds && Array.isArray(value.typeIds)
+          ? value.typeIds.map((typeId) =>
+              SensorSupportedTypeModel.createSensorSupportedType({
+                sensor_id: newSensor.id,
+                type_id: typeId,
+              }),
+            )
+          : [],
+      );
+
       return newSensor;
     } catch (error) {
       throw new Error(`Error al crear el sensor: ${error.message}`);
@@ -80,22 +81,29 @@ class SensorService {
       if (error) throw new Error(`ID inválido: ${error.message}`);
 
       const sensor = await SensorModel.getSensorById(value.id);
-      return {
+
+      if (!sensor) return null;
+
+      const sensorDto = {
         id: sensor.id,
         name: sensor.name,
         nodeId: sensor.node_id,
-        node: sensor.node
+        status: sensor.status,
+        types: sensor.supported_types.map((supportedType) => ({
+          id: supportedType.id,
+          name: supportedType.type.name,
+          unit: supportedType.type.unit,
+          description: supportedType.type.description || "No disponible",
+        })),
+        node: sensor.nodes
           ? {
-              id: sensor.node.id,
-              name: sensor.node.name,
-              location: sensor.node.location,
+              id: sensor.nodes.id,
+              name: sensor.nodes.name,
             }
           : null,
-        status: sensor.status,
-        type: sensor.type ? sensor.type.name : null,
-        unit: sensor.type ? sensor.type.unit : null,
-        description: sensor.type ? sensor.type.description : null,
       };
+
+      return sensorDto;
     } catch (error) {
       throw new Error(`Error fetching sensor by ID: ${error.message}`);
     }
