@@ -149,7 +149,7 @@ $custom-dark-theme: mat.m2-define-dark-theme(
       $custom-primary,
       600
     )};
-  --banner-background: #{mat.m2-get-color-from-palette($custom-primary, 800)};
+  --banner-background: #{mat.m2-get-color-from-palette($custom-primary, 500)};
   --banner-text-color: #{mat.m2-get-color-from-palette(
       $custom-primary-contrast,
       50
@@ -298,21 +298,30 @@ mat-list-item:last-child {
 .dark-theme {
   @include mat.all-component-colors($custom-dark-theme);
 
-  :root {
+  & {
     --background-color: #121212;
-    --text-color: #f5f5f5;
     --surface-color: #1e1e1e;
-    --selected-background-color: #{mat.m2-get-color-from-palette(
-        $dark-primary,
-        600
-      )};
-    --selected-text-color: #fff;
+    --text-color: #f5f5f5;
+
+    --primary-color: #{mat.m2-get-color-from-palette($dark-primary)};
+    --primary-color-light: #{mat.m2-get-color-from-palette($dark-primary, 100)};
+    --primary-color-dark: #{mat.m2-get-color-from-palette($dark-primary, 700)};
+
+    --accent-color: #{mat.m2-get-color-from-palette($dark-accent)};
+    --warn-color: #{mat.m2-get-color-from-palette($dark-warn)};
+
     --hover-color: #4abfc6;
     --hover-background-color: #{mat.m2-get-color-from-palette(
         $dark-primary,
         700
       )};
-    --banner-background: #{mat.m2-get-color-from-palette($dark-primary, 800)};
+    --selected-color: #fff;
+    --selected-background-color: #{mat.m2-get-color-from-palette(
+        $dark-primary,
+        600
+      )};
+
+    --banner-background: #{mat.m2-get-color-from-palette($dark-primary, 400)};
     --banner-text-color: #{mat.m2-get-color-from-palette($dark-primary, 50)};
     --navbar-background: #1e1e1e;
   }
