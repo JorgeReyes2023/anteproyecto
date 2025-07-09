@@ -35,10 +35,7 @@
     </mat-form-field>
     <mat-form-field appearance="outline" style="flex: 1">
       <mat-label>Seleccionar tipo de sensor</mat-label>
-      <mat-select
-        [(value)]="selectedTypeId"
-        (selectionChange)="subReadings(selectedTypeId!)"
-      >
+      <mat-select [(value)]="selectedTypeId" (selectionChange)="subReadings()">
         <mat-option *ngFor="let type of typesList" [value]="type.id">
           {{ type.name }} ({{ type.unit }})
         </mat-option>

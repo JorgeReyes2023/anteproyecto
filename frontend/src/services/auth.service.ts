@@ -1,4 +1,3 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, tap } from 'rxjs/operators';
 import { GeneralService } from './general.service';
@@ -65,7 +64,6 @@ export class AuthService {
   verifyToken(): Observable<any> {
     return this.generalService.getData('auth/verify').pipe(
       tap((response) => {
-        console.log('Token verification successful:', response);
         if (typeof window !== 'undefined' && window.localStorage) {
           localStorage.setItem('user', JSON.stringify(response.user));
           this.userSubject.next(response.user);

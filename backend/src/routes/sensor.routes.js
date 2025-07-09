@@ -1,7 +1,10 @@
 const { Router } = require("express");
 
 const { SensorService } = require("../services/sensor.service");
-const { authenticate } = require("../middlewares/auth.middleware");
+const {
+  authenticate,
+  authorizeAdmin,
+} = require("../middlewares/auth.middleware");
 
 const sensorRoutes = Router();
 
@@ -369,7 +372,7 @@ sensorRoutes.get("/:id", async (req, res) => {
  *       500:
  *         description: Error interno del servidor
  */
-sensorRoutes.get("/", async (req, res) => {
+sensorRoutes.get("/", authorizeAdmin, async (req, res) => {
   try {
     const sensors = await SensorService.getAllSensors();
     res.status(200).json(sensors);
@@ -550,12 +553,67 @@ sensorRoutes.delete("/:id", async (req, res) => {
  *                     type: number
  *                     description: Valor de la lectura del sensor
  */
-sensorRoutes.get("/types/:id/readings", async (req, res) => {
+sensorRoutes.get("/readings/type/:idType", async (req, res) => {
   try {
-    const { id } = req.params;
-    const readings = await SensorService.getReadingsBySensorTypeId(id);
+    const { idType } = req.params;
+    const readings = await SensorService.getReadingsBySensorTypeId(idType);
     if (!readings) {
       return res.status(404).json({ error: "Tipo de sensor no encontrado" });
+    }
+    res.status(200).json(readings);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+/**
+ * @swagger
+ * /api/sensors/readings/{idSensor}/{idType}:
+ *   get:
+ *     summary: Obtiene las lecturas de un sensor por ID y tipo
+ *     tags: [Sensors]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: idSensor
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID del sensor cuyas lecturas se desean obtener
+ *       - in: path
+ *         name: idType
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID del tipo de sensor cuyas lecturas se desean obtener
+ *     responses:
+ *       200:
+ *         description: Lecturas obtenidas exitosamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   timestamp:
+ *                     type: string
+ *                     format: date-time
+ *                     description: Fecha y hora de la lectura
+ *                   value:
+ *                     type: number
+ *                     description: Valor de la lectura del sensor
+ */
+sensorRoutes.get("/readings/:idSensor/:idType", async (req, res) => {
+  try {
+    const { idSensor, idType } = req.params;
+    const readings = await SensorService.getReadingsBySensorIdAndType(
+      idSensor,
+      idType,
+    );
+    if (!readings) {
+      return res.status(404).json({ error: "Sensor no encontrado" });
     }
     res.status(200).json(readings);
   } catch (error) {

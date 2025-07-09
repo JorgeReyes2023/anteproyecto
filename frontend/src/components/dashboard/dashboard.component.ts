@@ -204,28 +204,34 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.chart?.update();
   }
 
-  subReadings(sensorTypeId: number): void {
+  subReadings(): void {
     this.sub?.unsubscribe();
 
-    this.sub = this.readingService
-      .streamReadings(sensorTypeId)
-      .subscribe((readings) => {
-        const ordered = readings.reverse();
+    if (this.selectedSensorId !== null && this.selectedTypeId !== null) {
+      this.sub = this.readingService
+        .streamReadings(this.selectedSensorId, this.selectedTypeId)
+        .subscribe((readings) => {
+          const ordered = readings.reverse();
 
-        this.lineChartData.labels = ordered.map(
-          (r: { timestamp: string | number | Date }) =>
-            new Date(r.timestamp).toLocaleTimeString()
-        );
+          this.lineChartData.labels = ordered.map(
+            (r: { timestamp: string | number | Date }) =>
+              new Date(r.timestamp).toLocaleTimeString()
+          );
 
-        this.lineChartData.datasets[0].data = ordered.map(
-          (r: { value: any }) => {
-            return r.value;
-          }
-        );
+          this.lineChartData.datasets[0].data = ordered.map(
+            (r: { value: any }) => {
+              return r.value;
+            }
+          );
 
-        this.cdr.detectChanges();
-        this.chart?.update();
-      });
+          this.cdr.detectChanges();
+          this.chart?.update();
+        });
+    } else {
+      console.warn(
+        'Sensor ID and Type ID must be selected before subscribing to readings.'
+      );
+    }
   }
 
   ngOnDestroy(): void {

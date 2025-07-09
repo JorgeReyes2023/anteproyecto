@@ -12,6 +12,7 @@ const {
   SensorReadingTypeSchema,
   SensorReadingTypeSchemaWithoutId,
   attachingSensorsToNodeSchema,
+  getReadingsBySensorIdAndType,
 } = require("../validators/sensor.validator.js");
 
 /**
@@ -381,6 +382,33 @@ class SensorService {
     } catch (error) {
       throw new Error(
         `Error fetching readings by sensor type ID: ${error.message}`,
+      );
+    }
+  }
+
+  /**
+   * Obtiene las lecturas de un sensor específico por su ID y tipo.
+   *
+   * @param {number|string} sensorId - ID del sensor cuyas lecturas se desean obtener.
+   * @param {number|string} typeId - ID del tipo de sensor cuyas lecturas se desean obtener.
+   * @returns {Promise<Array<Object>>} Lista de lecturas del sensor y tipo especificados.
+   * @throws {Error} Si ocurre un error al obtener las lecturas.
+   */
+  static async getReadingsBySensorIdAndType(sensorId, typeId) {
+    try {
+      const { value, error } = getReadingsBySensorIdAndType.validate(
+        { idSensor: sensorId, idType: typeId },
+        { convert: true },
+      );
+      if (error)
+        throw new Error(`Invalid sensor ID or type ID: ${error.message}`);
+      return SensorReadingModel.getReadingsBySensorIdAndType(
+        value.idSensor,
+        value.idType,
+      );
+    } catch (error) {
+      throw new Error(
+        `Error fetching readings by sensor ID and type: ${error.message}`,
       );
     }
   }
