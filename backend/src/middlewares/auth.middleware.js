@@ -28,12 +28,14 @@ const authorizeAdmin = (req, res, next) => {
 };
 
 const authorizeCompanyId = (req, res, next) => {
-  const companyId = req.params.companyId || req.body.companyId;
-  if (!companyId) {
+  const companyIdReq = req.params.companyId || req.body.companyId;
+  const companyId = parseInt(companyIdReq, 10);
+
+  if (!companyIdReq || isNaN(companyId)) {
     return res.status(400).json({ error: "ID de empresa requerido" });
   }
 
-  if (req.user.role === "admin" && companyId != 0) {
+  if (req.user.role === "admin" && companyId !== 0) {
     return res.status(403).json({ error: "Acceso denegado a empresa 0" });
   }
 
