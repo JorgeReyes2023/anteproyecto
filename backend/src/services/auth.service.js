@@ -135,7 +135,6 @@ class AuthService {
   static async verifyToken(token) {
     try {
       const decoded = verifyToken(token);
-      console.log("Decoded token:", decoded);
       return {
         user: {
           id: decoded.id,
