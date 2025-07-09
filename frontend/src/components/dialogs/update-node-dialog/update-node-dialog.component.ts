@@ -42,10 +42,6 @@ export class UpdateNodeDialogComponent {
     // shallow copy – use structuredClone for deep copy if nested objects exist
     this.localNode = { ...node };
     this.fetchData();
-    console.log(
-      'UpdateNodeDialogComponent initialized with node:',
-      this.localNode
-    );
   }
 
   fetchData() {

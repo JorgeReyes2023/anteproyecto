@@ -1,40 +1,20 @@
 const { Router } = require("express");
 
 const { NodeService } = require("../services/node.service");
+const {
+  authenticate,
+  authorizeAdmin,
+} = require("../middlewares/auth.middleware");
 const nodeRoutes = Router();
 
-/**
- * @swagger
- * components:
- *   schemas:
- *     Node:
- *       type: object
- *       properties:
- *         id:
- *           type: integer
- *           example: 1
- *         name:
- *           type: string
- *           example: "Nodo Principal"
- *         location:
- *           type: string
- *           example: "Edificio A, Piso 2"
- *         status:
- *           type: string
- *           example: "activo"
- *         projectId:
- *           type: integer
- *           example: 3
- *       required:
- *         - name
- */
+nodeRoutes.use(authenticate);
 
 /**
  * @swagger
  * /api/nodes:
  *   post:
  *     summary: Crea un nuevo nodo
- *     tags: [Node]
+ *     tags: [Nodes]
  *     requestBody:
  *       required: true
  *       content:
@@ -87,7 +67,7 @@ nodeRoutes.post("/", async (req, res) => {
  * /api/nodes/{id}:
  *   put:
  *     summary: Actualiza un nodo por su ID
- *     tags: [Node]
+ *     tags: [Nodes]
  *     parameters:
  *       - in: path
  *         name: id
@@ -149,7 +129,7 @@ nodeRoutes.put("/:id", async (req, res) => {
  * /api/nodes/{id}:
  *   delete:
  *     summary: Elimina un nodo por su ID
- *     tags: [Node]
+ *     tags: [Nodes]
  *     parameters:
  *       - in: path
  *         name: id
@@ -178,7 +158,7 @@ nodeRoutes.delete("/:id", async (req, res) => {
  * /api/nodes:
  *   get:
  *     summary: Obtiene todos los nodos
- *     tags: [Node]
+ *     tags: [Nodes]
  *     responses:
  *       200:
  *         description: Lista de nodos
@@ -205,7 +185,7 @@ nodeRoutes.get("/", async (req, res) => {
  * /api/nodes/{id}:
  *   get:
  *     summary: Obtiene un nodo por su ID
- *     tags: [Node]
+ *     tags: [Nodes]
  *     parameters:
  *       - in: path
  *         name: id

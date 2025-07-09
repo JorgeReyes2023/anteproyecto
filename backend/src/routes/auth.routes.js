@@ -1,57 +1,20 @@
 const { Router } = require("express");
 const { AuthService } = require("../services/auth.service");
+const {
+  authenticate,
+  authorizeAdmin,
+} = require("../middlewares/auth.middleware");
 
 const authRoutes = Router();
-/**
- * @swagger
- * components:
- *   securitySchemes:
- *     bearerAuth:
- *       type: http
- *       scheme: bearer
- *       bearerFormat: JWT
- */
 
 /**
  * @swagger
- * components:
- *   schemas:
- *     User:
- *       type: object
- *       properties:
- *         id:
- *           type: integer
- *           description: ID del usuario
- *         name:
- *           type: string
- *           description: Nombre del usuario
- *         email:
- *           type: string
- *           description: Correo electrónico del usuario
- *         role:
- *           type: string
- *           description: Rol del usuario (admin, user, etc.)
- *         company:
- *           type: string
- *           description: Empresa asociada al usuario (opcional)
- *       required:
- *         - name
- *         - email
- *         - password
- *         - role
- *       example:
- *         id: 1
- *         name: "Juan Perez"
- *         email: "juan.perez@example.com"
- *         role: "user"
- *         company: "Empresa XYZ"
- */
-
-/** * @swagger
  * /api/auth/register:
  *   post:
- *     summary: Registra un nuevo usuario
+ *     summary: Registra un nuevo usuario (solo para administradores autenticados)
  *     tags: [Auth]
+ *     security:
+ *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -67,26 +30,14 @@ const authRoutes = Router();
  *               $ref: '#/components/schemas/User'
  *       400:
  *         description: Error de validación, faltan datos requeridos
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 error:
- *                   type: string
- *                   description: Mensaje de error
+ *       401:
+ *         description: No autenticado (token JWT faltante o inválido)
+ *       403:
+ *         description: No autorizado (solo administradores pueden registrar usuarios)
  *       500:
  *         description: Error interno del servidor
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 error:
- *                   type: string
- *                   description: Mensaje de error
- * */
-authRoutes.post("/register", async (req, res) => {
+ */
+authRoutes.post("/register", authenticate, authorizeAdmin, async (req, res) => {
   try {
     const { name, email, password, role, company } = req.body;
     if (!name || !email || !password) {
@@ -118,6 +69,7 @@ authRoutes.post("/register", async (req, res) => {
  *   post:
  *     summary: Inicia sesión con email y contraseña
  *     tags: [Auth]
+ *     security: []
  *     requestBody:
  *       required: true
  *       content:
@@ -212,8 +164,11 @@ authRoutes.get("/verify", async (req, res) => {
     if (!token) {
       return res.status(401).json({ error: "Token no proporcionado" });
     }
-    const decoded = AuthService.verifyToken(token);
-    res.status(200).json({ message: "Token válido", user: decoded });
+    const decoded = await AuthService.verifyToken(token);
+    res.status(200).json({
+      message: "Token válido",
+      user: decoded.user,
+    });
   } catch (error) {
     res.status(401).json({ error: "Token inválido o expirado" });
   }

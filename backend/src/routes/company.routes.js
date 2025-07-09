@@ -1,33 +1,20 @@
 const { Router } = require("express");
 const { CompanyService } = require("../services/company.service");
+const {
+  authenticate,
+  authorizeAdmin,
+} = require("../middlewares/auth.middleware");
 
 const companyRoutes = Router();
-/**
- * @swagger
- * components:
- *   schemas:
- *     Company:
- *       type: object
- *       properties:
- *         id:
- *           type: integer
- *           example: 1
- *         name:
- *           type: string
- *           example: "Empresa ABC"
- *         address:
- *           type: string
- *           example: "Av. Siempre Viva 123"
- *       required:
- *         - name
- */
+
+companyRoutes.use(authenticate);
 
 /**
  * @swagger
  * /api/companies:
  *   post:
  *     summary: Crea una nueva empresa
- *     tags: [Company]
+ *     tags: [Companies]
  *     requestBody:
  *       required: true
  *       content:
@@ -71,7 +58,7 @@ companyRoutes.post("/", async (req, res) => {
  * /api/companies/{id}:
  *   put:
  *     summary: Actualiza una empresa por su ID
- *     tags: [Company]
+ *     tags: [Companies]
  *     parameters:
  *       - in: path
  *         name: id
@@ -123,7 +110,7 @@ companyRoutes.put("/:id", async (req, res) => {
  * /api/companies/{id}:
  *   delete:
  *     summary: Elimina una empresa por su ID
- *     tags: [Company]
+ *     tags: [Companies]
  *     parameters:
  *       - in: path
  *         name: id
@@ -152,7 +139,7 @@ companyRoutes.delete("/:id", async (req, res) => {
  * /api/companies:
  *   get:
  *     summary: Obtiene la lista de todas las empresas
- *     tags: [Company]
+ *     tags: [Companies]
  *     responses:
  *       200:
  *         description: Lista de empresas
@@ -179,7 +166,7 @@ companyRoutes.get("/", async (req, res) => {
  * /api/companies/{id}:
  *   get:
  *     summary: Obtiene una empresa por su ID
- *     tags: [Company]
+ *     tags: [Companies]
  *     parameters:
  *       - in: path
  *         name: id
@@ -216,7 +203,7 @@ companyRoutes.get("/:id", async (req, res) => {
  * /api/companies/name/{name}:
  *   get:
  *     summary: Obtiene una empresa por su nombre
- *     tags: [Company]
+ *     tags: [Companies]
  *     parameters:
  *       - in: path
  *         name: name

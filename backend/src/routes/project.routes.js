@@ -1,43 +1,17 @@
 const { Router } = require("express");
 
 const { ProjectService } = require("../services/project.service");
+const { authenticate } = require("../middlewares/auth.middleware");
 
 const projectRoutes = Router();
-
-/**
- * @swagger
- * components:
- *   schemas:
- *     Project:
- *       type: object
- *       properties:
- *         id:
- *           type: integer
- *           example: 1
- *         name:
- *           type: string
- *           example: "Proyecto A"
- *         description:
- *           type: string
- *           example: "Sistema de monitoreo ambiental"
- *         companyId:
- *           type: integer
- *           example: 2
- *         nodes:
- *           type: array
- *           items:
- *             type: integer
- *           example: [1, 2, 3]
- *       required:
- *         - name
- */
+projectRoutes.use(authenticate);
 
 /**
  * @swagger
  * /api/projects:
  *   post:
  *     summary: Crea un nuevo proyecto
- *     tags: [Project]
+ *     tags: [Projects]
  *     requestBody:
  *       required: true
  *       content:
@@ -92,7 +66,7 @@ projectRoutes.post("/", async (req, res) => {
  * /api/projects/{id}:
  *   put:
  *     summary: Actualiza un proyecto por su ID
- *     tags: [Project]
+ *     tags: [Projects]
  *     parameters:
  *       - in: path
  *         name: id
@@ -156,7 +130,7 @@ projectRoutes.put("/:id", async (req, res) => {
  * /api/projects/{id}:
  *   delete:
  *     summary: Elimina un proyecto por su ID
- *     tags: [Project]
+ *     tags: [Projects]
  *     parameters:
  *       - in: path
  *         name: id
@@ -185,7 +159,7 @@ projectRoutes.delete("/:id", async (req, res) => {
  * /api/projects:
  *   get:
  *     summary: Obtiene todos los proyectos
- *     tags: [Project]
+ *     tags: [Projects]
  *     responses:
  *       200:
  *         description: Lista de proyectos
@@ -212,7 +186,7 @@ projectRoutes.get("/", async (req, res) => {
  * /api/projects/{id}:
  *   get:
  *     summary: Obtiene un proyecto por su ID
- *     tags: [Project]
+ *     tags: [Projects]
  *     parameters:
  *       - in: path
  *         name: id

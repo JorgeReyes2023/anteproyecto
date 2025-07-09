@@ -1,8 +1,11 @@
 const { Router } = require("express");
 
 const { SensorService } = require("../services/sensor.service");
+const { authenticate } = require("../middlewares/auth.middleware");
 
 const sensorRoutes = Router();
+
+sensorRoutes.use(authenticate);
 
 /**
  * @swagger
@@ -415,7 +418,6 @@ sensorRoutes.put("/:id", async (req, res) => {
  */
 sensorRoutes.put("/attach/node", async (req, res) => {
   try {
-    console.log("Updating sensors for node:", req.body);
     const { idNode, sensorIds } = req.body;
 
     if (!idNode || !Array.isArray(sensorIds)) {
@@ -504,7 +506,6 @@ sensorRoutes.get("/types/:id/readings", async (req, res) => {
   try {
     const { id } = req.params;
     const readings = await SensorService.getReadingsBySensorTypeId(id);
-    console.log("Readings for sensor type ID:", id, readings);
     if (!readings) {
       return res.status(404).json({ error: "Tipo de sensor no encontrado" });
     }

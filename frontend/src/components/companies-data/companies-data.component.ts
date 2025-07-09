@@ -64,7 +64,6 @@ export class CompaniesDataComponent {
   }
 
   fetchCompanies() {
-    console.log('Fetching companies...');
     this.companyService.getCompanies().subscribe({
       next: (response: Company[]) => {
         this.companies = response;
@@ -78,11 +77,16 @@ export class CompaniesDataComponent {
   addCompany(company: Omit<Company, 'id'>) {
     this.companyService.createCompany(company).subscribe({
       next: (response) => {
-        console.log('Company created successfully:', response);
+        this.alertService.success(
+          `Empresa "${response.name}" creada correctamente.`
+        );
         this.fetchCompanies();
       },
       error: (error) => {
         console.error('Error creating company:', error);
+        this.alertService.error(
+          'Error al crear la empresa. Por favor, inténtelo de nuevo.'
+        );
       },
     });
   }
@@ -94,8 +98,10 @@ export class CompaniesDataComponent {
   onUpdateCompany(company: Company) {
     this.companyService.updateCompany(company).subscribe({
       next: (response) => {
-        console.log('Company updated successfully:', response);
         this.fetchCompanies();
+        this.alertService.success(
+          `Empresa "${response.name}" actualizada correctamente.`
+        );
       },
       error: (error) => {
         console.error('Error updating company:', error);
@@ -109,7 +115,7 @@ export class CompaniesDataComponent {
   onDelete(company: Pick<Company, 'id'>) {
     this.companyService.deleteCompany(company.id).subscribe({
       next: (response) => {
-        console.log('Company deleted successfully:', response);
+        this.alertService.success(`Empresa eliminada correctamente.`);
         this.fetchCompanies();
       },
       error: (error) => {

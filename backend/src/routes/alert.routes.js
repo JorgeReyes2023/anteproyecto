@@ -1,14 +1,16 @@
 const { Router } = require("express");
 const { AlertService } = require("../services/alert.service");
+const { authenticate } = require("../middlewares/auth.middleware");
 
 const alertRoutes = Router();
+alertRoutes.use(authenticate);
 /**
  * @swagger
  * /api/alerts:
  *   post:
  *     summary: Crear una nueva alerta
  *     tags:
- *       - Alertas
+ *       - Alerts
  *     requestBody:
  *       required: true
  *       content:
@@ -45,7 +47,7 @@ alertRoutes.post("/", async (req, res) => {
  *   put:
  *     summary: Actualizar una alerta existente
  *     tags:
- *       - Alertas
+ *       - Alerts
  *     parameters:
  *       - in: path
  *         name: id
@@ -92,7 +94,7 @@ alertRoutes.put("/:id", async (req, res) => {
  *   delete:
  *     summary: Eliminar una alerta por ID
  *     tags:
- *       - Alertas
+ *       - Alerts
  *     parameters:
  *       - in: path
  *         name: id
@@ -123,7 +125,7 @@ alertRoutes.delete("/:id", async (req, res) => {
  *   get:
  *     summary: Obtener todas las alertas
  *     tags:
- *       - Alertas
+ *       - Alerts
  *     responses:
  *       200:
  *         description: Lista de alertas
@@ -159,7 +161,7 @@ alertRoutes.get("/", async (req, res) => {
  *   get:
  *     summary: Obtener una alerta por ID
  *     tags:
- *       - Alertas
+ *       - Alerts
  *     parameters:
  *       - in: path
  *         name: id

@@ -68,7 +68,7 @@ export class createUserComponent {
   }
 
   createUser() {
-    const userData : UserCreate = {
+    const userData: UserCreate = {
       name: this.user.name,
       email: this.user.email,
       password: this.user.password,
@@ -88,11 +88,11 @@ export class createUserComponent {
     }
     this.authService.register(userData).subscribe({
       next: (response) => {
-        console.log('User created successfully:', response);
-        this.alertService.success('Usuario creado exitosamente.');
+        this.alertService.success(
+          `Usuario ${response.name} creado exitosamente.`
+        );
       },
       error: (error) => {
-        console.error('Error creating user:', error);
         this.alertService.error('Error al crear el usuario.');
       },
     });
