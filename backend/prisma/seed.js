@@ -64,13 +64,13 @@ async function main() {
   await prisma.nodes.createMany({
     data: [
     {
-        "name": "node1",
+        "name": "Sistema foltovoltaico",
         "location": "loc node1",
         "project_id": null,
         "status": "ACTIVE"
     },
     {
-        "name": "Nodo temperatura",
+        "name": "Sistema hibernadero",
         "location": "planta baja",
         "project_id": null,
         "status": "MAINTENANCE"
@@ -82,14 +82,34 @@ async function main() {
   await prisma.sensor_reading_types.createMany({
     data: [
     {
-        "name": "humidity",
+        "name": "humedad",
         "unit": "%",
         "description": "Humedad relativa del aire"
     },
     {
-        "name": "temperature",
+        "name": "temperatura",
         "unit": "C°",
         "description": "Temperatura ambiente medida por el sensor, expresada en grados Celsius (°C)."
+    },
+    {
+        "name": "brillo",
+        "unit": "lux",
+        "description": null
+    },
+    {
+        "name": "corriente",
+        "unit": "A",
+        "description": "Mide la corriente generada por los paneles"
+    },
+    {
+        "name": "voltaje",
+        "unit": "V",
+        "description": "Mide la tension entre terminales"
+    },
+    {
+        "name": "irradiancia",
+        "unit": "W/m²",
+        "description": "Mide la energia solar incidente en una area"
     }
 ],
     skipDuplicates: true
@@ -134,6 +154,26 @@ async function main() {
     {
         "name": "ESP32-DHT11-SIMULADO",
         "node_id": 1,
+        "status": "ACTIVE"
+    },
+    {
+        "name": "BH-1750",
+        "node_id": null,
+        "status": "INACTIVE"
+    },
+    {
+        "name": "ACS-712",
+        "node_id": null,
+        "status": "ACTIVE"
+    },
+    {
+        "name": "INA-219",
+        "node_id": null,
+        "status": "ACTIVE"
+    },
+    {
+        "name": "PIRANOMETRO-1",
+        "node_id": null,
         "status": "ACTIVE"
     }
 ],
@@ -2895,468 +2935,6 @@ async function main() {
         "type_id": 2,
         "value": 22,
         "timestamp": "1970-01-12T06:40:56.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 39,
-        "timestamp": "1970-01-12T06:40:56.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 26,
-        "timestamp": "1970-01-12T08:04:18.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 54,
-        "timestamp": "1970-01-12T08:04:18.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 32,
-        "timestamp": "1970-01-12T09:27:39.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 37,
-        "timestamp": "1970-01-12T09:27:39.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 26,
-        "timestamp": "1970-01-12T10:51:00.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 33,
-        "timestamp": "1970-01-12T10:51:00.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 22,
-        "timestamp": "1970-01-12T12:14:21.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 59,
-        "timestamp": "1970-01-12T12:14:21.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 20,
-        "timestamp": "1970-01-12T13:37:43.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 47,
-        "timestamp": "1970-01-12T13:37:43.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 22,
-        "timestamp": "1970-01-12T15:01:04.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 48,
-        "timestamp": "1970-01-12T15:01:04.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 33,
-        "timestamp": "1970-01-12T16:24:25.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 32,
-        "timestamp": "1970-01-12T16:24:25.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 34,
-        "timestamp": "1970-01-12T17:47:46.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 39,
-        "timestamp": "1970-01-12T17:47:46.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 25,
-        "timestamp": "1970-01-12T19:11:08.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 50,
-        "timestamp": "1970-01-12T19:11:08.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 32,
-        "timestamp": "1970-01-12T20:34:29.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 35,
-        "timestamp": "1970-01-12T20:34:29.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 27,
-        "timestamp": "1970-01-12T21:57:50.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 39,
-        "timestamp": "1970-01-12T21:57:50.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 34,
-        "timestamp": "1970-01-12T23:21:11.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 32,
-        "timestamp": "1970-01-12T23:21:11.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 29,
-        "timestamp": "1970-01-13T00:44:33.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 39,
-        "timestamp": "1970-01-13T00:44:33.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 33,
-        "timestamp": "1970-01-13T02:07:54.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 36,
-        "timestamp": "1970-01-13T02:07:54.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 22,
-        "timestamp": "1970-01-13T03:31:15.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 55,
-        "timestamp": "1970-01-13T03:31:15.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 21,
-        "timestamp": "1970-01-13T04:54:36.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 31,
-        "timestamp": "1970-01-13T04:54:36.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 22,
-        "timestamp": "1970-01-13T06:17:58.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 32,
-        "timestamp": "1970-01-13T06:17:58.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 23,
-        "timestamp": "1970-01-13T07:41:19.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 37,
-        "timestamp": "1970-01-13T07:41:19.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 33,
-        "timestamp": "1970-01-13T09:04:40.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 49,
-        "timestamp": "1970-01-13T09:04:40.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 20,
-        "timestamp": "1970-01-13T10:28:01.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 58,
-        "timestamp": "1970-01-13T10:28:01.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 28,
-        "timestamp": "1970-01-13T11:51:23.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 51,
-        "timestamp": "1970-01-13T11:51:23.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 28,
-        "timestamp": "1970-01-13T13:14:44.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 33,
-        "timestamp": "1970-01-13T13:14:44.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 33,
-        "timestamp": "1970-01-13T14:38:05.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 34,
-        "timestamp": "1970-01-13T14:38:05.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 26,
-        "timestamp": "1970-01-13T16:01:26.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 43,
-        "timestamp": "1970-01-13T16:01:26.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 27,
-        "timestamp": "1970-01-13T17:24:48.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 58,
-        "timestamp": "1970-01-13T17:24:48.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 29,
-        "timestamp": "1970-01-13T18:48:09.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 52,
-        "timestamp": "1970-01-13T18:48:09.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 26,
-        "timestamp": "1970-01-13T20:11:30.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 35,
-        "timestamp": "1970-01-13T20:11:30.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 23,
-        "timestamp": "1970-01-13T21:34:51.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 57,
-        "timestamp": "1970-01-13T21:34:51.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 24,
-        "timestamp": "1970-01-13T22:58:13.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 53,
-        "timestamp": "1970-01-13T22:58:13.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 21,
-        "timestamp": "1970-01-14T00:21:34.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 59,
-        "timestamp": "1970-01-14T00:21:34.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 31,
-        "timestamp": "1970-01-14T01:44:55.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 36,
-        "timestamp": "1970-01-14T01:44:55.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 26,
-        "timestamp": "1970-01-14T03:08:16.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 41,
-        "timestamp": "1970-01-14T03:08:16.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 34,
-        "timestamp": "1970-01-14T04:31:38.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 36,
-        "timestamp": "1970-01-14T04:31:38.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 27,
-        "timestamp": "1970-01-14T05:54:59.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 40,
-        "timestamp": "1970-01-14T05:54:59.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 24,
-        "timestamp": "1970-01-14T07:18:20.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 38,
-        "timestamp": "1970-01-14T07:18:20.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 33,
-        "timestamp": "1970-01-14T08:41:41.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 32,
-        "timestamp": "1970-01-14T08:41:41.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 24,
-        "timestamp": "1970-01-14T10:05:03.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 41,
-        "timestamp": "1970-01-14T10:05:03.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 22,
-        "timestamp": "1970-01-14T11:28:24.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 42,
-        "timestamp": "1970-01-14T11:28:24.000Z"
     }
 ],
     skipDuplicates: true
@@ -3375,6 +2953,60 @@ async function main() {
         "type_id": 2,
         "min_value": 30,
         "max_value": 60
+    },
+    {
+        "sensor_id": 2,
+        "type_id": 3,
+        "min_value": 0,
+        "max_value": 10000
+    },
+    {
+        "sensor_id": 3,
+        "type_id": 4,
+        "min_value": 0,
+        "max_value": 10
+    },
+    {
+        "sensor_id": 4,
+        "type_id": 5,
+        "min_value": 0,
+        "max_value": 250
+    },
+    {
+        "sensor_id": 5,
+        "type_id": 6,
+        "min_value": 0,
+        "max_value": 1200
+    }
+],
+    skipDuplicates: true
+  });
+
+  await prisma.sensor_supported_types.createMany({
+    data: [
+    {
+        "sensor_id": 1,
+        "type_id": 1
+    },
+    {
+        "sensor_id": 1,
+        "type_id": 2
+    },
+    {
+        "sensor_id": 2,
+        "type_id": 3
+    },
+    {
+        "sensor_id": 3,
+        "type_id": 4
+    },
+    {
+        "sensor_id": 4,
+        "type_id": 5
+    },
+    {
+        "sensor_id": 5,
+        "type_id": 6
     }
 ],
     skipDuplicates: true
