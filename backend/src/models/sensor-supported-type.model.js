@@ -11,6 +11,15 @@ class SensorSupportedTypeModel {
     return prisma.sensor_supported_types.findMany();
   }
 
+  static async getSensorSupportedTypeBySensorId(sensorId) {
+    return prisma.sensor_supported_types.findMany({
+      where: { sensor_id: sensorId },
+      include: {
+        type: true,
+      },
+    });
+  }
+
   static async updateSensorSupportedType(id, sensorSupportedTypeData) {
     return prisma.sensor_supported_types.update({
       where: { id: id },

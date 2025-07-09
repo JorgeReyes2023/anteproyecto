@@ -13,6 +13,10 @@ export class ProjectService {
     return this.gService.getData('projects');
   }
 
+  getProjectsByCompanyId(companyId: number): Observable<Project[]> {
+    return this.gService.getData(`projects/company/${companyId}`);
+  }
+
   getProjectById(id: number) {
     return this.gService.getData(`projects/${id}`);
   }

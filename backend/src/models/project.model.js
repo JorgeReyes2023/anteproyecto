@@ -69,5 +69,21 @@ class ProjectModel {
       throw new Error(`Error fetching project by name: ${error.message}`);
     }
   }
+
+  static async getProjectsByCompanyId(companyId) {
+    try {
+      const projects = await prisma.projects.findMany({
+        where: { company_id: companyId },
+        include: {
+          companies: true,
+        },
+      });
+      return projects;
+    } catch (error) {
+      throw new Error(
+        `Error fetching projects by company ID: ${error.message}`,
+      );
+    }
+  }
 }
 module.exports = { ProjectModel };

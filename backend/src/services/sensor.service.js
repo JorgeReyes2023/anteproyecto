@@ -132,6 +132,26 @@ class SensorService {
   }
 
   /**
+   * Obtiene todos los sensores asociados a un nodo específico.
+   * @param {number|string} nodeId - ID del nodo cuyas sensores se desean obtener.
+   * @returns {Promise<Array<Object>>} Lista de sensores asociados al nodo.
+   * @throws {Error} Si ocurre un error al obtener los sensores.
+   */
+  static async getSensorsByNodeId(nodeId) {
+    try {
+      const { value, error } = sensorSchemaId.validate(
+        { id: nodeId },
+        { convert: true },
+      );
+      if (error) throw new Error(`ID inválido: ${error.message}`);
+
+      return await SensorModel.getSensorsByNodeId(value.id);
+    } catch (error) {
+      throw new Error(`Error fetching sensors by node ID: ${error.message}`);
+    }
+  }
+
+  /**
    * Actualiza un sensor existente con nuevos datos.
    *
    * @param {number|string} id - ID del sensor a actualizar.
@@ -238,6 +258,33 @@ class SensorService {
       return await SensorReadingTypeModel.getAllSensorReadingTypes();
     } catch (error) {
       throw new Error(`Error fetching all sensor types: ${error.message}`);
+    }
+  }
+
+  /**
+   * Obtiene los tipos de sensor asociados a un sensor específico por su ID.
+   *
+   * @param {number|string} sensorId - ID del sensor cuyas tipos se desean obtener.
+   * @returns {Promise<Array<Object>>} Lista de tipos de sensor asociados al sensor.
+   * @throws {Error} Si ocurre un error al obtener los tipos de sensor.
+   */
+  static async getSensorTypeBySensorId(sensorId) {
+    try {
+      const { value, error } = sensorSchemaId.validate(
+        { id: sensorId },
+        { convert: true },
+      );
+      if (error) throw new Error(`Invalid sensor ID: ${error.message}`);
+      const supportedTypes =
+        await SensorSupportedTypeModel.getSensorSupportedTypeBySensorId(
+          value.id,
+        );
+      const sensorTypes = supportedTypes.map((type) => type.type);
+      return sensorTypes;
+    } catch (error) {
+      throw new Error(
+        `Error fetching sensor type by sensor ID: ${error.message}`,
+      );
     }
   }
 

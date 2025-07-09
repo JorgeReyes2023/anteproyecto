@@ -26,6 +26,10 @@ export class SensorService {
     return this.gService.getData(`sensors/${id}`);
   }
 
+  getSensorsByNodeId(nodeId: number): Observable<Sensor[]> {
+    return this.gService.getData(`sensors/node/${nodeId}`);
+  }
+
   createSensor(sensor: SensorCreate): Observable<Sensor> {
     return this.gService.postData('sensors', sensor);
   }
@@ -47,6 +51,10 @@ export class SensorService {
   // -- sensor types
   getSensorsTypes(): Observable<SensorType[]> {
     return this.gService.getData('sensors/types');
+  }
+
+  getSensorTypeBySensorId(sensorId: number): Observable<SensorType[]> {
+    return this.gService.getData(`sensors/types/${sensorId}`);
   }
 
   createSensorType(type: SensorTypeCreate): Observable<SensorType> {

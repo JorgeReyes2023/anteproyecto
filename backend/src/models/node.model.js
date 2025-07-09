@@ -53,5 +53,15 @@ const NodeModel = {
       },
     });
   },
+
+  async getNodesByProjectId(projectId) {
+    return prisma.nodes.findMany({
+      where: { project_id: projectId },
+      include: {
+        projects: true,
+        sensors: true,
+      },
+    });
+  },
 };
 module.exports = { NodeModel };

@@ -217,4 +217,46 @@ nodeRoutes.get("/:id", async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+
+/**
+ * @swagger
+ * /api/nodes/project/{projectId}:
+ *   get:
+ *     summary: Obtiene todos los nodos de un proyecto
+ *     tags: [Nodes]
+ *     parameters:
+ *       - in: path
+ *         name: projectId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID del proyecto
+ *     responses:
+ *       200:
+ *         description: Lista de nodos del proyecto
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Node'
+ *       404:
+ *         description: No se encontraron nodos para este proyecto
+ *       500:
+ *         description: Error interno del servidor
+ */
+nodeRoutes.get("/project/:projectId", async (req, res) => {
+  try {
+    const { projectId } = req.params;
+    const nodes = await NodeService.getNodesByProjectId(projectId);
+    if (!nodes || nodes.length === 0) {
+      return res
+        .status(404)
+        .json({ error: "No se encontraron nodos para este proyecto" });
+    }
+    res.status(200).json(nodes);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
 module.exports = nodeRoutes;

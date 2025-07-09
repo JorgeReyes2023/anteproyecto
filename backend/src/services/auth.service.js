@@ -68,6 +68,7 @@ class AuthService {
         email: user.email,
         role: user.user_roles?.name || user.user_roles,
         company: user.companies?.name || null,
+        companyId: user.companies?.id || null,
       };
 
       // generar token
@@ -77,6 +78,7 @@ class AuthService {
         role: user.user_roles?.name || user.user_roles,
         email: user.email,
         company: user.companies?.name || null,
+        companyId: user.companies?.id || null,
       });
 
       return { user: userDto, token };
@@ -142,6 +144,7 @@ class AuthService {
           role: decoded.role,
           email: decoded.email,
           company: decoded.company,
+          companyId: decoded.companyId,
         },
       };
     } catch (error) {

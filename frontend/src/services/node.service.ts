@@ -18,6 +18,10 @@ export class NodeService {
     return this.gService.getData(`nodes/${id}`);
   }
 
+  getNodesByProjectId(projectId: number): Observable<Node[]> {
+    return this.gService.getData(`nodes/project/${projectId}`);
+  }
+
   createNode(node: NodeCreate): Observable<Node> {
     return this.gService.postData('nodes', node);
   }

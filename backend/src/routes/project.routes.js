@@ -218,4 +218,44 @@ projectRoutes.get("/:id", async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+
+/**
+ * @swagger
+ * /api/projects/company/{companyId}:
+ *   get:
+ *     summary: Obtiene proyectos por ID de empresa
+ *     tags: [Projects]
+ *     parameters:
+ *       - in: path
+ *         name: companyId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID de la empresa
+ *     responses:
+ *       200:
+ *         description: Lista de proyectos de la empresa
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Project'
+ *       404:
+ *         description: Empresa no encontrada
+ *       500:
+ *         description: Error interno del servidor
+ */
+projectRoutes.get("/company/:companyId", async (req, res) => {
+  try {
+    const { companyId } = req.params;
+    const projects = await ProjectService.getProjectsByCompanyId(companyId);
+    if (!projects || projects.length === 0) {
+      return res.status(404).json({ error: "Empresa no encontrada" });
+    }
+    res.status(200).json(projects);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
 module.exports = projectRoutes;

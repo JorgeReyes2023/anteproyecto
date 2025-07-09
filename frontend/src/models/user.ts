@@ -7,6 +7,7 @@ export interface User {
   role: string;
   roleDetails?: Role;
   company?: string;
+  companyId?: number;
 }
 
 export interface UserUpdate {
