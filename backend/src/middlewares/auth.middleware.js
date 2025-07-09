@@ -27,7 +27,25 @@ const authorizeAdmin = (req, res, next) => {
   next();
 };
 
+const authorizeCompanyId = (req, res, next) => {
+  const companyId = req.params.companyId || req.body.companyId;
+  if (!companyId) {
+    return res.status(400).json({ error: "ID de empresa requerido" });
+  }
+
+  if (req.user.role === "admin" && companyId != 0) {
+    return res.status(403).json({ error: "Acceso denegado a empresa 0" });
+  }
+
+  if (req.user.role === "user" && req.user.companyId !== companyId) {
+    return res.status(403).json({ error: "Acceso denegado a esta empresa" });
+  }
+
+  next();
+};
+
 module.exports = {
   authenticate,
   authorizeAdmin,
+  authorizeCompanyId,
 };

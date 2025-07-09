@@ -127,7 +127,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
           this.nodesList = projects.flatMap(
             (project: any) => project.nodes || []
           );
-          console.log('Projects:', this.projectsList);
         },
         error: (err) => {
           console.error('Error fetching projects:', err);
@@ -149,7 +148,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
           id: node.id,
           name: node.name,
         }));
-        console.log('Nodes:', this.nodesList);
       },
       error: (err) => {
         console.error('Error fetching nodes:', err);
@@ -165,12 +163,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
     this.sensorService.getSensorsByNodeId(this.selectedNodeId).subscribe({
       next: (sensors) => {
-        console.log('Sensors fetched:', sensors);
         this.sensorsList = sensors.map((sensor) => ({
           id: sensor.id,
           name: sensor.name,
         }));
-        console.log('Sensors:', this.sensorsList);
       },
       error: (err: any) => {
         console.error('Error fetching sensors:', err);
@@ -179,7 +175,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   fetchSensorTypesBySensorId(): void {
-    console.log('Fetching sensor types for sensor ID:', this.selectedSensorId);
     if (this.selectedSensorId === null) {
       this.typesList = [];
       return;
