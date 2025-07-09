@@ -47,24 +47,15 @@ client.on("message", async (topic, message) => {
         continue;
       }
 
-      let readingType = await prisma.sensor_reading_types.upsert({
+      let readingType = await prisma.sensor_reading_types.findFirst({
         where: { name: key },
-        update: {},
-        create: {
-          name: key,
-          unit: "",
-          description: "",
-        },
       });
-      if (readingType.createdAt === readingType.updatedAt) {
-        console.log(`Nuevo tipo de lectura creado: ${key}`);
-      }
 
       await prisma.sensor_readings.create({
         data: {
           sensor_id: sensor.id,
           type_id: readingType.id,
-          timestamp: date,
+          timestamp: new Date(data.timestamp),
           value,
         },
       });
