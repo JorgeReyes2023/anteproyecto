@@ -4,6 +4,7 @@ const { ProjectService } = require("../services/project.service");
 const {
   authenticate,
   authorizeCompanyId,
+  authorizeAdmin,
 } = require("../middlewares/auth.middleware");
 
 const projectRoutes = Router();
@@ -175,7 +176,7 @@ projectRoutes.delete("/:id", async (req, res) => {
  *       500:
  *         description: Error interno del servidor
  */
-projectRoutes.get("/", async (req, res) => {
+projectRoutes.get("/", authorizeAdmin, async (req, res) => {
   try {
     const projects = await ProjectService.getAllProjects();
     res.status(200).json(projects);

@@ -22,6 +22,19 @@ const options = {
         },
       },
       schemas: {
+        AuthResponse: {
+          type: "object",
+          properties: {
+            token: {
+              type: "string",
+              description: "Token de acceso JWT",
+            },
+            user: {
+              $ref: "#/components/schemas/User",
+            },
+          },
+          required: ["accessToken", "user"],
+        },
         User: {
           type: "object",
           properties: {
@@ -42,6 +55,15 @@ const options = {
               type: "string",
               enum: ["user", "admin"],
               description: "Rol del usuario",
+            },
+            companyId: {
+              type: "integer",
+              description: "ID de la empresa asociada al usuario",
+            },
+            company: {
+              type: "string",
+              description: "Nombre de la empresa asociada al usuario",
+              example: "Empresa XYZ",
             },
           },
           required: ["email", "name", "role"],

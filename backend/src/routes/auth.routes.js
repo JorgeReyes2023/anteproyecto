@@ -82,7 +82,7 @@ authRoutes.post("/register", authenticate, authorizeAdmin, async (req, res) => {
  *             properties:
  *               email:
  *                 type: string
- *                 example: "juan.perez@example.com"
+ *                 example: "juan.perez@email.com"
  *               password:
  *                 type: string
  *                 example: "securePassword123"
