@@ -111,6 +111,18 @@ $dark-primary: mat.m2-define-palette(
   100,
   700
 );
+$dark-primary-light: mat.m2-define-palette(
+  $fountain-blue-dark-palette,
+  200,
+  100,
+  700
+);
+$dark-primary-contrast: mat.m2-define-palette(
+  $fountain-blue-dark-palette,
+  900,
+  100,
+  700
+);
 $dark-accent: mat.m2-define-palette($fountain-blue-dark-palette, 300, 100, 700);
 $dark-warn: mat.m2-define-palette($fountain-blue-dark-palette, 600, 100, 700);
 
@@ -322,7 +334,10 @@ mat-list-item:last-child {
       )};
 
     --banner-background: #{mat.m2-get-color-from-palette($dark-primary, 400)};
-    --banner-text-color: #{mat.m2-get-color-from-palette($dark-primary, 50)};
+    --banner-text-color: #{mat.m2-get-color-from-palette(
+        $dark-primary-contrast,
+        100
+      )};
     --navbar-background: #1e1e1e;
   }
 }
