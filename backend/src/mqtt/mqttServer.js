@@ -1,10 +1,24 @@
 const mqtt = require("mqtt");
 const { PrismaClient } = require("@prisma/client");
 const dotenv = require("dotenv");
+const { createClient } = require("redis");
 
 dotenv.config();
 const prisma = new PrismaClient();
 const client = mqtt.connect(process.env.MQTTSERVER);
+
+// === Función para enviar alertas a través de Redis ===
+const redisPublisher = createClient({
+  url: process.env.REDIS_URL,
+});
+
+redisPublisher.on("error", (err) => {
+  console.error("Redis Client Error:", err);
+});
+
+redisPublisher.connect().catch((err) => {
+  console.error("Failed to connect to Redis:", err);
+});
 
 // === CACHÉS ===
 const topicsCache = new Map(); // topicBase => topicBase
@@ -148,14 +162,14 @@ async function cleanTopicsCache() {
 
   for (const cachedTopic of topicsCache.keys()) {
     if (!validTopics.has(cachedTopic)) {
-      console.log(`🧹 Eliminando topic obsoleto: ${cachedTopic}`);
+      console.log(`Eliminando topic obsoleto: ${cachedTopic}`);
       client.unsubscribe(cachedTopic);
       topicsCache.delete(cachedTopic);
     }
   }
 }
 
-// === Procesamiento de lecturas (cada 500ms) ===
+// === Procesamiento de lecturas (cada 400ms) ===
 setInterval(async () => {
   if (readingQueue.length === 0) return;
 
@@ -197,7 +211,7 @@ setInterval(async () => {
       }
 
       if (level) {
-        await prisma.alerts.create({
+        const createdAlert = await prisma.alerts.create({
           data: {
             sensor_id: sensorId,
             level,
@@ -205,11 +219,53 @@ setInterval(async () => {
           },
         });
 
-        console.log(`${level.toUpperCase()}: ${message}`);
+        const sensorWithCompany = await prisma.sensors.findUnique({
+          where: { id: sensorId },
+          include: {
+            nodes: {
+              include: {
+                projects: {
+                  select: { company_id: true },
+                },
+              },
+            },
+          },
+        });
+
+        const companyId = sensorWithCompany?.nodes?.projects?.company_id;
+
+        const usersToNotify = await prisma.users.findMany({
+          where: {
+            OR: [
+              { company_id: companyId },
+              { company_id: null }, // admin
+            ],
+          },
+          select: { id: true },
+        });
+
+        await prisma.alerts_users.createMany({
+          data: usersToNotify.map((user) => ({
+            alert_id: createdAlert.id,
+            user_id: user.id,
+          })),
+        });
+
+        const createdAlertDto = {
+          id: createdAlert.id,
+          message: createdAlert.message,
+          level: createdAlert.level,
+          sensorId: createdAlert.sensor_id,
+          isRead: false,
+          createdAt: createdAlert.created_at,
+        };
+        console.log("Alerta generada y enviada:", createdAlertDto);
+        await redisPublisher.publish("alerts", JSON.stringify(createdAlertDto));
+        console.log(`Alarma generada: ${level.toUpperCase()} - ${message}`);
       }
     }),
   );
-}, 500);
+}, 400);
 
 // === Conexión al broker MQTT ===
 client.on("connect", async () => {
@@ -221,7 +277,7 @@ client.on("connect", async () => {
 setInterval(async () => {
   await generateTopicsFromDB(); // agregar nuevos
   await cleanTopicsCache(); // eliminar obsoletos
-}, 60000); // cada 1 minuto
+}, 3600000); // cada hora
 
 // === Procesar mensajes recibidos ===
 client.on("message", async (topic, message) => {
