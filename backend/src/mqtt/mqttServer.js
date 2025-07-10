@@ -1,6 +1,7 @@
 const mqtt = require("mqtt");
 const { PrismaClient } = require("@prisma/client");
 const dotenv = require("dotenv");
+const { broadcastAlert } = require("../app"); // Importar la función de broadcast
 
 const prisma = new PrismaClient();
 dotenv.config();
@@ -114,6 +115,14 @@ setInterval(async () => {
           },
         });
 
+        const alert = {
+          sensorId,
+          message,
+          level,
+          timestamp: new Date(),
+        };
+
+        broadcastAlert(alert);
         console.log(`Alarma generada: ${level.toUpperCase()} - ${message}`);
       }
     }),

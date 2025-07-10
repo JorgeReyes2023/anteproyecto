@@ -17,6 +17,8 @@ const thresholdRoutes = require("./routes/threshold.routes");
 
 dotenv.config();
 
+const clients = []; // clients SSE conectados
+
 const app = express();
 app.use(cors());
 app.use(express.json());
@@ -43,4 +45,27 @@ app.use((err, req, res, next) => {
 
 // Puerto del servidor
 const PORT = process.env.PORT || 3000;
+
+app.get("/sse/alerts", (req, res) => {
+  res.setHeader("Content-Type", "text/event-stream");
+  res.setHeader("Cache-Control", "no-cache");
+  res.setHeader("Connection", "keep-alive");
+  res.flushHeaders();
+
+  clients.push(res);
+  console.log("Cliente SSE conectado");
+
+  req.on("close", () => {
+    console.log("Cliente SSE desconectado");
+    clients.splice(clients.indexOf(res), 1);
+  });
+});
+
 app.listen(PORT, () => console.log(`Servidor corriendo en puerto ${PORT}`));
+
+function broadcastAlert(alert) {
+  const data = `data: ${JSON.stringify(alert)}\n\n`;
+  clients.forEach((client) => client.write(data));
+}
+
+module.exports = { app, broadcastAlert };
