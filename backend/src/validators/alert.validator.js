@@ -6,10 +6,16 @@ const alertSchemaId = Joi.object({
 
 const alertSchema = Joi.object({
   id: Joi.number().integer().positive(),
-  name: Joi.string().min(2).max(255).required(),
-  type: Joi.string().valid("warning", "critical").required(),
-  is_read: Joi.boolean().default(false),
-  sensor_id: Joi.number().integer().positive().allow(null),
+  message: Joi.string().min(2).max(255).required(),
+  level: Joi.string().valid("warning", "critical").required(),
+  isRead: Joi.boolean().default(false),
+  sensorId: Joi.number().integer().positive().allow(null),
 });
 
-module.exports = { alertSchema, alertSchemaId };
+const updateReadSchema = Joi.object({
+  read: Joi.boolean().required(),
+  id: Joi.number().integer().positive().required(),
+  userId: Joi.number().integer().positive().required(),
+});
+
+module.exports = { alertSchema, alertSchemaId, updateReadSchema };

@@ -1,6 +1,10 @@
 const { AlertModel } = require("../models/alert.model");
 const { AlertUserModel } = require("../models/alert-user.model");
-const { alertSchema, alertSchemaId } = require("../validators/alert.validator");
+const {
+  alertSchema,
+  alertSchemaId,
+  updateReadSchema,
+} = require("../validators/alert.validator");
 
 /**
  * Servicio para la gestión de alertas.
@@ -93,9 +97,20 @@ class AlertService {
    * @returns {Promise<Object>} Alerta actualizada.
    * @throws {Error} Si ocurre un error durante la actualización.
    */
-  static async markAlertAsRead(read, id) {
+  static async markAlertAsRead(read, id, userId) {
     try {
-      return await AlertModel.markAlertAsRead(read, id);
+      const { value, error } = updateReadSchema.validate(
+        { read, id, userId },
+        { convert: true },
+      );
+      if (error) {
+        throw new Error(`Invalid input: ${error.message}`);
+      }
+      return await AlertUserModel.markAlertAsRead(
+        value.read,
+        value.id,
+        value.userId,
+      );
     } catch (error) {
       throw new Error(`Error marking alert as read: ${error.message}`);
     }

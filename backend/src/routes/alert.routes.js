@@ -239,7 +239,8 @@ alertRoutes.get("/:id", async (req, res) => {
 alertRoutes.post("/mark-read/:read/:id", async (req, res) => {
   try {
     const { read, id } = req.params;
-    const alert = await AlertService.markAlertAsRead(read, id);
+    const user = req.user;
+    const alert = await AlertService.markAlertAsRead(read, id, user.id);
     if (!alert) {
       return res.status(404).json({ error: "Alerta no encontrada" });
     }

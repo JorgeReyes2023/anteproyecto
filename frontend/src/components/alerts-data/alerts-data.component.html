@@ -22,7 +22,7 @@
     </mat-card-content>
 
     <mat-card-actions>
-      <button mat-button color="primary" (click)="goToSensor(alert.sensorId)">
+      <button mat-button color="primary" (click)="goToSensor(alert)">
         Ver sensor
       </button>
       <span *ngIf="!alert.isRead" class="badge-unread">● No leída</span>

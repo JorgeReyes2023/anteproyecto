@@ -4,6 +4,7 @@ import { BehaviorSubject, map } from 'rxjs';
 import { GeneralService } from './general.service';
 
 export interface Alert {
+  id: number;
   sensorId: number;
   message: string;
   level: 'warning' | 'critical';
@@ -60,13 +61,7 @@ export class AlertService {
     this.generalService
       .getData(`alerts/company/${companyId}`)
       .subscribe((alerts) => {
-        const parsed = alerts.map((a: any) => ({
-          ...a,
-          createdAt: new Date(a.createdAt),
-          isRead: a.isRead ?? false,
-        }));
-        this.alertsSubject.next(parsed);
-        this.alertsLoadedSubject.next(true);
+        this.alertsSubject.next(alerts);
       });
   }
 
@@ -78,6 +73,17 @@ export class AlertService {
       }));
       this.alertsSubject.next(updated);
     });
+  }
+
+  markAlertAsRead(isRead: boolean, alertId: number) {
+    this.generalService
+      .postData(`alerts/mark-read/${isRead}/${alertId}`, {})
+      .subscribe(() => {
+        const updated = this.alertsSubject.value.map((a) =>
+          a.id === alertId ? { ...a, isRead } : a
+        );
+        this.alertsSubject.next(updated);
+      });
   }
 
   getUnreadCount$() {

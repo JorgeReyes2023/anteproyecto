@@ -13,9 +13,9 @@ class AlertUserModel {
     });
   }
 
-  static async markAlertAsRead(read, id) {
+  static async markAlertAsRead(read, id, userId) {
     return prisma.alerts_users.update({
-      where: { id: id },
+      where: { alert_id_user_id: { alert_id: id, user_id: userId } },
       data: { is_read: read },
     });
   }

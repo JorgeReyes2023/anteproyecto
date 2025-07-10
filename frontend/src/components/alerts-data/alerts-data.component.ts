@@ -41,7 +41,9 @@ export class AlertsDataComponent implements OnInit {
     this.alertService.markAllAsRead();
   }
 
-  goToSensor(sensorId: number) {
-    this.router.navigate(['/sensor', sensorId]);
+  goToSensor(alert: Alert) {
+    console.log('Navigating to:', alert);
+    this.alertService.markAlertAsRead(true, alert.id);
+    this.router.navigate(['/sensor', alert.sensorId]);
   }
 }
