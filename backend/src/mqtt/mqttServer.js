@@ -2,28 +2,26 @@ const mqtt = require("mqtt");
 const { PrismaClient } = require("@prisma/client");
 const dotenv = require("dotenv");
 
-const prisma = new PrismaClient();
 dotenv.config();
-
+const prisma = new PrismaClient();
 const client = mqtt.connect(process.env.MQTTSERVER);
-const topic = "nodo/ESP32/ambiente";
 
-// === Cola en memoria para lecturas pendientes ===
-const readingQueue = [];
-
-// === Cachés para optimizar las consultas ===
+// === CACHÉS ===
+const topicsCache = new Map(); // topicBase => topicBase
 const readingTypeCache = new Map(); // typeName => id
 const thresholdCache = new Map(); // "sensorId-typeId" => threshold
 
-// === Función utilitaria para obtener el tipo de lectura con caché ===
+// === Cola en memoria para lecturas ===
+const readingQueue = [];
+
+// === Obtener tipo de lectura con caché ===
 async function getReadingTypeId(typeName) {
-  if (readingTypeCache.has(typeName)) {
-    return readingTypeCache.get(typeName);
-  }
+  if (readingTypeCache.has(typeName)) return readingTypeCache.get(typeName);
 
   const type = await prisma.sensor_reading_types.findFirst({
     where: { name: typeName },
   });
+
   if (type) {
     readingTypeCache.set(typeName, type.id);
     return type.id;
@@ -32,12 +30,10 @@ async function getReadingTypeId(typeName) {
   return null;
 }
 
-// === Función utilitaria para obtener un threshold con caché ===
+// === Obtener threshold con caché ===
 async function getThreshold(sensorId, typeId) {
   const key = `${sensorId}-${typeId}`;
-  if (thresholdCache.has(key)) {
-    return thresholdCache.get(key);
-  }
+  if (thresholdCache.has(key)) return thresholdCache.get(key);
 
   const threshold = await prisma.thresholds.findFirst({
     where: {
@@ -46,18 +42,124 @@ async function getThreshold(sensorId, typeId) {
     },
   });
 
-  if (threshold) {
-    thresholdCache.set(key, threshold);
-  }
+  if (threshold) thresholdCache.set(key, threshold);
 
   return threshold;
 }
 
-// === Procesamiento de la cola cada 500 ms ===
+// === Obtener topics desde la base de datos ===
+async function generateTopicsFromDB() {
+  const sensors = await prisma.sensors.findMany({
+    select: {
+      name: true,
+      nodes: {
+        select: {
+          name: true,
+          projects: {
+            select: {
+              name: true,
+              companies: {
+                select: {
+                  name: true,
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  });
+
+  const topicSet = new Set();
+
+  for (const sensor of sensors) {
+    if (!sensor.nodes || !sensor.nodes.projects) continue;
+    const companyName = normalizeTopicPart(
+      sensor.nodes.projects.companies.name,
+    );
+    const projectName = normalizeTopicPart(sensor.nodes.projects.name);
+    const nodeName = normalizeTopicPart(sensor.nodes.name);
+    const topicBase = `${companyName}/${projectName}/${nodeName}`;
+    topicSet.add(topicBase);
+  }
+
+  for (const topicBase of topicSet) {
+    console.log(`Generando topic: ${topicBase}`);
+    if (!topicsCache.has(topicBase)) {
+      topicsCache.set(topicBase, topicBase);
+      client.subscribe(topicBase, (err) => {
+        if (err) console.error(`Error al suscribirse a ${topicBase}:`, err);
+        else console.log(`Suscrito a ${topicBase}`);
+      });
+    }
+  }
+}
+
+function normalizeTopicPart(str) {
+  return str
+    .normalize("NFD") // Descompone tildes (ej. á → a + ́)
+    .replace(/[\u0300-\u036f]/g, "") // Elimina los signos diacríticos (tildes)
+    .replace(/\s+/g, "") // Elimina todos los espacios
+    .toLowerCase(); // (Opcional) Convierte todo a minúsculas
+}
+
+// === Limpiar topics obsoletos en cache ===
+async function cleanTopicsCache() {
+  const validTopics = new Set();
+
+  const sensors = await prisma.sensors.findMany({
+    select: {
+      name: true,
+      nodes: {
+        select: {
+          name: true,
+          projects: {
+            select: {
+              name: true,
+              companies: {
+                select: {
+                  name: true,
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  });
+
+  for (const sensor of sensors) {
+    if (
+      !sensor.nodes ||
+      !sensor.nodes.projects ||
+      !sensor.nodes.projects.companies
+    )
+      continue;
+
+    const companyName = normalizeTopicPart(
+      sensor.nodes.projects.companies.name,
+    );
+    const projectName = normalizeTopicPart(sensor.nodes.projects.name);
+    const nodeName = normalizeTopicPart(sensor.nodes.name);
+    const topicBase = `${companyName}/${projectName}/${nodeName}`;
+
+    validTopics.add(topicBase);
+  }
+
+  for (const cachedTopic of topicsCache.keys()) {
+    if (!validTopics.has(cachedTopic)) {
+      console.log(`🧹 Eliminando topic obsoleto: ${cachedTopic}`);
+      client.unsubscribe(cachedTopic);
+      topicsCache.delete(cachedTopic);
+    }
+  }
+}
+
+// === Procesamiento de lecturas (cada 500ms) ===
 setInterval(async () => {
   if (readingQueue.length === 0) return;
 
-  const batch = readingQueue.splice(0, 10); // procesar máximo 10 lecturas a la vez
+  const batch = readingQueue.splice(0, 10);
 
   await Promise.all(
     batch.map(async ({ sensorId, typeName, value, timestamp }) => {
@@ -65,12 +167,7 @@ setInterval(async () => {
       if (!typeId) return;
 
       await prisma.sensor_readings.create({
-        data: {
-          sensor_id: sensorId,
-          type_id: typeId,
-          timestamp,
-          value,
-        },
+        data: { sensor_id: sensorId, type_id: typeId, value, timestamp },
       });
 
       const threshold = await getThreshold(sensorId, typeId);
@@ -82,26 +179,20 @@ setInterval(async () => {
 
       if (max_value !== null && value > max_value) {
         level = "critical";
-        message = `Valor ${value} supera el máximo permitido (${max_value}) para ${typeName}`;
+        message = `Valor ${value} supera el máximo (${max_value}) para ${typeName}`;
       } else if (min_value !== null && value < min_value) {
         level = "critical";
-        message = `Valor ${value} está por debajo del mínimo permitido (${min_value}) para ${typeName}`;
-      } else {
-        const range =
-          max_value !== null && min_value !== null
-            ? max_value - min_value
-            : null;
+        message = `Valor ${value} está por debajo del mínimo (${min_value}) para ${typeName}`;
+      } else if (max_value !== null && min_value !== null) {
+        const range = max_value - min_value;
+        const warningMargin = range * 0.2;
 
-        if (range && range > 0) {
-          const seuilWarning = range * 0.2;
-
-          if (max_value !== null && value > max_value - seuilWarning) {
-            level = "warning";
-            message = `Valor ${value} se aproxima al máximo (${max_value}) para ${typeName}`;
-          } else if (min_value !== null && value < min_value + seuilWarning) {
-            level = "warning";
-            message = `Valor ${value} se aproxima al mínimo (${min_value}) para ${typeName}`;
-          }
+        if (value > max_value - warningMargin) {
+          level = "warning";
+          message = `Valor ${value} se aproxima al máximo (${max_value}) para ${typeName}`;
+        } else if (value < min_value + warningMargin) {
+          level = "warning";
+          message = `Valor ${value} se aproxima al mínimo (${min_value}) para ${typeName}`;
         }
       }
 
@@ -109,74 +200,80 @@ setInterval(async () => {
         await prisma.alerts.create({
           data: {
             sensor_id: sensorId,
-            message,
             level,
+            message,
           },
         });
 
-        console.log(`Alarma generada: ${level.toUpperCase()} - ${message}`);
+        console.log(`${level.toUpperCase()}: ${message}`);
       }
     }),
   );
 }, 500);
 
 // === Conexión al broker MQTT ===
-client.on("connect", () => {
+client.on("connect", async () => {
   console.log("Conectado al broker MQTT");
-  client.subscribe(topic, (err) => {
-    if (err) {
-      console.error("Error al suscribirse:", err);
-    } else {
-      console.log(`Suscrito a ${topic}`);
-    }
-  });
+  await generateTopicsFromDB();
 });
 
-// === Recepción de mensajes MQTT ===
+// === Revisión periódica de nuevos/borrados topics ===
+setInterval(async () => {
+  await generateTopicsFromDB(); // agregar nuevos
+  await cleanTopicsCache(); // eliminar obsoletos
+}, 60000); // cada 1 minuto
+
+// === Procesar mensajes recibidos ===
 client.on("message", async (topic, message) => {
   try {
     const data = JSON.parse(message.toString());
     console.log("Mensaje recibido:", data);
 
-    const sensor = await prisma.sensors.findFirst({
-      where: { name: data.sensorId },
-    });
-
-    if (!sensor) {
-      console.error("Sensor no encontrado:", data.sensorId);
+    const sensores = data.sensores;
+    if (!Array.isArray(sensores)) {
+      console.error("'sensores' no es un arreglo");
       return;
     }
 
-    const timestampMs = Number(data.timestamp) * 1000;
-    const date = new Date(timestampMs);
+    for (const sensorData of sensores) {
+      const sensorName = sensorData.nombreSensor.toUpperCase();
+      const valores = sensorData.valor;
 
-    const keys = Object.keys(data).filter(
-      (k) => !["sensorId", "timestamp"].includes(k),
-    );
+      const sensor = await prisma.sensors.findFirst({
+        where: { name: sensorName },
+      });
 
-    for (const key of keys) {
-      const value = parseFloat(data[key]);
-      if (isNaN(value)) {
-        console.warn(`Valor inválido para ${key}:`, data[key]);
+      if (!sensor) {
+        console.error("Sensor no encontrado:", sensorName);
         continue;
       }
 
-      // Agregar a la cola para procesamiento diferido
-      readingQueue.push({
-        sensorId: sensor.id,
-        typeName: key,
-        value,
-        timestamp: date,
-      });
+      const timestamp = new Date(); // usa timestamp local (o cambia si tu payload lo tiene)
+
+      for (const key of Object.keys(valores)) {
+        const value = parseFloat(valores[key]);
+        if (isNaN(value)) {
+          console.warn(`Valor inválido para ${key}:`, valores[key]);
+          continue;
+        }
+
+        readingQueue.push({
+          sensorId: sensor.id,
+          typeName: key,
+          value,
+          timestamp,
+        });
+      }
     }
   } catch (error) {
     console.error("Error al procesar el mensaje:", error);
   }
 });
 
-// === Cierre limpio ===
+// === Salida limpia ===
 process.on("SIGINT", async () => {
-  console.log("Solicitud de parada, cerrando cliente MQTT y Prisma...");
+  console.log("Cerrando conexión y Prisma...");
   await prisma.$disconnect();
+  client.end();
   process.exit();
 });
