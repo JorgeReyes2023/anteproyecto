@@ -57,9 +57,7 @@ export class AppComponent {
   }
 
   loadAlerts() {
-    console.log('Loading alerts...');
     this.alertService.alerts$.subscribe((alerts: Alert[]) => {
-      console.log('Alerts loaded:', alerts);
       this.unreadCount = alerts.filter((a) => !a.read).length;
       this.hasCritical = alerts.some((a) => !a.read && a.level === 'critical');
     });
