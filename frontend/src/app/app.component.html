@@ -1,78 +1,92 @@
-<!-- Barra de presentación ARRIBA -->
-<div class="presentation-banner mat-elevation-z2">
-  <h2>NODALIS</h2>
+<div class="presentation-banner">
+  <div class="banner-top">
+    <h2>NODALIS</h2>
+    <label class="switch-with-icons">
+      <mat-icon class="theme-icon">light_mode</mat-icon>
+      <input type="checkbox" (change)="toggleTheme()" [checked]="darkMode" />
+      <span class="slider"></span>
+      <mat-icon class="theme-icon">dark_mode</mat-icon>
+    </label>
+  </div>
   <p>
     Bienvenido a esta página. Aquí encontrará una visión general e información
     importante sobre la aplicación.
   </p>
 </div>
 
-<!-- Layout Angular Material -->
-<mat-sidenav-container opened class="main-container">
+<div class="layout">
   <!-- Sidebar -->
-  <mat-sidenav mode="side" opened class="sidenav" *ngIf="user$ | async as user">
-    <mat-toolbar color="primary">Navegación</mat-toolbar>
-    <mat-nav-list>
+  <aside class="sidebar" *ngIf="user$ | async as user">
+    <div class="sidebar-title">Navegación</div>
+    <hr />
+    <nav class="nav-list">
       <ng-container *ngIf="user$ | async as user; else guest">
-        <a mat-list-item routerLink="/dashboard" routerLinkActive="active"
-          >Dashboard</a
-        >
-        <a mat-list-item routerLink="/info" routerLinkActive="active"
-          >Información del usuario</a
-        >
-        <a
-          *ngIf="user.role === 'admin'"
-          mat-list-item
-          routerLink="/users"
+        <div
           routerLinkActive="active"
-          >Usuarios</a
+          [routerLinkActiveOptions]="{ exact: true }"
         >
-        <a
-          *ngIf="user.role === 'admin'"
-          mat-list-item
-          routerLink="/companies"
+          <a routerLink="/dashboard">Dashboard</a>
+        </div>
+        <div
           routerLinkActive="active"
-          >Empresas</a
+          [routerLinkActiveOptions]="{ exact: true }"
         >
-        <a
+          <a routerLink="/info">Información del usuario</a>
+        </div>
+        <div
           *ngIf="user.role === 'admin'"
-          mat-list-item
-          routerLink="/nodes"
           routerLinkActive="active"
-          >Nodos</a
+          [routerLinkActiveOptions]="{ exact: true }"
         >
-        <a
+          <a routerLink="/users">Usuarios</a>
+        </div>
+        <div
           *ngIf="user.role === 'admin'"
-          mat-list-item
-          routerLink="/projects"
           routerLinkActive="active"
-          >Proyectos</a
+          [routerLinkActiveOptions]="{ exact: true }"
         >
-        <a
+          <a routerLink="/companies">Empresas</a>
+        </div>
+        <div
           *ngIf="user.role === 'admin'"
-          mat-list-item
-          routerLink="/users/create"
           routerLinkActive="active"
-          >Crear usuario</a
+          [routerLinkActiveOptions]="{ exact: true }"
         >
-        <a mat-list-item (click)="logout()">Cerrar sesión</a>
+          <a routerLink="/nodes">Nodos</a>
+        </div>
+        <div
+          *ngIf="user.role === 'admin'"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }"
+        >
+          <a routerLink="/projects">Proyectos</a>
+        </div>
+        <div
+          *ngIf="user.role === 'admin'"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }"
+        >
+          <a routerLink="/users/create">Crear usuario</a>
+        </div>
+        <div>
+          <a (click)="logout()">Cerrar sesión</a>
+        </div>
       </ng-container>
 
       <ng-template #guest>
-        <a mat-list-item routerLink="/login" routerLinkActive="active"
-          >Iniciar sesión</a
+        <div
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }"
         >
+          <a routerLink="/login">Iniciar sesión</a>
+        </div>
       </ng-template>
-    </mat-nav-list>
-  </mat-sidenav>
+    </nav>
+  </aside>
 
-  <!-- Contenido principal -->
-  <mat-sidenav-content>
-    <mat-card class="main-card">
-      <mat-card-content>
-        <app-alert></app-alert>
-        <router-outlet></router-outlet>
-      </mat-card-content>
-    </mat-card>
-  </mat-sidenav-content>
-</mat-sidenav-container>
+  <!-- Main content -->
+  <main class="main-content">
+    <app-alert></app-alert>
+    <router-outlet></router-outlet>
+  </main>
+</div>
