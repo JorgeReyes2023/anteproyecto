@@ -1,18 +1,37 @@
-<div class="presentation-banner">
-  <div class="banner-top">
-    <h2>NODALIS</h2>
-    <label class="switch-with-icons">
-      <mat-icon class="theme-icon">light_mode</mat-icon>
-      <input type="checkbox" (change)="toggleTheme()" [checked]="darkMode" />
-      <span class="slider"></span>
-      <mat-icon class="theme-icon">dark_mode</mat-icon>
-    </label>
+<header class="presentation-banner">
+  <!-- logo -->
+  <img src="../logoNodalis.png" alt="Nodalis Logo" class="logo" />
+  <!-- alerts -->
+  <button
+    mat-icon-button
+    class="notification-button"
+    routerLink="/notifications"
+    matTooltip="Notificaciones"
+  >
+    <mat-icon>notifications</mat-icon>
+
+    <!-- Badge non lues -->
+    <span class="badge" *ngIf="unreadCount > 0">{{ unreadCount }}</span>
+
+    <!-- Indicateur critique -->
+    <span class="critical-dot" *ngIf="hasCritical"></span>
+  </button>
+  <!-- user info -->
+  <div class="user-info" *ngIf="user$ | async as user">
+    <span class="user-name">{{ user.name }}</span>
+    <span class="user-role">{{ user.role }}</span>
+    <!-- logout -->
+    <span
+      class="user-icon"
+      role="button"
+      tabindex="0"
+      (click)="logout()"
+      aria-label="Cerrar sesión"
+    >
+      <mat-icon>logout</mat-icon>
+    </span>
   </div>
-  <p>
-    Bienvenido a esta página. Aquí encontrará una visión general e información
-    importante sobre la aplicación.
-  </p>
-</div>
+</header>
 
 <div class="layout">
   <!-- Sidebar -->
@@ -20,7 +39,7 @@
     <div class="sidebar-title">Navegación</div>
     <hr />
     <nav class="nav-list">
-      <ng-container *ngIf="user$ | async as user; else guest">
+      <ng-container *ngIf="user$ | async as user">
         <div
           routerLinkActive="active"
           [routerLinkActiveOptions]="{ exact: true }"
@@ -68,20 +87,17 @@
         >
           <a routerLink="/users/create">Crear usuario</a>
         </div>
-        <div>
-          <a (click)="logout()">Cerrar sesión</a>
-        </div>
       </ng-container>
-
-      <ng-template #guest>
-        <div
-          routerLinkActive="active"
-          [routerLinkActiveOptions]="{ exact: true }"
-        >
-          <a routerLink="/login">Iniciar sesión</a>
-        </div>
-      </ng-template>
     </nav>
+    <!-- Theme toggle -->
+    <div class="theme-toggle">
+      <label class="switch-with-icons">
+        <mat-icon class="theme-icon">light_mode</mat-icon>
+        <input type="checkbox" (change)="toggleTheme()" [checked]="darkMode" />
+        <span class="slider"></span>
+        <mat-icon class="theme-icon">dark_mode</mat-icon>
+      </label>
+    </div>
   </aside>
 
   <!-- Main content -->
