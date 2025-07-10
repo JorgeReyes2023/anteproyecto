@@ -202,7 +202,7 @@ setInterval(async () => {
       }
 
       if (level) {
-        await prisma.alerts.create({
+        const createdAlert = await prisma.alerts.create({
           data: {
             sensor_id: sensorId,
             level,
@@ -210,15 +210,48 @@ setInterval(async () => {
           },
         });
 
-        const alert = {
-          sensorId,
-          message,
-          level,
-          timestamp: new Date(),
-        };
+        const sensorWithCompany = await prisma.sensors.findUnique({
+          where: { id: sensorId },
+          include: {
+            nodes: {
+              include: {
+                projects: {
+                  select: { company_id: true },
+                },
+              },
+            },
+          },
+        });
 
-        console.log("Alerta generada y enviada:", alert);
-        await redisPublisher.publish("alerts", JSON.stringify(alert));
+        const companyId = sensorWithCompany?.nodes?.projects?.company_id;
+
+        const usersToNotify = await prisma.users.findMany({
+          where: {
+            OR: [
+              { company_id: companyId },
+              { company_id: null }, // admin
+            ],
+          },
+          select: { id: true },
+        });
+
+        await prisma.alerts_users.createMany({
+          data: usersToNotify.map((user) => ({
+            alert_id: createdAlert.id,
+            user_id: user.id,
+          })),
+        });
+
+        const createdAlertDto = {
+          id: createdAlert.id,
+          message: createdAlert.message,
+          level: createdAlert.level,
+          sensorId: createdAlert.sensor_id,
+          isRead: false,
+          createdAt: createdAlert.created_at,
+        };
+        console.log("Alerta generada y enviada:", createdAlertDto);
+        await redisPublisher.publish("alerts", JSON.stringify(createdAlertDto));
         console.log(`Alarma generada: ${level.toUpperCase()} - ${message}`);
       }
     }),

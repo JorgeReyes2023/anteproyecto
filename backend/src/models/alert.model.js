@@ -14,7 +14,12 @@ class AlertModel {
   }
 
   static async getAllAlerts() {
-    return prisma.alerts.findMany();
+    return prisma.alerts.findMany({
+      include: {
+        alerts_users: true,
+      },
+      orderBy: { created_at: "desc" },
+    });
   }
 
   static async updateAlert(id, alertData) {
@@ -27,20 +32,6 @@ class AlertModel {
   static async deleteAlert(id) {
     return prisma.alerts.delete({
       where: { id: id },
-    });
-  }
-
-  static async markAlertAsRead(read, id) {
-    return prisma.alerts.update({
-      where: { id: id },
-      data: { is_read: read },
-    });
-  }
-
-  static async markAllAlertsAsRead(read) {
-    return prisma.alerts.updateMany({
-      where: { is_read: false },
-      data: { is_read: read },
     });
   }
 
@@ -57,6 +48,10 @@ class AlertModel {
           },
         },
       },
+      include: {
+        alerts_users: true,
+      },
+      orderBy: { created_at: "desc" },
     });
   }
 }

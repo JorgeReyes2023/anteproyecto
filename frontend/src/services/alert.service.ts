@@ -1,12 +1,14 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, map } from 'rxjs';
+import { GeneralService } from './general.service';
 
 export interface Alert {
   sensorId: number;
   message: string;
   level: 'warning' | 'critical';
-  timestamp: Date;
-  read?: boolean;
+  createdAt: Date;
+  isRead?: boolean;
 }
 
 @Injectable({
@@ -16,17 +18,36 @@ export class AlertService {
   private alertsSubject = new BehaviorSubject<Alert[]>([]);
   public alerts$ = this.alertsSubject.asObservable();
 
-  constructor() {
+  private alertsLoadedSubject = new BehaviorSubject<boolean>(false);
+  public alertsLoaded$ = this.alertsLoadedSubject.asObservable();
+
+  constructor(
+    private http: HttpClient,
+    private generalService: GeneralService
+  ) {
+    this.initSSE();
+  }
+
+  private initSSE() {
     if (typeof window !== 'undefined') {
       const eventSource = new EventSource('http://localhost:3000/sse/alerts');
 
       eventSource.onmessage = (event) => {
         const alert: Alert = JSON.parse(event.data);
-        alert.read = false;
-        alert.timestamp = new Date(alert.timestamp);
+        alert.isRead = false;
+        alert.createdAt = new Date(alert.createdAt);
 
         const current = this.alertsSubject.value;
-        this.alertsSubject.next([alert, ...current]);
+        const alreadyExists = current.some(
+          (a) =>
+            a.sensorId === alert.sensorId &&
+            a.message === alert.message &&
+            new Date(a.createdAt).getTime() === alert.createdAt.getTime()
+        );
+
+        if (!alreadyExists) {
+          this.alertsSubject.next([alert, ...current]);
+        }
       };
 
       eventSource.onerror = (error) => {
@@ -35,8 +56,39 @@ export class AlertService {
     }
   }
 
+  loadAlertsFromDB(companyId: number) {
+    this.generalService
+      .getData(`alerts/company/${companyId}`)
+      .subscribe((alerts) => {
+        const parsed = alerts.map((a: any) => ({
+          ...a,
+          createdAt: new Date(a.createdAt),
+          isRead: a.isRead ?? false,
+        }));
+        this.alertsSubject.next(parsed);
+        this.alertsLoadedSubject.next(true);
+      });
+  }
+
   markAllAsRead() {
-    const updated = this.alertsSubject.value.map((a) => ({ ...a, read: true }));
-    this.alertsSubject.next(updated);
+    this.generalService.postData('alerts/mark-all-read', {}).subscribe(() => {
+      const updated = this.alertsSubject.value.map((a) => ({
+        ...a,
+        isRead: true,
+      }));
+      this.alertsSubject.next(updated);
+    });
+  }
+
+  getUnreadCount$() {
+    return this.alerts$.pipe(
+      map((alerts) => alerts.filter((a) => !a.isRead).length)
+    );
+  }
+
+  getHasCritical$() {
+    return this.alerts$.pipe(
+      map((alerts) => alerts.some((a) => a.level === 'critical' && !a.isRead))
+    );
   }
 }

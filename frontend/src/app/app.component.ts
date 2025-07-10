@@ -53,13 +53,18 @@ export class AppComponent {
   }
 
   ngOnInit() {
-    this.loadAlerts();
-  }
+    this.user$.subscribe((user) => {
+      if (user?.companyId) {
+        this.alertService.loadAlertsFromDB(user.companyId);
+      }
+    });
+    
+    this.alertService.getUnreadCount$().subscribe((count) => {
+      this.unreadCount = count;
+    });
 
-  loadAlerts() {
-    this.alertService.alerts$.subscribe((alerts: Alert[]) => {
-      this.unreadCount = alerts.filter((a) => !a.read).length;
-      this.hasCritical = alerts.some((a) => !a.read && a.level === 'critical');
+    this.alertService.getHasCritical$().subscribe((has) => {
+      this.hasCritical = has;
     });
   }
 

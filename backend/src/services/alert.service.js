@@ -1,4 +1,5 @@
 const { AlertModel } = require("../models/alert.model");
+const { AlertUserModel } = require("../models/alert-user.model");
 const { alertSchema, alertSchemaId } = require("../validators/alert.validator");
 
 /**
@@ -43,7 +44,14 @@ class AlertService {
    */
   static async getAllAlerts() {
     try {
-      return await AlertModel.getAllAlerts();
+      return (await AlertModel.getAllAlerts()).map((alert) => ({
+        id: alert.id,
+        message: alert.message,
+        level: alert.level,
+        isRead: alert.alerts_users.some((user) => user.is_read),
+        sensorId: alert.sensor_id,
+        createdAt: alert.created_at,
+      }));
     } catch (error) {
       throw new Error(`Error fetching all alerts: ${error.message}`);
     }
@@ -98,9 +106,16 @@ class AlertService {
    * @returns {Promise<Array>} Lista de alertas actualizadas.
    * @throws {Error} Si ocurre un error durante la actualización.
    */
-  static async markAllAlertsAsRead() {
+  static async markAllAlertsAsRead(userId) {
     try {
-      return await AlertModel.markAllAlertsAsRead();
+      const { value, error } = alertSchemaId.validate(
+        { id: userId },
+        { convert: true },
+      );
+      if (error) {
+        throw new Error(`Invalid user ID: ${error.message}`);
+      }
+      return await AlertUserModel.markAllAlertsAsRead(value.id);
     } catch (error) {
       throw new Error(`Error marking all alerts as read: ${error.message}`);
     }
@@ -115,7 +130,7 @@ class AlertService {
   static async getAlertsByCompanyId(companyId) {
     try {
       if (companyId === "0") {
-        return this.getAllAlerts();
+        return await this.getAllAlerts();
       }
       const { value, error } = alertSchemaId.validate(
         { id: companyId },
@@ -125,7 +140,17 @@ class AlertService {
         throw new Error(`Invalid company ID: ${error.message}`);
       }
 
-      return await AlertModel.getAlertsByCompanyId(value.id);
+      const alerts = (await AlertModel.getAlertsByCompanyId(value.id)).map(
+        (alert) => ({
+          id: alert.id,
+          message: alert.message,
+          level: alert.level,
+          isRead: alert.alerts_users.some((user) => user.is_read),
+          sensorId: alert.sensor_id,
+          createdAt: alert.created_at,
+        }),
+      );
+      return alerts;
     } catch (error) {
       throw new Error(`Error fetching alerts by company ID: ${error.message}`);
     }

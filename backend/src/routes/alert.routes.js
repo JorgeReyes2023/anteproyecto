@@ -262,7 +262,8 @@ alertRoutes.post("/mark-read/:read/:id", async (req, res) => {
  */
 alertRoutes.post("/mark-all-read", async (req, res) => {
   try {
-    const alerts = await AlertService.markAllAlertsAsRead();
+    const user = req.user;
+    const alerts = await AlertService.markAllAlertsAsRead(user.id);
     res.status(200).json(alerts);
   } catch (error) {
     res.status(500).json({ error: error.message });

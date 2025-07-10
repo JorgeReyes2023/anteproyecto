@@ -55,12 +55,11 @@ app.get("/sse/alerts", (req, res) => {
   res.setHeader("Connection", "keep-alive");
 
   clients.push(res);
-  console.log("Client SSE connecté — Total:", clients.length);
-  res.write("data: Connected\n\n");
+  console.log("Cliente SSE conectado — Total:", clients.length);
 
   req.on("close", () => {
     clients.splice(clients.indexOf(res), 1);
-    console.log("Client SSE déconnecté — Reste:", clients.length);
+    console.log("Cliente SSE desconectado — Restantes:", clients.length);
   });
 });
 
