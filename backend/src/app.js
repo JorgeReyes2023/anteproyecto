@@ -15,6 +15,7 @@ const nodeRoutes = require("./routes/node.routes");
 const alertRoutes = require("./routes/alert.routes");
 const sensorRoutes = require("./routes/sensor.routes");
 const thresholdRoutes = require("./routes/threshold.routes");
+const { authenticate } = require("./middlewares/auth.middleware");
 
 dotenv.config();
 
@@ -49,17 +50,19 @@ const PORT = process.env.PORT || 3000;
 const clients = []; // clientes SSE conectados
 
 // Inicializar SSE
-app.get("/sse/alerts", (req, res) => {
+app.get("/sse/alerts", authenticate, (req, res) => {
   res.setHeader("Content-Type", "text/event-stream");
   res.setHeader("Cache-Control", "no-cache");
   res.setHeader("Connection", "keep-alive");
+  res.setHeader("Access-Control-Allow-Origin", "*");
 
   clients.push(res);
-  console.log("Cliente SSE conectado — Total:", clients.length);
 
   req.on("close", () => {
-    clients.splice(clients.indexOf(res), 1);
-    console.log("Cliente SSE desconectado — Restantes:", clients.length);
+    const index = clients.indexOf(res);
+    if (index > -1) {
+      clients.splice(index, 1);
+    }
   });
 });
 
@@ -77,13 +80,24 @@ redisSubscriber
       const alert = JSON.parse(message);
       const data = `data: ${JSON.stringify(alert)}\n\n`;
       clients.forEach((client, i) => {
-        console.log(`Enviando a cliente #${i + 1}`);
-        client.write(data);
+        try {
+          client.write(data);
+        } catch (error) {
+          console.error(`Error sending to client #${i + 1}:`, error);
+          // Remove failed client
+          clients.splice(i, 1);
+        }
       });
     });
   })
   .catch((err) => {
     console.error("Failed to connect to Redis:", err);
   });
+
+process.on("SIGINT", async () => {
+  console.log("Shutting down gracefully...");
+  await redisSubscriber.quit();
+  process.exit(0);
+});
 
 app.listen(PORT, () => console.log(`Servidor corriendo en puerto ${PORT}`));

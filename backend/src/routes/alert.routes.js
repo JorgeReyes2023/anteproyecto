@@ -309,8 +309,8 @@ alertRoutes.get("/company/:companyId", async (req, res) => {
   try {
     const { companyId } = req.params;
     const alerts = await AlertService.getAlertsByCompanyId(companyId);
-    if (!alerts) {
-      return res.status(404).json({ error: "Empresa no encontrada" });
+    if (!alerts || alerts.length === 0) {
+      return res.status(200).json([]);
     }
     res.status(200).json(alerts);
   } catch (error) {

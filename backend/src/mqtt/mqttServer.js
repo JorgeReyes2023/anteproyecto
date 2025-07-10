@@ -8,8 +8,17 @@ const prisma = new PrismaClient();
 const client = mqtt.connect(process.env.MQTTSERVER);
 
 // === Función para enviar alertas a través de Redis ===
-const redisPublisher = createClient();
-redisPublisher.connect();
+const redisPublisher = createClient({
+  url: process.env.REDIS_URL,
+});
+
+redisPublisher.on("error", (err) => {
+  console.error("Redis Client Error:", err);
+});
+
+redisPublisher.connect().catch((err) => {
+  console.error("Failed to connect to Redis:", err);
+});
 
 // === CACHÉS ===
 const topicsCache = new Map(); // topicBase => topicBase

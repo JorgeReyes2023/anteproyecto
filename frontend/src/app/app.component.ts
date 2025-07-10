@@ -11,8 +11,10 @@ import { Observable } from 'rxjs';
 import { User } from '../models/user';
 import { MatDialogModule } from '@angular/material/dialog';
 import { RouterModule } from '@angular/router';
+import { Subject, takeUntil } from 'rxjs';
 
 import { Alert, AlertService } from '../services/alert.service';
+import { error } from 'node:console';
 
 @Component({
   standalone: true,
@@ -42,6 +44,8 @@ export class AppComponent {
   // theme
   darkMode = false;
 
+  private destroy$ = new Subject<void>();
+
   constructor(
     @Inject(PLATFORM_ID) private platformId: unknown,
     private authService: AuthService,
@@ -53,19 +57,34 @@ export class AppComponent {
   }
 
   ngOnInit() {
-    this.user$.subscribe((user) => {
-      if (user?.companyId) {
-        this.alertService.loadAlertsFromDB(user.companyId);
-      }
-    });
-    
-    this.alertService.getUnreadCount$().subscribe((count) => {
-      this.unreadCount = count;
+    this.user$.pipe(takeUntil(this.destroy$)).subscribe({
+      next: (user) => {
+        if (user?.companyId) {
+          this.alertService.loadAlertsFromDB(user.companyId);
+        }
+      },
+      error: (error) => console.error('Error loading user:', error),
     });
 
-    this.alertService.getHasCritical$().subscribe((has) => {
-      this.hasCritical = has;
-    });
+    this.alertService
+      .getUnreadCount$()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (count) => {
+          this.unreadCount = count;
+        },
+        error: (error) => console.error('Error getting unread count:', error),
+      });
+
+    this.alertService
+      .getHasCritical$()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (has) => {
+          this.hasCritical = has;
+        },
+        error: (error) => console.error('Error getting hasCritical:', error),
+      });
   }
 
   logout() {
@@ -77,6 +96,11 @@ export class AppComponent {
     this.darkMode = !this.darkMode;
     const classList = document.body.classList;
     classList.toggle('dark-theme', this.darkMode);
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   title = 'frontend';
