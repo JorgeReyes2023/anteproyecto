@@ -12,7 +12,7 @@ import { User } from '../models/user';
 import { MatDialogModule } from '@angular/material/dialog';
 import { RouterModule } from '@angular/router';
 
-import { AlertService } from '../services/alert.service';
+import { Alert, AlertService } from '../services/alert.service';
 
 @Component({
   standalone: true,
@@ -57,9 +57,9 @@ export class AppComponent {
   }
 
   loadAlerts() {
-    this.alertService.getAlerts().subscribe((alerts) => {
-      this.unreadCount = alerts.filter((alert) => !alert.read).length;
-      this.hasCritical = alerts.some((alert) => alert.critical);
+    this.alertService.alerts$.subscribe((alerts: Alert[]) => {
+      this.unreadCount = alerts.filter((a) => !a.read).length;
+      this.hasCritical = alerts.some((a) => !a.read && a.level === 'critical');
     });
   }
 
