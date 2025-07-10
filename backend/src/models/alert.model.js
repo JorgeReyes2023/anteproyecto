@@ -29,6 +29,36 @@ class AlertModel {
       where: { id: id },
     });
   }
+
+  static async markAlertAsRead(read, id) {
+    return prisma.alerts.update({
+      where: { id: id },
+      data: { is_read: read },
+    });
+  }
+
+  static async markAllAlertsAsRead(read) {
+    return prisma.alerts.updateMany({
+      where: { is_read: false },
+      data: { is_read: read },
+    });
+  }
+
+  static async getAlertsByCompanyId(companyId) {
+    return prisma.alerts.findMany({
+      where: {
+        sensors: {
+          some: {
+            projects: {
+              some: {
+                company_id: companyId,
+              },
+            },
+          },
+        },
+      },
+    });
+  }
 }
 
 module.exports = { AlertModel };

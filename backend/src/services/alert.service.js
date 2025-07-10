@@ -1,4 +1,5 @@
 const { AlertModel } = require("../models/alert.model");
+const { alertSchema, alertSchemaId } = require("../validators/alert.validator");
 
 /**
  * Servicio para la gestión de alertas.
@@ -74,6 +75,59 @@ class AlertService {
       return await AlertModel.deleteAlert(id);
     } catch (error) {
       throw new Error(`Error deleting alert: ${error.message}`);
+    }
+  }
+
+  /**
+   * Marca una alerta como leída/no leída.
+   * @param {boolean} read - Indica si la alerta debe ser marcada como leída (true) o no leída (false).
+   * @param {string} id - ID de la alerta a marcar como leída/no leída.
+   * @returns {Promise<Object>} Alerta actualizada.
+   * @throws {Error} Si ocurre un error durante la actualización.
+   */
+  static async markAlertAsRead(read, id) {
+    try {
+      return await AlertModel.markAlertAsRead(read, id);
+    } catch (error) {
+      throw new Error(`Error marking alert as read: ${error.message}`);
+    }
+  }
+
+  /**
+   * Marca todas las alertas como leídas.
+   * @returns {Promise<Array>} Lista de alertas actualizadas.
+   * @throws {Error} Si ocurre un error durante la actualización.
+   */
+  static async markAllAlertsAsRead() {
+    try {
+      return await AlertModel.markAllAlertsAsRead();
+    } catch (error) {
+      throw new Error(`Error marking all alerts as read: ${error.message}`);
+    }
+  }
+
+  /**
+   * Obtiene las alertas de una compania por su ID.
+   * @param {string} companyId - ID de la compañía para filtrar las alertas.
+   * @returns {Promise<Array>} Lista de alertas de la compañía.
+   * @throws {Error} Si ocurre un error durante la obtención.
+   */
+  static async getAlertsByCompanyId(companyId) {
+    try {
+      if (companyId === "0") {
+        return this.getAllAlerts();
+      }
+      const { value, error } = alertSchemaId.validate(
+        { id: companyId },
+        { convert: true },
+      );
+      if (error) {
+        throw new Error(`Invalid company ID: ${error.message}`);
+      }
+
+      return await AlertModel.getAlertsByCompanyId(value.id);
+    } catch (error) {
+      throw new Error(`Error fetching alerts by company ID: ${error.message}`);
     }
   }
 }
