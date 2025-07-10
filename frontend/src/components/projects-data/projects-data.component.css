@@ -5,14 +5,7 @@
   width: 100%;
   padding: 8px 16px;
   box-sizing: border-box;
-}
-
-.project-info-row span {
   font-size: 14px;
-  color: var(--accent-color);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }
 
 .project-info-row .actions {
@@ -22,15 +15,8 @@
   align-items: center;
 }
 
-.header-row {
-  background-color: var(--background-color);
-  font-weight: bold;
-  border-bottom: 2px solid #ddd;
-}
-
 .header span {
   font-weight: 600;
-  color: var(--primary-color);
 }
 
 .actions-header {

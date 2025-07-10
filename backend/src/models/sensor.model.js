@@ -35,6 +35,15 @@ class SensorModel {
     return prisma.sensors.findMany();
   }
 
+  static async getSensorsByNodeId(nodeId) {
+    return prisma.sensors.findMany({
+      where: { node_id: nodeId },
+      include: {
+        nodes: true,
+      },
+    });
+  }
+
   static async updateSensor(id, sensorData) {
     return prisma.sensors.update({
       where: { id: id },

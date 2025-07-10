@@ -177,7 +177,8 @@ class UserService {
       }
       const salt = await bcrypt.genSalt(10);
       const hashedNewPassword = await bcrypt.hash(newPassword, salt);
-      const updatedUser = await UserModel.updateUser(id, {
+      const numericId = parseInt(id, 10);
+      const updatedUser = await UserModel.updateUser(numericId, {
         password: hashedNewPassword,
       });
 

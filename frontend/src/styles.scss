@@ -35,7 +35,7 @@ $fountain-blue-palette: (
     A700: #fff,
   ),
 );
-// Usa tu paleta personalizada como color primario
+
 $custom-primary: mat.m2-define-palette($fountain-blue-palette, 500, 100, 700);
 $custom-primary-light: mat.m2-define-palette(
   $fountain-blue-palette,
@@ -53,7 +53,6 @@ $custom-secondary: mat.m2-define-palette($fountain-blue-palette, 300, 100, 700);
 $custom-accent: mat.m2-define-palette($fountain-blue-palette, 400, 100, 700);
 $custom-warn: mat.m2-define-palette($fountain-blue-palette, 600, 100, 700);
 
-// Define el tema con tu nueva paleta
 $custom-theme: mat.m2-define-light-theme(
   (
     color: (
@@ -72,6 +71,73 @@ $custom-theme: mat.m2-define-light-theme(
 // Aplica el tema globalmente
 @include mat.all-component-themes($custom-theme);
 
+// === Fountain Blue Dark Palette ===
+$fountain-blue-dark-palette: (
+  50: #121212,
+  100: #1e1e1e,
+  200: #232f34,
+  300: #2c3e45,
+  400: #375359,
+  500: #3f6c70,
+  600: #479296,
+  700: #4abfc6,
+  800: #66d6db,
+  900: #84f1f4,
+  A100: #66d6db,
+  A200: #4abfc6,
+  A400: #3f6c70,
+  A700: #375359,
+  contrast: (
+    50: #fff,
+    100: #fff,
+    200: #fff,
+    300: #fff,
+    400: #fff,
+    500: #fff,
+    600: #000,
+    700: #000,
+    800: #000,
+    900: #000,
+    A100: #000,
+    A200: #000,
+    A400: #fff,
+    A700: #fff,
+  ),
+);
+
+$dark-primary: mat.m2-define-palette(
+  $fountain-blue-dark-palette,
+  500,
+  100,
+  700
+);
+$dark-primary-light: mat.m2-define-palette(
+  $fountain-blue-dark-palette,
+  200,
+  100,
+  700
+);
+$dark-primary-contrast: mat.m2-define-palette(
+  $fountain-blue-dark-palette,
+  900,
+  100,
+  700
+);
+$dark-accent: mat.m2-define-palette($fountain-blue-dark-palette, 300, 100, 700);
+$dark-warn: mat.m2-define-palette($fountain-blue-dark-palette, 600, 100, 700);
+
+$custom-dark-theme: mat.m2-define-dark-theme(
+  (
+    color: (
+      primary: $dark-primary,
+      accent: $dark-accent,
+      warn: $dark-warn,
+    ),
+    typography: mat.m2-define-typography-config(),
+    density: 0,
+  )
+);
+
 :root {
   --primary-color: #{mat.m2-get-color-from-palette($custom-primary)};
   --primary-color-light: #{mat.m2-get-color-from-palette($custom-primary, 100)};
@@ -81,6 +147,26 @@ $custom-theme: mat.m2-define-light-theme(
   --background-color: #{mat.m2-get-color-from-palette($custom-primary, 50)};
   --surface-color: #ffffff;
   --text-color: #1a1a1a;
+  --hover-color: #{mat.m2-get-color-from-palette($custom-primary-contrast, 600)};
+  --hover-background-color: #{mat.m2-get-color-from-palette(
+      $custom-primary,
+      600,
+      60%
+    )};
+  --selected-color: #{mat.m2-get-color-from-palette(
+      $custom-primary-contrast,
+      600
+    )};
+  --selected-background-color: #{mat.m2-get-color-from-palette(
+      $custom-primary,
+      600
+    )};
+  --banner-background: #{mat.m2-get-color-from-palette($custom-primary, 500)};
+  --banner-text-color: #{mat.m2-get-color-from-palette(
+      $custom-primary-contrast,
+      50
+    )};
+  --navbar-background: #{mat.m2-get-color-from-palette($custom-primary, A200)};
 }
 
 .text-no-data {
@@ -220,3 +306,38 @@ mat-list-item:last-child {
 }
 
 @include flexible-mat-list-items();
+
+.dark-theme {
+  @include mat.all-component-colors($custom-dark-theme);
+
+  & {
+    --background-color: #121212;
+    --surface-color: #1e1e1e;
+    --text-color: #f5f5f5;
+
+    --primary-color: #{mat.m2-get-color-from-palette($dark-primary)};
+    --primary-color-light: #{mat.m2-get-color-from-palette($dark-primary, 100)};
+    --primary-color-dark: #{mat.m2-get-color-from-palette($dark-primary, 700)};
+
+    --accent-color: #{mat.m2-get-color-from-palette($dark-accent)};
+    --warn-color: #{mat.m2-get-color-from-palette($dark-warn)};
+
+    --hover-color: #4abfc6;
+    --hover-background-color: #{mat.m2-get-color-from-palette(
+        $dark-primary,
+        700
+      )};
+    --selected-color: #fff;
+    --selected-background-color: #{mat.m2-get-color-from-palette(
+        $dark-primary,
+        600
+      )};
+
+    --banner-background: #{mat.m2-get-color-from-palette($dark-primary, 400)};
+    --banner-text-color: #{mat.m2-get-color-from-palette(
+        $dark-primary-contrast,
+        100
+      )};
+    --navbar-background: #1e1e1e;
+  }
+}

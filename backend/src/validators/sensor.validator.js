@@ -83,10 +83,16 @@ const attachingSensorsToNodeSchema = Joi.object({
     .required(),
 });
 
+const getReadingsBySensorIdAndType = Joi.object({
+  idSensor: Joi.number().integer().positive().required(),
+  idType: Joi.number().integer().positive().required(),
+});
+
 module.exports = {
   sensorSupportedTypeSchema,
   sensorSchemaId,
   SensorReadingTypeSchema,
   SensorReadingTypeSchemaWithoutId,
   attachingSensorsToNodeSchema,
+  getReadingsBySensorIdAndType,
 };

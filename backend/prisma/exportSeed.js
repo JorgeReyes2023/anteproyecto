@@ -16,6 +16,8 @@ async function main() {
     "sensor_readings",
     "thresholds",
     "alerts",
+    "alerts_users",
+    "sensor_supported_types",
   ];
 
   const tables = {};

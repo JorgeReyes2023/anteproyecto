@@ -12,6 +12,7 @@ const {
   SensorReadingTypeSchema,
   SensorReadingTypeSchemaWithoutId,
   attachingSensorsToNodeSchema,
+  getReadingsBySensorIdAndType,
 } = require("../validators/sensor.validator.js");
 
 /**
@@ -132,6 +133,26 @@ class SensorService {
   }
 
   /**
+   * Obtiene todos los sensores asociados a un nodo específico.
+   * @param {number|string} nodeId - ID del nodo cuyas sensores se desean obtener.
+   * @returns {Promise<Array<Object>>} Lista de sensores asociados al nodo.
+   * @throws {Error} Si ocurre un error al obtener los sensores.
+   */
+  static async getSensorsByNodeId(nodeId) {
+    try {
+      const { value, error } = sensorSchemaId.validate(
+        { id: nodeId },
+        { convert: true },
+      );
+      if (error) throw new Error(`ID inválido: ${error.message}`);
+
+      return await SensorModel.getSensorsByNodeId(value.id);
+    } catch (error) {
+      throw new Error(`Error fetching sensors by node ID: ${error.message}`);
+    }
+  }
+
+  /**
    * Actualiza un sensor existente con nuevos datos.
    *
    * @param {number|string} id - ID del sensor a actualizar.
@@ -242,6 +263,33 @@ class SensorService {
   }
 
   /**
+   * Obtiene los tipos de sensor asociados a un sensor específico por su ID.
+   *
+   * @param {number|string} sensorId - ID del sensor cuyas tipos se desean obtener.
+   * @returns {Promise<Array<Object>>} Lista de tipos de sensor asociados al sensor.
+   * @throws {Error} Si ocurre un error al obtener los tipos de sensor.
+   */
+  static async getSensorTypeBySensorId(sensorId) {
+    try {
+      const { value, error } = sensorSchemaId.validate(
+        { id: sensorId },
+        { convert: true },
+      );
+      if (error) throw new Error(`Invalid sensor ID: ${error.message}`);
+      const supportedTypes =
+        await SensorSupportedTypeModel.getSensorSupportedTypeBySensorId(
+          value.id,
+        );
+      const sensorTypes = supportedTypes.map((type) => type.type);
+      return sensorTypes;
+    } catch (error) {
+      throw new Error(
+        `Error fetching sensor type by sensor ID: ${error.message}`,
+      );
+    }
+  }
+
+  /**
    * Actualiza un tipo de sensor existente.
    *
    * @param {number|string} id - ID del tipo de sensor a actualizar.
@@ -334,6 +382,33 @@ class SensorService {
     } catch (error) {
       throw new Error(
         `Error fetching readings by sensor type ID: ${error.message}`,
+      );
+    }
+  }
+
+  /**
+   * Obtiene las lecturas de un sensor específico por su ID y tipo.
+   *
+   * @param {number|string} sensorId - ID del sensor cuyas lecturas se desean obtener.
+   * @param {number|string} typeId - ID del tipo de sensor cuyas lecturas se desean obtener.
+   * @returns {Promise<Array<Object>>} Lista de lecturas del sensor y tipo especificados.
+   * @throws {Error} Si ocurre un error al obtener las lecturas.
+   */
+  static async getReadingsBySensorIdAndType(sensorId, typeId) {
+    try {
+      const { value, error } = getReadingsBySensorIdAndType.validate(
+        { idSensor: sensorId, idType: typeId },
+        { convert: true },
+      );
+      if (error)
+        throw new Error(`Invalid sensor ID or type ID: ${error.message}`);
+      return SensorReadingModel.getReadingsBySensorIdAndType(
+        value.idSensor,
+        value.idType,
+      );
+    } catch (error) {
+      throw new Error(
+        `Error fetching readings by sensor ID and type: ${error.message}`,
       );
     }
   }

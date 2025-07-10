@@ -68,14 +68,17 @@ class AuthService {
         email: user.email,
         role: user.user_roles?.name || user.user_roles,
         company: user.companies?.name || null,
+        companyId: user.companies?.id || null,
       };
 
       // generar token
       const token = generateToken({
         id: user.id,
+        name: user.name,
         role: user.user_roles?.name || user.user_roles,
         email: user.email,
-        company: user.company,
+        company: user.companies?.name || null,
+        companyId: user.companies?.id || null,
       });
 
       return { user: userDto, token };
@@ -113,6 +116,7 @@ class AuthService {
       );
       const token = generateToken({
         id: user.id,
+        name: user.name,
         role: user.role,
         email: user.email,
         company: user.company,
@@ -127,12 +131,22 @@ class AuthService {
    * Verifica y decodifica un token JWT.
    *
    * @param {string} token - Token JWT a verificar.
-   * @returns {Object} Datos decodificados del token.
+   * @returns {Object} Nuevo token y datos decodificados del token (usuario).
    * @throws {Error} Si el token no es válido o ha expirado.
    */
   static async verifyToken(token) {
     try {
-      return verifyToken(token);
+      const decoded = verifyToken(token);
+      return {
+        user: {
+          id: decoded.id,
+          name: decoded.name,
+          role: decoded.role,
+          email: decoded.email,
+          company: decoded.company,
+          companyId: decoded.companyId,
+        },
+      };
     } catch (error) {
       throw new Error(`Token verification failed: ${error.message}`);
     }

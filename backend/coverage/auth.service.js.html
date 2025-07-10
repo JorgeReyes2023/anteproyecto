@@ -23,16 +23,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">87.5% </span>
+                <span class="strong">87.87% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>28/32</span>
+                <span class='fraction'>29/33</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">81.25% </span>
+                <span class="strong">81.81% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>13/16</span>
+                <span class='fraction'>18/22</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">87.5% </span>
+                <span class="strong">87.87% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>28/32</span>
+                <span class='fraction'>29/33</span>
             </div>
         
             
@@ -204,7 +204,21 @@
 <a name='L139'></a><a href='#L139'>139</a>
 <a name='L140'></a><a href='#L140'>140</a>
 <a name='L141'></a><a href='#L141'>141</a>
-<a name='L142'></a><a href='#L142'>142</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L142'></a><a href='#L142'>142</a>
+<a name='L143'></a><a href='#L143'>143</a>
+<a name='L144'></a><a href='#L144'>144</a>
+<a name='L145'></a><a href='#L145'>145</a>
+<a name='L146'></a><a href='#L146'>146</a>
+<a name='L147'></a><a href='#L147'>147</a>
+<a name='L148'></a><a href='#L148'>148</a>
+<a name='L149'></a><a href='#L149'>149</a>
+<a name='L150'></a><a href='#L150'>150</a>
+<a name='L151'></a><a href='#L151'>151</a>
+<a name='L152'></a><a href='#L152'>152</a>
+<a name='L153'></a><a href='#L153'>153</a>
+<a name='L154'></a><a href='#L154'>154</a>
+<a name='L155'></a><a href='#L155'>155</a>
+<a name='L156'></a><a href='#L156'>156</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
@@ -277,7 +291,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -323,6 +340,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -339,6 +357,16 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -415,14 +443,17 @@ class AuthService {
         email: user.email,
         role: user.user_roles?.name || <span class="branch-1 cbranch-no" title="branch not covered" >user.user_roles,</span>
         company: user.companies?.name || <span class="branch-1 cbranch-no" title="branch not covered" >null,</span>
+        companyId: user.companies?.id || null,
       };
 &nbsp;
       // generar token
       const token = generateToken({
         id: user.id,
+        name: user.name,
         role: user.user_roles?.name || <span class="branch-1 cbranch-no" title="branch not covered" >user.user_roles,</span>
         email: user.email,
-        company: user.company,
+        company: user.companies?.name || <span class="branch-1 cbranch-no" title="branch not covered" >null,</span>
+        companyId: user.companies?.id || null,
       });
 &nbsp;
       return { user: userDto, token };
@@ -460,6 +491,7 @@ class AuthService {
       );
       const token = generateToken({
         id: user.id,
+        name: user.name,
         role: user.role,
         email: user.email,
         company: user.company,
@@ -474,12 +506,22 @@ class AuthService {
    * Verifica y decodifica un token JWT.
    *
    * @param {string} token - Token JWT a verificar.
-   * @returns {Object} Datos decodificados del token.
+   * @returns {Object} Nuevo token y datos decodificados del token (usuario).
    * @throws {Error} Si el token no es válido o ha expirado.
    */
   static async verifyToken(token) {
     try {
-      return verifyToken(token);
+      const decoded = verifyToken(token);
+      return {
+        user: {
+          id: decoded.id,
+          name: decoded.name,
+          role: decoded.role,
+          email: decoded.email,
+          company: decoded.company,
+          companyId: decoded.companyId,
+        },
+      };
     } catch (error) {
 <span class="cstat-no" title="statement not covered" >      throw new Error(`Token verification failed: ${error.message}`);</span>
     }
@@ -493,7 +535,7 @@ module.exports = { AuthService };
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-07-07T10:45:02.919Z
+                at 2025-07-10T12:25:29.125Z
             </div>
         <script src="prettify.js"></script>
         <script>

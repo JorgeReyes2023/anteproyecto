@@ -1,8 +1,14 @@
 const { Router } = require("express");
 
 const { SensorService } = require("../services/sensor.service");
+const {
+  authenticate,
+  authorizeAdmin,
+} = require("../middlewares/auth.middleware");
 
 const sensorRoutes = Router();
+
+sensorRoutes.use(authenticate);
 
 /**
  * @swagger
@@ -124,6 +130,54 @@ sensorRoutes.get("/types", async (req, res) => {
         .json({ error: "Los tipos de sensores no son un arreglo" });
     }
     res.status(200).json(sensorTypes);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+/**
+ * @swagger
+ * /api/sensors/types/{id}:
+ *   get:
+ *     summary: Obtiene un tipo de sensor por ID
+ *     tags: [Sensors]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID del tipo de sensor a obtener
+ *     responses:
+ *       200:
+ *         description: Tipo de sensor encontrado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/SensorType'
+ *       404:
+ *         description: Tipo de sensor no encontrado
+ *       500:
+ *         description: Error del servidor
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   description: Mensaje de error
+ */
+sensorRoutes.get("/types/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const sensorType = await SensorService.getSensorTypeBySensorId(id);
+    if (!sensorType) {
+      return res.status(404).json({ error: "Tipo de sensor no encontrado" });
+    }
+    res.status(200).json(sensorType);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -318,7 +372,7 @@ sensorRoutes.get("/:id", async (req, res) => {
  *       500:
  *         description: Error interno del servidor
  */
-sensorRoutes.get("/", async (req, res) => {
+sensorRoutes.get("/", authorizeAdmin, async (req, res) => {
   try {
     const sensors = await SensorService.getAllSensors();
     res.status(200).json(sensors);
@@ -415,7 +469,6 @@ sensorRoutes.put("/:id", async (req, res) => {
  */
 sensorRoutes.put("/attach/node", async (req, res) => {
   try {
-    console.log("Updating sensors for node:", req.body);
     const { idNode, sensorIds } = req.body;
 
     if (!idNode || !Array.isArray(sensorIds)) {
@@ -500,15 +553,113 @@ sensorRoutes.delete("/:id", async (req, res) => {
  *                     type: number
  *                     description: Valor de la lectura del sensor
  */
-sensorRoutes.get("/types/:id/readings", async (req, res) => {
+sensorRoutes.get("/readings/type/:idType", async (req, res) => {
   try {
-    const { id } = req.params;
-    const readings = await SensorService.getReadingsBySensorTypeId(id);
-    console.log("Readings for sensor type ID:", id, readings);
+    const { idType } = req.params;
+    const readings = await SensorService.getReadingsBySensorTypeId(idType);
     if (!readings) {
       return res.status(404).json({ error: "Tipo de sensor no encontrado" });
     }
     res.status(200).json(readings);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+/**
+ * @swagger
+ * /api/sensors/readings/{idSensor}/{idType}:
+ *   get:
+ *     summary: Obtiene las lecturas de un sensor por ID y tipo
+ *     tags: [Sensors]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: idSensor
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID del sensor cuyas lecturas se desean obtener
+ *       - in: path
+ *         name: idType
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID del tipo de sensor cuyas lecturas se desean obtener
+ *     responses:
+ *       200:
+ *         description: Lecturas obtenidas exitosamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   timestamp:
+ *                     type: string
+ *                     format: date-time
+ *                     description: Fecha y hora de la lectura
+ *                   value:
+ *                     type: number
+ *                     description: Valor de la lectura del sensor
+ */
+sensorRoutes.get("/readings/:idSensor/:idType", async (req, res) => {
+  try {
+    const { idSensor, idType } = req.params;
+    const readings = await SensorService.getReadingsBySensorIdAndType(
+      idSensor,
+      idType,
+    );
+    if (!readings) {
+      return res.status(404).json({ error: "Sensor no encontrado" });
+    }
+    res.status(200).json(readings);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+/**
+ * @swagger
+ * /api/sensors/node/{id}:
+ *   get:
+ *     summary: Obtiene los sensores de un nodo por ID
+ *     tags: [Sensors]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID del nodo cujos sensores se desean obtener
+ *     responses:
+ *       200:
+ *         description: Sensores obtenidos exitosamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Sensor'
+ *       404:
+ *         description: No se encontraron sensores para este nodo
+ *       500:
+ *         description: Error interno del servidor
+ */
+sensorRoutes.get("/node/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const sensors = await SensorService.getSensorsByNodeId(id);
+    if (!sensors) {
+      return res
+        .status(404)
+        .json({ error: "No se encontraron sensores para este nodo" });
+    }
+    res.status(200).json(sensors);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

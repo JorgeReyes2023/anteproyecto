@@ -144,6 +144,40 @@ class ProjectService {
       throw new Error(`Error al obtener los proyectos: ${error.message}`);
     }
   }
+
+  /**
+   * Obtiene un proyecto por el ID de la empresa asociada.
+   * @param {number} companyId - ID de la empresa asociada.
+   * @returns {Promise<Array<Object>>} Lista de proyectos asociados a la empresa.
+   * @throws {Error} Si ocurre un error al obtener los proyectos.
+   */
+  static async getProjectsByCompanyId(companyId) {
+    try {
+      if (companyId == 0) {
+        return await ProjectService.getAllProjects();
+      }
+
+      const { value, error } = deleteProjectSchema.validate(
+        { id: companyId },
+        { convert: true },
+      );
+      const projects = await ProjectModel.getProjectsByCompanyId(value.id);
+      return projects.map((project) => ({
+        id: project.id,
+        name: project.name,
+        description: project.description,
+        companyId: project.company_id,
+        company: project.companies
+          ? {
+              id: project.companies.id,
+              name: project.companies.name,
+            }
+          : null,
+      }));
+    } catch (error) {
+      throw new Error(`Error al obtener los proyectos: ${error.message}`);
+    }
+  }
 }
 
 module.exports = { ProjectService };

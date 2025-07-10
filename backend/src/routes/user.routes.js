@@ -5,34 +5,6 @@ const userRoutes = Router();
 
 /**
  * @swagger
- * components:
- *   schemas:
- *     User:
- *       type: object
- *       properties:
- *         id:
- *           type: string
- *           example: "64ecf7d8e0b9ad00125b5f01"
- *         name:
- *           type: string
- *           example: "Maria Lopez"
- *         email:
- *           type: string
- *           example: "maria@example.com"
- *         role:
- *           type: string
- *           example: "user"
- *         company:
- *           type: string
- *           example: "Empresa S.A."
- *       required:
- *         - name
- *         - email
- *         - role
- */
-
-/**
- * @swagger
  * /api/users:
  *   get:
  *     summary: Obtener todos los usuarios

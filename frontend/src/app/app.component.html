@@ -1,78 +1,110 @@
-<!-- Barra de presentación ARRIBA -->
-<div class="presentation-banner mat-elevation-z2">
-  <h2>NODALIS</h2>
-  <p>
-    Bienvenido a esta página. Aquí encontrará una visión general e información
-    importante sobre la aplicación.
-  </p>
-</div>
+<header class="presentation-banner">
+  <!-- logo -->
+  <img src="../logoNodalis.png" alt="Nodalis Logo" class="logo" />
+  <!-- alerts -->
+  <button
+    mat-icon-button
+    class="notification-button"
+    routerLink="/alerts"
+    matTooltip="Alertas"
+  >
+    <mat-icon>notifications</mat-icon>
 
-<!-- Layout Angular Material -->
-<mat-sidenav-container opened class="main-container">
+    <!-- Badge non lues -->
+    <span class="badge" *ngIf="unreadCount > 0">{{ unreadCount }}</span>
+
+    <!-- Indicateur critique -->
+    <span class="critical-dot" *ngIf="hasCritical"></span>
+  </button>
+  <!-- user info -->
+  <div class="user-info" *ngIf="user$ | async as user">
+    <span class="user-name">{{ user.name }}</span>
+    <span class="user-role">{{
+      user.role === "admin" ? "Administrador" : "Usuario"
+    }}</span>
+    <!-- logout -->
+    <span
+      class="user-icon"
+      role="button"
+      tabindex="0"
+      (click)="logout()"
+      aria-label="Cerrar sesión"
+    >
+      <mat-icon>logout</mat-icon>
+    </span>
+  </div>
+</header>
+
+<div class="layout">
   <!-- Sidebar -->
-  <mat-sidenav mode="side" opened class="sidenav" *ngIf="user$ | async as user">
-    <mat-toolbar color="primary">Navegación</mat-toolbar>
-    <mat-nav-list>
-      <ng-container *ngIf="user$ | async as user; else guest">
-        <a mat-list-item routerLink="/dashboard" routerLinkActive="active"
-          >Dashboard</a
-        >
-        <a mat-list-item routerLink="/info" routerLinkActive="active"
-          >Información del usuario</a
-        >
-        <a
-          *ngIf="user.role === 'admin'"
-          mat-list-item
-          routerLink="/users"
+  <aside class="sidebar" *ngIf="user$ | async as user">
+    <div class="sidebar-title">Navegación</div>
+    <hr />
+    <nav class="nav-list">
+      <ng-container *ngIf="user$ | async as user">
+        <div
           routerLinkActive="active"
-          >Usuarios</a
+          [routerLinkActiveOptions]="{ exact: true }"
         >
-        <a
-          *ngIf="user.role === 'admin'"
-          mat-list-item
-          routerLink="/companies"
+          <a routerLink="/dashboard">Dashboard</a>
+        </div>
+        <div
           routerLinkActive="active"
-          >Empresas</a
+          [routerLinkActiveOptions]="{ exact: true }"
         >
-        <a
+          <a routerLink="/info">Información del usuario</a>
+        </div>
+        <div
           *ngIf="user.role === 'admin'"
-          mat-list-item
-          routerLink="/nodes"
           routerLinkActive="active"
-          >Nodos</a
+          [routerLinkActiveOptions]="{ exact: true }"
         >
-        <a
+          <a routerLink="/users">Usuarios</a>
+        </div>
+        <div
           *ngIf="user.role === 'admin'"
-          mat-list-item
-          routerLink="/projects"
           routerLinkActive="active"
-          >Proyectos</a
+          [routerLinkActiveOptions]="{ exact: true }"
         >
-        <a
+          <a routerLink="/companies">Empresas</a>
+        </div>
+        <div
           *ngIf="user.role === 'admin'"
-          mat-list-item
-          routerLink="/users/create"
           routerLinkActive="active"
-          >Crear usuario</a
+          [routerLinkActiveOptions]="{ exact: true }"
         >
-        <a mat-list-item (click)="logout()">Cerrar sesión</a>
+          <a routerLink="/nodes">Nodos</a>
+        </div>
+        <div
+          *ngIf="user.role === 'admin'"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }"
+        >
+          <a routerLink="/projects">Proyectos</a>
+        </div>
+        <div
+          *ngIf="user.role === 'admin'"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }"
+        >
+          <a routerLink="/users/create">Crear usuario</a>
+        </div>
       </ng-container>
+    </nav>
+    <!-- Theme toggle -->
+    <div class="theme-toggle">
+      <label class="switch-with-icons">
+        <mat-icon class="theme-icon">light_mode</mat-icon>
+        <input type="checkbox" (change)="toggleTheme()" [checked]="darkMode" />
+        <span class="slider"></span>
+        <mat-icon class="theme-icon">dark_mode</mat-icon>
+      </label>
+    </div>
+  </aside>
 
-      <ng-template #guest>
-        <a mat-list-item routerLink="/login" routerLinkActive="active"
-          >Iniciar sesión</a
-        >
-      </ng-template>
-    </mat-nav-list>
-  </mat-sidenav>
-
-  <!-- Contenido principal -->
-  <mat-sidenav-content>
-    <mat-card class="main-card">
-      <mat-card-content>
-        <app-alert></app-alert>
-        <router-outlet></router-outlet>
-      </mat-card-content>
-    </mat-card>
-  </mat-sidenav-content>
-</mat-sidenav-container>
+  <!-- Main content -->
+  <main class="main-content">
+    <app-alert></app-alert>
+    <router-outlet></router-outlet>
+  </main>
+</div>

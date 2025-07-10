@@ -1,8 +1,7 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { tap } from 'rxjs/operators';
+import { catchError, tap } from 'rxjs/operators';
 import { GeneralService } from './general.service';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { User, UserCreate } from '../models/user';
 
 @Injectable({
@@ -28,13 +27,8 @@ export class AuthService {
       tap((response) => {
         if (typeof window !== 'undefined' && window.localStorage) {
           localStorage.setItem('token', response.token);
-          console.log(response);
-          const userDto = {
-            ...response.user,
-            role: response.user.role,
-          };
-          localStorage.setItem('user', JSON.stringify(userDto));
-          this.userSubject.next(userDto);
+          localStorage.setItem('user', JSON.stringify(response.user));
+          this.userSubject.next(response.user);
         }
       })
     );
@@ -65,5 +59,24 @@ export class AuthService {
 
   register(user: UserCreate): Observable<User> {
     return this.generalService.postData('auth/register', user);
+  }
+
+  verifyToken(): Observable<any> {
+    return this.generalService.getData('auth/verify').pipe(
+      tap((response) => {
+        if (typeof window !== 'undefined' && window.localStorage) {
+          localStorage.setItem('user', JSON.stringify(response.user));
+          this.userSubject.next(response.user);
+        }
+      }),
+      catchError((error) => {
+        console.warn('Token invalid or expired:', error);
+        this.logout();
+        if (typeof window !== 'undefined' && window.location) {
+          window.location.href = '/login';
+        }
+        return throwError(() => error);
+      })
+    );
   }
 }

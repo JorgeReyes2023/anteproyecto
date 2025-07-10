@@ -1,43 +1,21 @@
 const { Router } = require("express");
 
 const { ProjectService } = require("../services/project.service");
+const {
+  authenticate,
+  authorizeCompanyId,
+  authorizeAdmin,
+} = require("../middlewares/auth.middleware");
 
 const projectRoutes = Router();
-
-/**
- * @swagger
- * components:
- *   schemas:
- *     Project:
- *       type: object
- *       properties:
- *         id:
- *           type: integer
- *           example: 1
- *         name:
- *           type: string
- *           example: "Proyecto A"
- *         description:
- *           type: string
- *           example: "Sistema de monitoreo ambiental"
- *         companyId:
- *           type: integer
- *           example: 2
- *         nodes:
- *           type: array
- *           items:
- *             type: integer
- *           example: [1, 2, 3]
- *       required:
- *         - name
- */
+projectRoutes.use(authenticate);
 
 /**
  * @swagger
  * /api/projects:
  *   post:
  *     summary: Crea un nuevo proyecto
- *     tags: [Project]
+ *     tags: [Projects]
  *     requestBody:
  *       required: true
  *       content:
@@ -92,7 +70,7 @@ projectRoutes.post("/", async (req, res) => {
  * /api/projects/{id}:
  *   put:
  *     summary: Actualiza un proyecto por su ID
- *     tags: [Project]
+ *     tags: [Projects]
  *     parameters:
  *       - in: path
  *         name: id
@@ -156,7 +134,7 @@ projectRoutes.put("/:id", async (req, res) => {
  * /api/projects/{id}:
  *   delete:
  *     summary: Elimina un proyecto por su ID
- *     tags: [Project]
+ *     tags: [Projects]
  *     parameters:
  *       - in: path
  *         name: id
@@ -185,7 +163,7 @@ projectRoutes.delete("/:id", async (req, res) => {
  * /api/projects:
  *   get:
  *     summary: Obtiene todos los proyectos
- *     tags: [Project]
+ *     tags: [Projects]
  *     responses:
  *       200:
  *         description: Lista de proyectos
@@ -198,7 +176,7 @@ projectRoutes.delete("/:id", async (req, res) => {
  *       500:
  *         description: Error interno del servidor
  */
-projectRoutes.get("/", async (req, res) => {
+projectRoutes.get("/", authorizeAdmin, async (req, res) => {
   try {
     const projects = await ProjectService.getAllProjects();
     res.status(200).json(projects);
@@ -212,7 +190,7 @@ projectRoutes.get("/", async (req, res) => {
  * /api/projects/{id}:
  *   get:
  *     summary: Obtiene un proyecto por su ID
- *     tags: [Project]
+ *     tags: [Projects]
  *     parameters:
  *       - in: path
  *         name: id
@@ -244,4 +222,48 @@ projectRoutes.get("/:id", async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+
+/**
+ * @swagger
+ * /api/projects/company/{companyId}:
+ *   get:
+ *     summary: Obtiene proyectos por ID de empresa
+ *     tags: [Projects]
+ *     parameters:
+ *       - in: path
+ *         name: companyId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID de la empresa
+ *     responses:
+ *       200:
+ *         description: Lista de proyectos de la empresa
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Project'
+ *       404:
+ *         description: Empresa no encontrada
+ *       500:
+ *         description: Error interno del servidor
+ */
+projectRoutes.get(
+  "/company/:companyId",
+  authorizeCompanyId,
+  async (req, res) => {
+    try {
+      const { companyId } = req.params;
+      const projects = await ProjectService.getProjectsByCompanyId(companyId);
+      if (!projects || projects.length === 0) {
+        return res.status(404).json({ error: "Empresa no encontrada" });
+      }
+      res.status(200).json(projects);
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  },
+);
 module.exports = projectRoutes;

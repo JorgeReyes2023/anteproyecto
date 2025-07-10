@@ -11,14 +11,20 @@ export class ReadingService {
 
   getReadingsBySensorTypeId(sensorTypeId: number) {
     return this.generalService.getData(
-      `sensors/types/${sensorTypeId}/readings`
+      `sensors/readings/type/${sensorTypeId}/`
     );
   }
 
-  streamReadings(sensorTypeId: number) {
+  getReadingsBySensorIdAndType(sensorId: number, typeId: number) {
+    return this.generalService.getData(
+      `sensors/readings/${sensorId}/${typeId}`
+    );
+  }
+
+  streamReadings(sensorId: number, typeId: number) {
     return interval(this.refreshMs).pipe(
       startWith(0),
-      switchMap(() => this.getReadingsBySensorTypeId(sensorTypeId))
+      switchMap(() => this.getReadingsBySensorIdAndType(sensorId, typeId))
     );
   }
 }

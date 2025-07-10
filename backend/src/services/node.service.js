@@ -160,6 +160,36 @@ class NodeService {
       throw new Error(`Error al obtener los nodos: ${error.message}`);
     }
   }
+
+  /**
+   * Obtiene todos los nodos asociados a un proyecto específico.
+   *
+   * @param {number|string} projectId - ID del proyecto.
+   * @returns {Promise<Array<Object>>} Lista de nodos asociados al proyecto.
+   * @throws {Error} Si ocurre un error al obtener los nodos.
+   */
+  static async getNodesByProjectId(projectId) {
+    try {
+      const { value, error } = nodeSchemaId.validate(
+        { id: projectId },
+        { convert: true },
+      );
+      if (error) throw new Error(`Error de validación: ${error.message}`);
+      const nodes = await NodeModel.getNodesByProjectId(value.id);
+      return nodes.map((node) => ({
+        id: node.id,
+        name: node.name,
+        status: State[node.status],
+        projectId: node.project_id,
+        project: node.projects || [],
+        sensors: node.sensors || [],
+      }));
+    } catch (error) {
+      throw new Error(
+        `Error al obtener los nodos del proyecto: ${error.message}`,
+      );
+    }
+  }
 }
 
 module.exports = { NodeService };

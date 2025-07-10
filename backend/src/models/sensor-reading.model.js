@@ -16,6 +16,19 @@ class SensorReadingModel {
       take: 100,
     });
   }
+
+  static async getReadingsBySensorIdAndType(sensorId, typeId) {
+    return prisma.sensor_readings.findMany({
+      where: {
+        sensor_id: sensorId,
+        type_id: typeId,
+      },
+      orderBy: {
+        timestamp: "desc",
+      },
+      take: 100,
+    });
+  }
 }
 
 module.exports = { SensorReadingModel };
