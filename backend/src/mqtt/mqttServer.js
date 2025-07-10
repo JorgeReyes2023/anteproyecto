@@ -1,11 +1,15 @@
 const mqtt = require("mqtt");
 const { PrismaClient } = require("@prisma/client");
 const dotenv = require("dotenv");
-const { broadcastAlert } = require("../app"); // Importar la función de broadcast
+const { createClient } = require("redis");
 
 dotenv.config();
 const prisma = new PrismaClient();
 const client = mqtt.connect(process.env.MQTTSERVER);
+
+// === Función para enviar alertas a través de Redis ===
+const redisPublisher = createClient();
+redisPublisher.connect();
 
 // === CACHÉS ===
 const topicsCache = new Map(); // topicBase => topicBase
@@ -149,14 +153,14 @@ async function cleanTopicsCache() {
 
   for (const cachedTopic of topicsCache.keys()) {
     if (!validTopics.has(cachedTopic)) {
-      console.log(`🧹 Eliminando topic obsoleto: ${cachedTopic}`);
+      console.log(`Eliminando topic obsoleto: ${cachedTopic}`);
       client.unsubscribe(cachedTopic);
       topicsCache.delete(cachedTopic);
     }
   }
 }
 
-// === Procesamiento de lecturas (cada 500ms) ===
+// === Procesamiento de lecturas (cada 400ms) ===
 setInterval(async () => {
   if (readingQueue.length === 0) return;
 
@@ -213,12 +217,13 @@ setInterval(async () => {
           timestamp: new Date(),
         };
 
-        broadcastAlert(alert);
+        console.log("Alerta generada y enviada:", alert);
+        await redisPublisher.publish("alerts", JSON.stringify(alert));
         console.log(`Alarma generada: ${level.toUpperCase()} - ${message}`);
       }
     }),
   );
-}, 500);
+}, 400);
 
 // === Conexión al broker MQTT ===
 client.on("connect", async () => {
@@ -230,7 +235,7 @@ client.on("connect", async () => {
 setInterval(async () => {
   await generateTopicsFromDB(); // agregar nuevos
   await cleanTopicsCache(); // eliminar obsoletos
-}, 60000); // cada 1 minuto
+}, 3600000); // cada hora
 
 // === Procesar mensajes recibidos ===
 client.on("message", async (topic, message) => {

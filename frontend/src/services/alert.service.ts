@@ -21,6 +21,7 @@ export class AlertService {
       const eventSource = new EventSource('http://localhost:3000/sse/alerts');
 
       eventSource.onmessage = (event) => {
+        console.log('Nouveau message SSE:', event.data);
         const alert: Alert = JSON.parse(event.data);
         alert.read = false;
         alert.timestamp = new Date(alert.timestamp);

@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const dotenv = require("dotenv");
+const { createClient } = require("redis");
 
 const swaggerUi = require("swagger-ui-express");
 const swaggerSpec = require("./swagger");
@@ -17,9 +18,8 @@ const thresholdRoutes = require("./routes/threshold.routes");
 
 dotenv.config();
 
-const clients = []; // clients SSE conectados
-
 const app = express();
+
 app.use(cors());
 app.use(express.json());
 
@@ -46,26 +46,45 @@ app.use((err, req, res, next) => {
 // Puerto del servidor
 const PORT = process.env.PORT || 3000;
 
+const clients = []; // clientes SSE conectados
+
+// Inicializar SSE
 app.get("/sse/alerts", (req, res) => {
   res.setHeader("Content-Type", "text/event-stream");
   res.setHeader("Cache-Control", "no-cache");
   res.setHeader("Connection", "keep-alive");
-  res.flushHeaders();
 
   clients.push(res);
-  console.log("Cliente SSE conectado");
+  console.log("Client SSE connecté — Total:", clients.length);
+  res.write("data: Connected\n\n");
 
   req.on("close", () => {
-    console.log("Cliente SSE desconectado");
     clients.splice(clients.indexOf(res), 1);
+    console.log("Client SSE déconnecté — Reste:", clients.length);
   });
 });
 
+// Redis - subscriber
+const redisSubscriber = createClient();
+
+redisSubscriber.on("error", (err) => {
+  console.error("Redis connection error:", err);
+});
+
+redisSubscriber
+  .connect()
+  .then(() => {
+    redisSubscriber.subscribe("alerts", (message) => {
+      const alert = JSON.parse(message);
+      const data = `data: ${JSON.stringify(alert)}\n\n`;
+      clients.forEach((client, i) => {
+        console.log(`Enviando a cliente #${i + 1}`);
+        client.write(data);
+      });
+    });
+  })
+  .catch((err) => {
+    console.error("Failed to connect to Redis:", err);
+  });
+
 app.listen(PORT, () => console.log(`Servidor corriendo en puerto ${PORT}`));
-
-function broadcastAlert(alert) {
-  const data = `data: ${JSON.stringify(alert)}\n\n`;
-  clients.forEach((client) => client.write(data));
-}
-
-module.exports = { app, broadcastAlert };
