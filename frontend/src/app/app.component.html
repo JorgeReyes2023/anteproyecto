@@ -19,7 +19,9 @@
   <!-- user info -->
   <div class="user-info" *ngIf="user$ | async as user">
     <span class="user-name">{{ user.name }}</span>
-    <span class="user-role">{{ user.role }}</span>
+    <span class="user-role">{{
+      user.role === "admin" ? "Administrador" : "Usuario"
+    }}</span>
     <!-- logout -->
     <span
       class="user-icon"

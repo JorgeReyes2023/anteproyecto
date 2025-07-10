@@ -11,7 +11,7 @@ export const roleGuard = (allowedRoles: string[]): CanActivateFn => {
 
     return auth.verifyToken().pipe(
       switchMap((response) => {
-        // If verifyToken fails, error handler in tap will handle redirect
+        // Si verifyToken falla, el manejador de errores en tap se encargará de la redirección
         const user = auth.getCurrentUser();
         if (!user || !allowedRoles.includes(user.role)) {
           router.navigate(['/unauthorized']);

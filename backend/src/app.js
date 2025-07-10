@@ -49,7 +49,7 @@ const PORT = process.env.PORT || 3000;
 
 const clients = []; // clientes SSE conectados
 
-// Inicializar SSE
+// Inicializar SSE - Server-Sent Events
 app.get("/sse/alerts", authenticate, (req, res) => {
   res.setHeader("Content-Type", "text/event-stream");
   res.setHeader("Cache-Control", "no-cache");

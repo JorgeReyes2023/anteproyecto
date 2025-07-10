@@ -52,7 +52,6 @@ export class ProjectsDataComponent implements OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (projects) => {
-          console.log('Fetched projects:', projects);
           this.projects = projects;
         },
         error: (err) => {
@@ -96,12 +95,12 @@ export class ProjectsDataComponent implements OnDestroy {
     }
     this.projectService.createProject(project).subscribe({
       next: () => {
-        this.alertService.success('Project created successfully');
+        this.alertService.success('Proyecto creado exitosamente.');
         this.fetchProjects();
       },
       error: (err) => {
         console.error('Error creating project:', err);
-        this.alertService.error('Failed to create project');
+        this.alertService.error('Error al crear el proyecto.');
       },
     });
   }
@@ -113,12 +112,12 @@ export class ProjectsDataComponent implements OnDestroy {
     }
     this.projectService.updateProject(project.id, project).subscribe({
       next: () => {
-        this.alertService.success('Project updated successfully');
+        this.alertService.success('Proyecto actualizado exitosamente.');
         this.fetchProjects();
       },
       error: (err) => {
         console.error('Error updating project:', err);
-        this.alertService.error('Failed to update project');
+        this.alertService.error('Error al actualizar el proyecto.');
       },
     });
   }
@@ -130,12 +129,12 @@ export class ProjectsDataComponent implements OnDestroy {
     }
     this.projectService.deleteProject(project.id).subscribe({
       next: () => {
-        this.alertService.success('Project deleted successfully');
+        this.alertService.success('Proyecto eliminado exitosamente.');
         this.fetchProjects();
       },
       error: (err) => {
         console.error('Error deleting project:', err);
-        this.alertService.error('Failed to delete project');
+        this.alertService.error('Error al eliminar el proyecto.');
       },
     });
   }
