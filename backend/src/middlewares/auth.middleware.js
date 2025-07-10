@@ -1,5 +1,7 @@
 const jwt = require("jsonwebtoken");
 
+// Middleware para autenticar y autorizar usuarios
+// Verifica el token JWT y asigna el usuario al objeto de solicitud
 const authenticate = (req, res, next) => {
   const authHeader = req.headers.authorization;
   if (!authHeader) return res.status(401).json({ error: "Token ausente" });
@@ -18,6 +20,8 @@ const authenticate = (req, res, next) => {
   }
 };
 
+// Middleware para autorizar acceso de administrador
+// Verifica que el usuario tenga el rol de administrador
 const authorizeAdmin = (req, res, next) => {
   if (!req.user || req.user.role !== "admin") {
     return res

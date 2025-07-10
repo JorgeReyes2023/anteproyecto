@@ -9,6 +9,7 @@ import { CompaniesDataComponent } from '../components/companies-data/companies-d
 import { ProjectsDataComponent } from '../components/projects-data/projects-data.component';
 import { NodesDataComponent } from '../components/nodes-data/nodes-data.component';
 import { SensorDetailsComponent } from '../components/sensor-details/sensor-details.component';
+import { AlertsDataComponent } from '../components/alerts-data/alerts-data.component';
 import { UnauthorizedComponent } from '../components/unauthorized/unauthorized.component';
 
 export const routes: Routes = [
@@ -52,6 +53,11 @@ export const routes: Routes = [
     path: 'sensor/:id',
     component: SensorDetailsComponent,
     canActivate: [roleGuard(['admin'])],
+  },
+  {
+    path: 'alerts',
+    component: AlertsDataComponent,
+    canActivate: [roleGuard(['admin', 'user'])],
   },
   {
     path: 'unauthorized',

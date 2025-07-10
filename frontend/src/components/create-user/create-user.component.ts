@@ -88,9 +88,7 @@ export class createUserComponent {
     }
     this.authService.register(userData).subscribe({
       next: (response) => {
-        this.alertService.success(
-          `Usuario ${response.name} creado exitosamente.`
-        );
+        this.alertService.success(`Usuario creado exitosamente.`);
       },
       error: (error) => {
         this.alertService.error('Error al crear el usuario.');
