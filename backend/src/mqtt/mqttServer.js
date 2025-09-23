@@ -5,7 +5,11 @@ const { createClient } = require("redis");
 
 dotenv.config();
 const prisma = new PrismaClient();
-const client = mqtt.connect(process.env.MQTTSERVER);
+const client = mqtt.connect(process.env.MQTTSERVER, {
+  clientId: process.env.CLIENTID,
+  username: process.env.USERNAME,
+  password: process.env.PASSWORD_MQ
+});
 
 // === Función para enviar alertas a través de Redis ===
 const redisPublisher = createClient({
