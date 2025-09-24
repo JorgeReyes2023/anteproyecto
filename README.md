@@ -48,7 +48,7 @@ Sistema web que permite la gestión de empresas, proyectos, nodos y sensores IoT
    cd backend  
    npm install  
    npx prisma generate  
-   npx prisma migrate dev --name init  
+   npx prisma migrate dev --name init  ## Desde --name init solo se usa cuando esta en blanco. Cuando ya se tiene informacion solo hasta dev
    npm run dev
 ```
 3. Frontend
@@ -58,6 +58,14 @@ Sistema web que permite la gestión de empresas, proyectos, nodos y sensores IoT
    ng serve
 ```
 ---
+
+4. Redis
+```bash
+
+
+
+```
+  
 
 ## 🔐 Variables de entorno `.env`
 
