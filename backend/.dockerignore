@@ -1,0 +1,45 @@
+# ===== BACKEND DOCKERIGNORE =====
+
+# Node modules
+node_modules/
+npm-debug.log*
+
+# Build artifacts
+dist/
+build/
+
+# Coverage and tests
+coverage/
+*.test.js
+tests/
+
+# Logs
+logs/
+*.log
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Git
+.git/
+.gitignore
+
+# Documentation
+docs/
+README.md
+
+# Temporary files
+tmp/
+temp/
