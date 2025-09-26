@@ -1,4 +1,4 @@
-const { generateToken, verifyToken } = require("./token.service");
+const { generateToken, verifyToken } = require("./token.service").default;
 const bcrypt = require("bcryptjs");
 
 const { UserModel } = require("../models/user.model");

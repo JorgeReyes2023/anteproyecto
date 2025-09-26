@@ -1,4 +1,4 @@
-const Joi = require("joi");
+import { object, number, string, array } from "joi";
 
 const statusMap = {
   activo: "ACTIVE",
@@ -8,16 +8,13 @@ const statusMap = {
 };
 
 // ---- Sensor Reading Type Schema ----
-const SensorReadingTypeSchema = Joi.object({
-  id: Joi.number().integer().positive().required(),
-  name: Joi.string()
-    .custom((value, helpers) => {
+const SensorReadingTypeSchema = object({
+  id: number().integer().positive().required(),
+  name: string()
+    .custom((value) => {
       const normalized = value
         .normalize("NFD")
-        .replace(
-          /[\u0300-\u036f\u1AB0-\u1AFF\u1DC0-\u1DFF\u20D0-\u20FF\uFE20-\uFE2F]/g,
-          "",
-        )
+        .replace(/[\u0300-\u036f]/g, "")
         .toLowerCase()
         .trim();
       return normalized;
@@ -25,19 +22,16 @@ const SensorReadingTypeSchema = Joi.object({
     .min(2)
     .max(255)
     .required(),
-  unit: Joi.string().min(1).max(50).lowercase().required(),
-  description: Joi.string().min(5).max(500).allow("", null),
+  unit: string().min(1).max(50).lowercase().required(),
+  description: string().min(5).max(500).allow("", null),
 });
 
-const SensorReadingTypeSchemaWithoutId = Joi.object({
-  name: Joi.string()
-    .custom((value, helpers) => {
+const SensorReadingTypeSchemaWithoutId = object({
+  name: string()
+    .custom((value) => {
       const normalized = value
         .normalize("NFD")
-        .replace(
-          /[\u0300-\u036f\u1AB0-\u1AFF\u1DC0-\u1DFF\u20D0-\u20FF\uFE20-\uFE2F]/g,
-          "",
-        )
+        .replace(/[\u0300-\u036f]/g, "")
         .toLowerCase()
         .trim();
       return normalized;
@@ -45,16 +39,16 @@ const SensorReadingTypeSchemaWithoutId = Joi.object({
     .min(2)
     .max(255)
     .required(),
-  unit: Joi.string().min(1).max(50).lowercase().required(),
-  description: Joi.string().min(5).max(500).allow("", null),
+  unit: string().min(1).max(50).lowercase().required(),
+  description: string().min(5).max(500).allow("", null),
 });
 
 // ---- Sensor Supported Type Schema ----
-const sensorSupportedTypeSchema = Joi.object({
-  id: Joi.number().integer().positive(),
-  name: Joi.string().min(2).max(255).required(),
-  nodeId: Joi.number().integer().positive().allow(null),
-  status: Joi.string()
+const sensorSupportedTypeSchema = object({
+  id: number().integer().positive(),
+  name: string().min(2).max(255).required(),
+  nodeId: number().integer().positive().allow(null),
+  status: string()
     .custom((value, helpers) => {
       if (["ACTIVE", "INACTIVE", "MAINTENANCE", "ERROR"].includes(value)) {
         return value;
@@ -65,30 +59,24 @@ const sensorSupportedTypeSchema = Joi.object({
       return helpers.error("any.invalid");
     })
     .default("INACTIVE"),
-  typeIds: Joi.array()
-    .items(Joi.number().integer().positive())
-    .min(0)
-    .required(),
+  typeIds: array().items(number().integer().positive()).min(0).required(),
 });
 
-const sensorSchemaId = Joi.object({
-  id: Joi.number().integer().positive().required(),
+const sensorSchemaId = object({
+  id: number().integer().positive().required(),
 });
 
-const attachingSensorsToNodeSchema = Joi.object({
-  idNode: Joi.number().integer().positive().required(),
-  sensorIds: Joi.array()
-    .items(Joi.number().integer().positive())
-    .min(0)
-    .required(),
+const attachingSensorsToNodeSchema = object({
+  idNode: number().integer().positive().required(),
+  sensorIds: array().items(number().integer().positive()).min(0).required(),
 });
 
-const getReadingsBySensorIdAndType = Joi.object({
-  idSensor: Joi.number().integer().positive().required(),
-  idType: Joi.number().integer().positive().required(),
+const getReadingsBySensorIdAndType = object({
+  idSensor: number().integer().positive().required(),
+  idType: number().integer().positive().required(),
 });
 
-module.exports = {
+export default {
   sensorSupportedTypeSchema,
   sensorSchemaId,
   SensorReadingTypeSchema,

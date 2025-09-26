@@ -1,10 +1,7 @@
 const { Router } = require("express");
 
 const { NodeService } = require("../services/node.service");
-const {
-  authenticate,
-  authorizeAdmin,
-} = require("../middlewares/auth.middleware");
+const { authenticate } = require("../middlewares/auth.middleware");
 const nodeRoutes = Router();
 
 nodeRoutes.use(authenticate);

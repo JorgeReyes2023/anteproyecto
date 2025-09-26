@@ -15,6 +15,7 @@ const nodeRoutes = require("./routes/node.routes");
 const alertRoutes = require("./routes/alert.routes");
 const sensorRoutes = require("./routes/sensor.routes");
 const thresholdRoutes = require("./routes/threshold.routes");
+const healthRoutes = require("./routes/health.routes");
 const { authenticate } = require("./middlewares/auth.middleware");
 
 dotenv.config();
@@ -29,6 +30,7 @@ app.use("/docs", express.static(path.join(__dirname, "..", "docs")));
 app.use("/coverage", express.static(path.join(__dirname, "..", "coverage")));
 
 // Rutas
+app.use("/api", healthRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/companies", companyRoutes);
@@ -39,7 +41,7 @@ app.use("/api/sensors", sensorRoutes);
 app.use("/api/thresholds", thresholdRoutes);
 
 // Manejo de errores
-app.use((err, req, res, next) => {
+app.use((err, req, res) => {
   console.error(err.stack);
   res.status(500).json({ error: "Algo salió mal" });
 });

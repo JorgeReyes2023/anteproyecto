@@ -25,6 +25,7 @@ async function main() {
   //  Extraemos los datos actuales de la base de datos y eliminamos los campos id / created_at
   for (const table of tablesOrder) {
     const rows = await prisma[table].findMany();
+    // eslint-disable-next-line no-unused-vars
     tables[table] = rows.map(({ id, created_at, ...rest }) => rest);
   }
 
