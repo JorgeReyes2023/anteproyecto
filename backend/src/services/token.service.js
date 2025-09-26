@@ -1,4 +1,4 @@
-import { sign, verify } from "jsonwebtoken";
+const { sign, verify } = require("jsonwebtoken");
 
 /**
  * Genera un token para un usuario dado.
