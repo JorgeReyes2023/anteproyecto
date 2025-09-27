@@ -57,10 +57,4 @@ client.on("offline", () => {
   console.warn("Client offline");
 });
 
-setTimeout(() => {
-  console.log("End of test");
-  client.end();
-  process.exit(0);
-}, 30000);
-
 console.log("Attempting to connect...");
