@@ -103,7 +103,7 @@ model nodos {
   n_modificado_en DateTime?
   n_borrado_en DateTime?
   
-  proyectos    proyectos? @relation(fields: [n_proyecto_id], references: [p_id], onDelete: NoAction, onUpdate: NoAction)
+  proyectos    proyectos? @relation(fields: [n_proyecto_id], references: [p_id], onDelete: SetNull, onUpdate: NoAction)
   sensores     sensores[]
   datos_crudos datos_crudos[]
 
@@ -122,7 +122,7 @@ model sensores {
   alertas           alertas[]
   lecturas_sensores lecturas_sensores[]
   umbrales          umbrales[]
-  nodos             nodos?                 @relation(fields: [s_nodo_id], references: [n_id], onDelete: NoAction, onUpdate: NoAction)
+  nodos             nodos?                 @relation(fields: [s_nodo_id], references: [n_id], onDelete: SetNull, onUpdate: NoAction)
   tipos_soportados  tipos_sensor_soportados[]
 
   @@schema("iot")
@@ -163,14 +163,14 @@ model lecturas_sensores {
 }
 
 model umbrales {
-  u_id        BigInt   @id @default(autoincrement())
-  u_sensor_id BigInt
-  u_tipo_id   BigInt
-  u_valor_min Float?
-  u_valor_max Float?
-  u_creado_en  DateTime?  @default(now()) @db.Timestamp(6)
-  u_modificado_en DateTime?
-  u_borrado_en DateTime?
+  um_id        BigInt   @id @default(autoincrement())
+  um_sensor_id BigInt
+  um_tipo_id   BigInt
+  um_valor_min Float?
+  um_valor_max Float?
+  um_creado_en  DateTime?  @default(now()) @db.Timestamp(6)
+  um_modificado_en DateTime?
+  um_borrado_en DateTime?
 
   sensores              sensores?              @relation(fields: [u_sensor_id], references: [s_id], onDelete: NoAction, onUpdate: NoAction)
   tipos_lectura_sensor  tipos_lectura_sensor   @relation(fields: [u_tipo_id], references: [tls_id], onDelete: NoAction, onUpdate: NoAction)
