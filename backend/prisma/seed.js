@@ -8,42 +8,52 @@ async function main() {
       {
         e_nombre: "EcuadorTech S.A.",
         e_direccion: "Av. Amazonas 1345, Quito",
+        e_numero_tel: "022123456",
       },
       {
         e_nombre: "Andes Soluciones",
         e_direccion: "Calle Chile y Aguirre, Guayaquil",
+        e_numero_tel: "042123456",
       },
       {
         e_nombre: "Control Climático Loja",
         e_direccion: "Av. Universitaria y Av. Manuel Agustín Aguirre, Loja",
+        e_numero_tel: "072123456",
       },
       {
         e_nombre: "Innovaciones Tungurahua",
         e_direccion: "Av. Cevallos y Montalvo, Ambato",
+        e_numero_tel: "032123456",
       },
       {
         e_nombre: "ClimaSmart S.A.",
         e_direccion: "Av. Remigio Crespo y Cornelio Merchán, Cuenca",
+        e_numero_tel: "072123456",
       },
       {
         e_nombre: "SensorData Ecuador",
         e_direccion: "Av. 6 de Diciembre y Naciones Unidas, Quito",
+        e_numero_tel: "022123456",
       },
       {
         e_nombre: "ElectroCloud Systems",
         e_direccion: "Malecón Simón Bolívar y 9 de Octubre, Guayaquil",
+        e_numero_tel: "042123456",
       },
       {
         e_nombre: "Carchi Electrónica",
         e_direccion: "Av. Bolívar y Av. Carchi, Tulcán",
+        e_numero_tel: "062123456",
       },
       {
         e_nombre: "IoT Solutions Riobamba",
         e_direccion: "Av. Daniel León Borja y Av. de los Shyris, Riobamba",
+        e_numero_tel: "032123456",
       },
       {
         e_nombre: "Ambiente Inteligente",
         e_direccion: "Av. 10 de Agosto y Av. El Inca, Quito",
+        e_numero_tel: "022123456",
       },
     ],
     skipDuplicates: true,
@@ -66,13 +76,13 @@ async function main() {
         n_nombre: "Sistema hibernadero",
         n_ubicacion: "planta baja",
         n_proyecto_id: null,
-        n_estado: "MAINTENANCE",
+        n_estado: "MANTENIMIENTO",
       },
       {
-        n_nombre: "Sistema fotovoltaico",
+        n_nombre: "Sistema foltovoltaico",
         n_ubicacion: "loc node1",
         n_proyecto_id: 1,
-        n_estado: "MAINTENANCE",
+        n_estado: "MANTENIMIENTO",
       },
     ],
     skipDuplicates: true,
@@ -156,27 +166,27 @@ async function main() {
       {
         s_nombre: "ESP32-DHT11-SIMULADO",
         s_node_id: 1,
-        s_estado: "ACTIVE",
+        s_estado: "ACTIVO",
       },
       {
         s_nombre: "BH-1750",
         s_node_id: null,
-        s_estado: "INACTIVE",
+        s_estado: "INACTIVO",
       },
       {
         s_nombre: "INA-219",
         s_node_id: null,
-        s_estado: "ACTIVE",
+        s_estado: "ACTIVO",
       },
       {
         s_nombre: "ACS-712",
         s_node_id: 2,
-        s_estado: "ACTIVE",
+        s_estado: "ACTIVO",
       },
       {
         s_nombre: "PIRANOMETRO-1",
         s_node_id: 2,
-        s_estado: "ACTIVE",
+        s_estado: "ACTIVO",
       },
     ],
     skipDuplicates: true,
@@ -479,28 +489,28 @@ async function main() {
   await prisma.tipos_sensor_soportados.createMany({
     data: [
       {
-        u_sensor_id: 1,
-        u_tipo_id: 1,
+        tss_sensor_id: 1,
+        tss_tipo_id: 1,
       },
       {
-        u_sensor_id: 1,
-        u_tipo_id: 2,
+        tss_sensor_id: 1,
+        tss_tipo_id: 2,
       },
       {
-        u_sensor_id: 2,
-        u_tipo_id: 3,
+        tss_sensor_id: 2,
+        tss_tipo_id: 3,
       },
       {
-        u_sensor_id: 3,
-        u_tipo_id: 4,
+        tss_sensor_id: 3,
+        tss_tipo_id: 4,
       },
       {
-        u_sensor_id: 4,
-        u_tipo_id: 5,
+        tss_sensor_id: 4,
+        tss_tipo_id: 5,
       },
       {
-        u_sensor_id: 5,
-        u_tipo_id: 6,
+        tss_sensor_id: 5,
+        tss_tipo_id: 6,
       },
     ],
     skipDuplicates: true,
