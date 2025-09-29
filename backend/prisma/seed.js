@@ -1,1956 +1,514 @@
-const { PrismaClient } = require('@prisma/client');
+const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
 async function main() {
-
   // Inserción de datos
-  await prisma.companies.createMany({
+  await prisma.empresas.createMany({
     data: [
-    {
-        "name": "EcuadorTech S.A.",
-        "address": "Av. Amazonas 1345, Quito"
-    },
-    {
-        "name": "Andes Soluciones",
-        "address": "Calle Chile y Aguirre, Guayaquil"
-    },
-    {
-        "name": "Control Climático Loja",
-        "address": "Av. Universitaria y Av. Manuel Agustín Aguirre, Loja"
-    },
-    {
-        "name": "Innovaciones Tungurahua",
-        "address": "Av. Cevallos y Montalvo, Ambato"
-    },
-    {
-        "name": "ClimaSmart S.A.",
-        "address": "Av. Remigio Crespo y Cornelio Merchán, Cuenca"
-    },
-    {
-        "name": "SensorData Ecuador",
-        "address": "Av. 6 de Diciembre y Naciones Unidas, Quito"
-    },
-    {
-        "name": "ElectroCloud Systems",
-        "address": "Malecón Simón Bolívar y 9 de Octubre, Guayaquil"
-    },
-    {
-        "name": "Carchi Electrónica",
-        "address": "Av. Bolívar y Av. Carchi, Tulcán"
-    },
-    {
-        "name": "IoT Solutions Riobamba",
-        "address": "Av. Daniel León Borja y Av. de los Shyris, Riobamba"
-    },
-    {
-        "name": "Ambiente Inteligente",
-        "address": "Av. 10 de Agosto y Av. El Inca, Quito"
-    }
-],
-    skipDuplicates: true
+      {
+        e_nombre: "EcuadorTech S.A.",
+        e_direccion: "Av. Amazonas 1345, Quito",
+      },
+      {
+        e_nombre: "Andes Soluciones",
+        e_direccion: "Calle Chile y Aguirre, Guayaquil",
+      },
+      {
+        e_nombre: "Control Climático Loja",
+        e_direccion: "Av. Universitaria y Av. Manuel Agustín Aguirre, Loja",
+      },
+      {
+        e_nombre: "Innovaciones Tungurahua",
+        e_direccion: "Av. Cevallos y Montalvo, Ambato",
+      },
+      {
+        e_nombre: "ClimaSmart S.A.",
+        e_direccion: "Av. Remigio Crespo y Cornelio Merchán, Cuenca",
+      },
+      {
+        e_nombre: "SensorData Ecuador",
+        e_direccion: "Av. 6 de Diciembre y Naciones Unidas, Quito",
+      },
+      {
+        e_nombre: "ElectroCloud Systems",
+        e_direccion: "Malecón Simón Bolívar y 9 de Octubre, Guayaquil",
+      },
+      {
+        e_nombre: "Carchi Electrónica",
+        e_direccion: "Av. Bolívar y Av. Carchi, Tulcán",
+      },
+      {
+        e_nombre: "IoT Solutions Riobamba",
+        e_direccion: "Av. Daniel León Borja y Av. de los Shyris, Riobamba",
+      },
+      {
+        e_nombre: "Ambiente Inteligente",
+        e_direccion: "Av. 10 de Agosto y Av. El Inca, Quito",
+      },
+    ],
+    skipDuplicates: true,
   });
 
-  await prisma.projects.createMany({
+  await prisma.proyectos.createMany({
     data: [
-    {
-        "name": "proyecto test",
-        "description": "dev data",
-        "company_id": 1
-    }
-],
-    skipDuplicates: true
+      {
+        p_nombre: "proyecto test",
+        p_descripcion: "dev data",
+        p_empresa_id: 1,
+      },
+    ],
+    skipDuplicates: true,
   });
 
-  await prisma.nodes.createMany({
+  await prisma.nodos.createMany({
     data: [
-    {
-        "name": "Sistema hibernadero",
-        "location": "planta baja",
-        "project_id": null,
-        "status": "MAINTENANCE"
-    },
-    {
-        "name": "Sistema foltovoltaico",
-        "location": "loc node1",
-        "project_id": 1,
-        "status": "MAINTENANCE"
-    }
-],
-    skipDuplicates: true
+      {
+        n_nombre: "Sistema hibernadero",
+        n_ubicacion: "planta baja",
+        n_proyecto_id: null,
+        n_estado: "MAINTENANCE",
+      },
+      {
+        n_nombre: "Sistema foltovoltaico",
+        n_ubicacion: "loc node1",
+        n_proyecto_id: 1,
+        n_estado: "MAINTENANCE",
+      },
+    ],
+    skipDuplicates: true,
   });
 
-  await prisma.sensor_reading_types.createMany({
+  await prisma.tipos_lectura_sensor.createMany({
     data: [
-    {
-        "name": "brillo",
-        "unit": "lux",
-        "description": null
-    },
-    {
-        "name": "corriente",
-        "unit": "A",
-        "description": "Mide la corriente generada por los paneles"
-    },
-    {
-        "name": "voltaje",
-        "unit": "V",
-        "description": "Mide la tension entre terminales"
-    },
-    {
-        "name": "irradiancia",
-        "unit": "W/m²",
-        "description": "Mide la energia solar incidente en una area"
-    },
-    {
-        "name": "temperatura",
-        "unit": "C°",
-        "description": "Temperatura ambiente medida por el sensor, expresada en grados Celsius (°C)."
-    },
-    {
-        "name": "humedad",
-        "unit": "%",
-        "description": "Humedad relativa del aire"
-    }
-],
-    skipDuplicates: true
+      {
+        tls_nombre: "brillo",
+        tls_unidad: "lux",
+        tls_descripcion: null,
+      },
+      {
+        tls_nombre: "corriente",
+        tls_unidad: "A",
+        tls_descripcion: "Mide la corriente generada por los paneles",
+      },
+      {
+        tls_nombre: "voltaje",
+        tls_unidad: "V",
+        tls_descripcion: "Mide la tension entre terminales",
+      },
+      {
+        tls_nombre: "irradiancia",
+        tls_unidad: "W/m²",
+        tls_descripcion: "Mide la energia solar incidente en una area",
+      },
+      {
+        tls_nombre: "temperatura",
+        tls_unidad: "C°",
+        tls_descripcion:
+          "Temperatura ambiente medida por el sensor, expresada en grados Celsius (°C).",
+      },
+      {
+        tls_nombre: "humedad",
+        tls_unidad: "%",
+        tls_descripcion: "Humedad relativa del aire",
+      },
+    ],
+    skipDuplicates: true,
   });
 
-  await prisma.user_roles.createMany({
+  await prisma.roles_usuario.createMany({
     data: [
-    {
-        "name": "admin",
-        "description": null
-    },
-    {
-        "name": "user",
-        "description": null
-    }
-],
-    skipDuplicates: true
+      {
+        ru_nombre: "admin",
+        ru_descripcion: null,
+      },
+      {
+        ru_nombre: "user",
+        ru_descripcion: null,
+      },
+    ],
+    skipDuplicates: true,
   });
 
-  await prisma.users.createMany({
+  await prisma.usuarios.createMany({
     data: [
-    {
-        "name": "admin-dev",
-        "email": "admin@email.com",
-        "password": "$2y$10$K3Pfj0CiBqukj0qtIsQLA./2SZLG5Z94cg9pNhuUTvXcPXa0m/uM6",
-        "user_role_id": 1,
-        "company_id": null
-    },
-    {
-        "name": "user-dev",
-        "email": "user@email.com",
-        "password": "$2y$10$ya31jyNfYQnDSu1qUVII.exGNT05GBf773lXrwk7JCLVYvfw9zStq",
-        "user_role_id": 2,
-        "company_id": 1
-    }
-],
-    skipDuplicates: true
+      {
+        u_nombre: "admin-dev",
+        u_email: "admin@email.com",
+        u_contrasena:
+          "$2y$10$K3Pfj0CiBqukj0qtIsQLA./2SZLG5Z94cg9pNhuUTvXcPXa0m/uM6",
+        u_rol_id: 1,
+        u_empresa_id: null,
+      },
+      {
+        u_nombre: "user-dev",
+        u_email: "user@email.com",
+        u_contrasena:
+          "$2y$10$ya31jyNfYQnDSu1qUVII.exGNT05GBf773lXrwk7JCLVYvfw9zStq",
+        u_rol_id: 2,
+        u_empresa_id: 1,
+      },
+    ],
+    skipDuplicates: true,
   });
 
-  await prisma.sensors.createMany({
+  await prisma.sensores.createMany({
     data: [
-    {
-        "name": "ESP32-DHT11-SIMULADO",
-        "node_id": 1,
-        "status": "ACTIVE"
-    },
-    {
-        "name": "BH-1750",
-        "node_id": null,
-        "status": "INACTIVE"
-    },
-    {
-        "name": "INA-219",
-        "node_id": null,
-        "status": "ACTIVE"
-    },
-    {
-        "name": "ACS-712",
-        "node_id": 2,
-        "status": "ACTIVE"
-    },
-    {
-        "name": "PIRANOMETRO-1",
-        "node_id": 2,
-        "status": "ACTIVE"
-    }
-],
-    skipDuplicates: true
+      {
+        s_nombre: "ESP32-DHT11-SIMULADO",
+        s_node_id: 1,
+        s_estado: "ACTIVE",
+      },
+      {
+        s_nombre: "BH-1750",
+        s_node_id: null,
+        s_estado: "INACTIVE",
+      },
+      {
+        s_nombre: "INA-219",
+        s_node_id: null,
+        s_estado: "ACTIVE",
+      },
+      {
+        s_nombre: "ACS-712",
+        s_node_id: 2,
+        s_estado: "ACTIVE",
+      },
+      {
+        s_nombre: "PIRANOMETRO-1",
+        s_node_id: 2,
+        s_estado: "ACTIVE",
+      },
+    ],
+    skipDuplicates: true,
   });
 
-  await prisma.sensor_readings.createMany({
+  await prisma.lecturas_sensores.createMany({
     data: [
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 24,
-        "timestamp": "2025-07-09T02:02:34.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 46,
-        "timestamp": "2025-07-09T02:02:34.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 25,
-        "timestamp": "2025-07-09T02:02:39.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 53,
-        "timestamp": "2025-07-09T02:02:39.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 30,
-        "timestamp": "2025-07-09T02:02:44.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 39,
-        "timestamp": "2025-07-09T02:02:44.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 27,
-        "timestamp": "2025-07-09T02:02:49.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 54,
-        "timestamp": "2025-07-09T02:02:49.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 23,
-        "timestamp": "2025-07-09T02:02:54.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 37,
-        "timestamp": "2025-07-09T02:02:54.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 20,
-        "timestamp": "2025-07-09T02:02:59.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 41,
-        "timestamp": "2025-07-09T02:02:59.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 21,
-        "timestamp": "2025-07-09T02:03:04.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 33,
-        "timestamp": "2025-07-09T02:03:04.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 31,
-        "timestamp": "2025-07-09T02:03:09.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 40,
-        "timestamp": "2025-07-09T02:03:09.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 24,
-        "timestamp": "2025-07-09T02:03:14.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 44,
-        "timestamp": "2025-07-09T02:03:14.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 20,
-        "timestamp": "2025-07-09T02:03:19.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 40,
-        "timestamp": "2025-07-09T02:03:19.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 28,
-        "timestamp": "2025-07-09T02:03:24.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 34,
-        "timestamp": "2025-07-09T02:03:24.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 29,
-        "timestamp": "2025-07-09T02:03:30.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 31,
-        "timestamp": "2025-07-09T02:03:30.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 20,
-        "timestamp": "2025-07-09T02:03:35.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 38,
-        "timestamp": "2025-07-09T02:03:35.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 26,
-        "timestamp": "2025-07-09T02:03:40.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 41,
-        "timestamp": "2025-07-09T02:03:40.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 26,
-        "timestamp": "2025-07-09T02:03:45.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 34,
-        "timestamp": "2025-07-09T02:03:45.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 32,
-        "timestamp": "2025-07-09T02:03:50.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 39,
-        "timestamp": "2025-07-09T02:03:50.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 33,
-        "timestamp": "2025-07-09T02:03:55.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 53,
-        "timestamp": "2025-07-09T02:03:55.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 32,
-        "timestamp": "2025-07-09T02:04:00.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 56,
-        "timestamp": "2025-07-09T02:04:00.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 33,
-        "timestamp": "2025-07-09T02:04:05.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 42,
-        "timestamp": "2025-07-09T02:04:05.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 29,
-        "timestamp": "2025-07-09T02:04:10.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 41,
-        "timestamp": "2025-07-09T02:04:10.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 20,
-        "timestamp": "2025-07-09T02:04:15.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 56,
-        "timestamp": "2025-07-09T02:04:15.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 22,
-        "timestamp": "2025-07-09T02:04:20.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 33,
-        "timestamp": "2025-07-09T02:04:20.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 23,
-        "timestamp": "2025-07-09T02:04:25.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 47,
-        "timestamp": "2025-07-09T02:04:25.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 29,
-        "timestamp": "2025-07-09T02:04:30.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 44,
-        "timestamp": "2025-07-09T02:04:30.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 20,
-        "timestamp": "2025-07-09T02:04:35.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 56,
-        "timestamp": "2025-07-09T02:04:35.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 27,
-        "timestamp": "2025-07-09T02:04:40.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 45,
-        "timestamp": "2025-07-09T02:04:40.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 22,
-        "timestamp": "2025-07-09T02:04:45.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 49,
-        "timestamp": "2025-07-09T02:04:45.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 22,
-        "timestamp": "2025-07-09T02:04:50.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 30,
-        "timestamp": "2025-07-09T02:04:50.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 23,
-        "timestamp": "2025-07-09T02:04:55.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 46,
-        "timestamp": "2025-07-09T02:04:55.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 30,
-        "timestamp": "2025-07-09T02:05:00.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 39,
-        "timestamp": "2025-07-09T02:05:00.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 34,
-        "timestamp": "2025-07-09T02:05:05.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 35,
-        "timestamp": "2025-07-09T02:05:05.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 28,
-        "timestamp": "2025-07-09T02:05:10.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 53,
-        "timestamp": "2025-07-09T02:05:10.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 32,
-        "timestamp": "2025-07-09T02:05:15.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 30,
-        "timestamp": "2025-07-09T02:05:15.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 29,
-        "timestamp": "2025-07-09T02:05:20.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 36,
-        "timestamp": "2025-07-09T02:05:20.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 25,
-        "timestamp": "2025-07-09T02:05:25.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 43,
-        "timestamp": "2025-07-09T02:05:25.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 32,
-        "timestamp": "2025-07-09T02:05:30.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 47,
-        "timestamp": "2025-07-09T02:05:30.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 33,
-        "timestamp": "2025-07-09T02:05:35.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 46,
-        "timestamp": "2025-07-09T02:05:35.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 24,
-        "timestamp": "2025-07-09T02:05:40.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 49,
-        "timestamp": "2025-07-09T02:05:40.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 28,
-        "timestamp": "2025-07-09T02:05:45.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 32,
-        "timestamp": "2025-07-09T02:05:45.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 34,
-        "timestamp": "2025-07-09T02:05:50.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 49,
-        "timestamp": "2025-07-09T02:05:50.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 21,
-        "timestamp": "2025-07-09T02:05:55.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 52,
-        "timestamp": "2025-07-09T02:05:55.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 33,
-        "timestamp": "2025-07-09T02:06:00.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 34,
-        "timestamp": "2025-07-09T02:06:00.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 20,
-        "timestamp": "2025-07-09T02:06:05.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 56,
-        "timestamp": "2025-07-09T02:06:05.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 29,
-        "timestamp": "2025-07-09T02:06:10.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 30,
-        "timestamp": "2025-07-09T02:06:10.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 27,
-        "timestamp": "2025-07-09T02:06:15.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 34,
-        "timestamp": "2025-07-09T02:06:15.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 30,
-        "timestamp": "2025-07-09T02:06:20.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 54,
-        "timestamp": "2025-07-09T02:06:20.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 33,
-        "timestamp": "2025-07-09T02:06:25.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 40,
-        "timestamp": "2025-07-09T02:06:25.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 27,
-        "timestamp": "2025-07-09T02:06:30.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 49,
-        "timestamp": "2025-07-09T02:06:30.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 31,
-        "timestamp": "2025-07-09T02:06:35.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 30,
-        "timestamp": "2025-07-09T02:06:35.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 21,
-        "timestamp": "2025-07-09T02:06:40.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 32,
-        "timestamp": "2025-07-09T02:06:40.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 29,
-        "timestamp": "2025-07-09T02:06:45.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 59,
-        "timestamp": "2025-07-09T02:06:45.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 21,
-        "timestamp": "2025-07-09T02:06:50.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 42,
-        "timestamp": "2025-07-09T02:06:50.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 20,
-        "timestamp": "2025-07-09T02:06:55.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 34,
-        "timestamp": "2025-07-09T02:06:55.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 34,
-        "timestamp": "2025-07-09T02:07:00.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 32,
-        "timestamp": "2025-07-09T02:07:00.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 31,
-        "timestamp": "2025-07-09T02:07:05.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 59,
-        "timestamp": "2025-07-09T02:07:05.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 34,
-        "timestamp": "2025-07-09T02:07:10.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 31,
-        "timestamp": "2025-07-09T02:07:10.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 23,
-        "timestamp": "2025-07-09T02:07:15.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 46,
-        "timestamp": "2025-07-09T02:07:15.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 26,
-        "timestamp": "2025-07-09T02:07:20.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 47,
-        "timestamp": "2025-07-09T02:07:20.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 28,
-        "timestamp": "2025-07-09T02:07:25.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 46,
-        "timestamp": "2025-07-09T02:07:25.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 26,
-        "timestamp": "2025-07-09T02:07:30.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 51,
-        "timestamp": "2025-07-09T02:07:30.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 28,
-        "timestamp": "2025-07-09T02:07:35.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 37,
-        "timestamp": "2025-07-09T02:07:35.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 27,
-        "timestamp": "2025-07-09T02:07:40.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 47,
-        "timestamp": "2025-07-09T02:07:40.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 20,
-        "timestamp": "2025-07-09T02:07:45.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 38,
-        "timestamp": "2025-07-09T02:07:45.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 26,
-        "timestamp": "2025-07-09T02:07:50.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 47,
-        "timestamp": "2025-07-09T02:07:50.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 21,
-        "timestamp": "2025-07-09T02:07:55.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 52,
-        "timestamp": "2025-07-09T02:07:55.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 23,
-        "timestamp": "2025-07-09T02:08:00.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 31,
-        "timestamp": "2025-07-09T02:08:00.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 31,
-        "timestamp": "2025-07-09T02:08:05.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 56,
-        "timestamp": "2025-07-09T02:08:05.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 23,
-        "timestamp": "2025-07-09T02:08:10.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 40,
-        "timestamp": "2025-07-09T02:08:10.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 27,
-        "timestamp": "2025-07-09T02:08:15.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 44,
-        "timestamp": "2025-07-09T02:08:15.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 21,
-        "timestamp": "2025-07-09T02:08:20.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 59,
-        "timestamp": "2025-07-09T02:08:20.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 20,
-        "timestamp": "2025-07-09T02:08:25.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 54,
-        "timestamp": "2025-07-09T02:08:25.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 21,
-        "timestamp": "2025-07-09T02:08:30.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 53,
-        "timestamp": "2025-07-09T02:08:30.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 33,
-        "timestamp": "2025-07-09T02:08:35.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 52,
-        "timestamp": "2025-07-09T02:08:35.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 24,
-        "timestamp": "2025-07-09T02:08:40.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 55,
-        "timestamp": "2025-07-09T02:08:40.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 24,
-        "timestamp": "2025-07-09T02:08:45.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 39,
-        "timestamp": "2025-07-09T02:08:45.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 32,
-        "timestamp": "2025-07-09T02:08:50.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 33,
-        "timestamp": "2025-07-09T02:08:50.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 33,
-        "timestamp": "2025-07-09T02:08:55.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 57,
-        "timestamp": "2025-07-09T02:08:55.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 31,
-        "timestamp": "2025-07-09T02:09:00.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 45,
-        "timestamp": "2025-07-09T02:09:00.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 26,
-        "timestamp": "2025-07-09T02:09:05.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 43,
-        "timestamp": "2025-07-09T02:09:05.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 31,
-        "timestamp": "2025-07-09T02:09:10.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 42,
-        "timestamp": "2025-07-09T02:09:10.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 29,
-        "timestamp": "2025-07-09T02:09:15.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 40,
-        "timestamp": "2025-07-09T02:09:15.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 20,
-        "timestamp": "2025-07-09T02:09:20.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 34,
-        "timestamp": "2025-07-09T02:09:20.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 27,
-        "timestamp": "2025-07-09T02:09:25.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 31,
-        "timestamp": "2025-07-09T02:09:25.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 34,
-        "timestamp": "2025-07-09T02:09:30.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 52,
-        "timestamp": "2025-07-09T02:09:30.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 23,
-        "timestamp": "2025-07-09T02:09:35.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 46,
-        "timestamp": "2025-07-09T02:09:35.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 26,
-        "timestamp": "2025-07-09T02:09:40.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 59,
-        "timestamp": "2025-07-09T02:09:40.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 21,
-        "timestamp": "2025-07-09T02:09:45.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 45,
-        "timestamp": "2025-07-09T02:09:45.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 25,
-        "timestamp": "2025-07-09T02:09:50.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 52,
-        "timestamp": "2025-07-09T02:09:50.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 33,
-        "timestamp": "2025-07-09T02:09:55.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 50,
-        "timestamp": "2025-07-09T02:09:55.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 21,
-        "timestamp": "2025-07-09T02:10:00.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 56,
-        "timestamp": "2025-07-09T02:10:00.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 26,
-        "timestamp": "2025-07-09T02:10:05.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 57,
-        "timestamp": "2025-07-09T02:10:05.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 34,
-        "timestamp": "2025-07-09T02:10:10.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 42,
-        "timestamp": "2025-07-09T02:10:10.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 28,
-        "timestamp": "2025-07-09T02:10:15.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 59,
-        "timestamp": "2025-07-09T02:10:15.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 34,
-        "timestamp": "2025-07-09T02:10:20.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 49,
-        "timestamp": "2025-07-09T02:10:20.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 27,
-        "timestamp": "2025-07-09T02:10:25.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 49,
-        "timestamp": "2025-07-09T02:10:25.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 29,
-        "timestamp": "2025-07-09T02:10:30.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 38,
-        "timestamp": "2025-07-09T02:10:30.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 30,
-        "timestamp": "2025-07-09T02:10:35.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 30,
-        "timestamp": "2025-07-09T02:10:35.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 34,
-        "timestamp": "2025-07-09T02:10:40.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 43,
-        "timestamp": "2025-07-09T02:10:40.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 23,
-        "timestamp": "2025-07-09T02:10:45.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 47,
-        "timestamp": "2025-07-09T02:10:45.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 34,
-        "timestamp": "2025-07-09T02:10:51.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 55,
-        "timestamp": "2025-07-09T02:10:51.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 29,
-        "timestamp": "2025-07-09T02:10:56.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 36,
-        "timestamp": "2025-07-09T02:10:56.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 27,
-        "timestamp": "2025-07-09T02:11:01.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 45,
-        "timestamp": "2025-07-09T02:11:01.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 31,
-        "timestamp": "2025-07-09T02:11:06.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 51,
-        "timestamp": "2025-07-09T02:11:06.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 21,
-        "timestamp": "2025-07-09T02:11:11.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 30,
-        "timestamp": "2025-07-09T02:11:11.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 20,
-        "timestamp": "2025-07-09T02:11:16.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 50,
-        "timestamp": "2025-07-09T02:11:16.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 32,
-        "timestamp": "2025-07-09T02:11:21.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 50,
-        "timestamp": "2025-07-09T02:11:21.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 22,
-        "timestamp": "2025-07-09T02:11:26.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 37,
-        "timestamp": "2025-07-09T02:11:26.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 27,
-        "timestamp": "2025-07-09T02:11:31.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 48,
-        "timestamp": "2025-07-09T02:11:31.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 24,
-        "timestamp": "2025-07-09T02:11:36.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 53,
-        "timestamp": "2025-07-09T02:11:36.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 29,
-        "timestamp": "2025-07-09T02:11:41.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 58,
-        "timestamp": "2025-07-09T02:11:41.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 20,
-        "timestamp": "2025-07-09T02:11:46.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 40,
-        "timestamp": "2025-07-09T02:11:46.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 26,
-        "timestamp": "2025-07-09T02:11:51.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 39,
-        "timestamp": "2025-07-09T02:11:51.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 28,
-        "timestamp": "2025-07-09T02:11:56.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 34,
-        "timestamp": "2025-07-09T02:11:56.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 30,
-        "timestamp": "2025-07-09T02:12:01.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 40,
-        "timestamp": "2025-07-09T02:12:01.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 34,
-        "timestamp": "2025-07-09T02:12:06.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 50,
-        "timestamp": "2025-07-09T02:12:06.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 23,
-        "timestamp": "2025-07-09T02:12:11.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 31,
-        "timestamp": "2025-07-09T02:12:11.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 27,
-        "timestamp": "2025-07-09T02:12:16.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 59,
-        "timestamp": "2025-07-09T02:12:16.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 29,
-        "timestamp": "2025-07-09T02:12:21.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 44,
-        "timestamp": "2025-07-09T02:12:21.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 34,
-        "timestamp": "2025-07-09T02:12:26.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 56,
-        "timestamp": "2025-07-09T02:12:26.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 24,
-        "timestamp": "2025-07-09T02:12:31.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 38,
-        "timestamp": "2025-07-09T02:12:31.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 34,
-        "timestamp": "2025-07-09T02:12:36.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 33,
-        "timestamp": "2025-07-09T02:12:36.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 25,
-        "timestamp": "2025-07-09T02:12:41.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 50,
-        "timestamp": "2025-07-09T02:12:41.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 26,
-        "timestamp": "2025-07-09T02:12:46.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 43,
-        "timestamp": "2025-07-09T02:12:46.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 30,
-        "timestamp": "2025-07-09T02:12:51.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 52,
-        "timestamp": "2025-07-09T02:12:51.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 20,
-        "timestamp": "2025-07-09T02:12:56.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 47,
-        "timestamp": "2025-07-09T02:12:56.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 28,
-        "timestamp": "2025-07-09T02:13:01.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 57,
-        "timestamp": "2025-07-09T02:13:01.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 27,
-        "timestamp": "2025-07-09T02:13:06.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 49,
-        "timestamp": "2025-07-09T02:13:06.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 30,
-        "timestamp": "2025-07-09T02:13:11.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 41,
-        "timestamp": "2025-07-09T02:13:11.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 21,
-        "timestamp": "2025-07-09T02:13:16.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 30,
-        "timestamp": "2025-07-09T02:13:16.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 29,
-        "timestamp": "2025-07-09T02:13:21.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 33,
-        "timestamp": "2025-07-09T02:13:21.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 28,
-        "timestamp": "2025-07-09T02:13:26.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 49,
-        "timestamp": "2025-07-09T02:13:26.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 30,
-        "timestamp": "2025-07-09T02:13:31.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 59,
-        "timestamp": "2025-07-09T02:13:31.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 30,
-        "timestamp": "2025-07-09T02:13:36.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 57,
-        "timestamp": "2025-07-09T02:13:36.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 27,
-        "timestamp": "2025-07-09T02:13:41.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 39,
-        "timestamp": "2025-07-09T02:13:41.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 29,
-        "timestamp": "2025-07-09T02:13:46.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 33,
-        "timestamp": "2025-07-09T02:13:46.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 30,
-        "timestamp": "2025-07-09T02:13:51.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 31,
-        "timestamp": "2025-07-09T02:13:51.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 22,
-        "timestamp": "2025-07-09T02:13:56.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 44,
-        "timestamp": "2025-07-09T02:13:56.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 25,
-        "timestamp": "2025-07-09T02:14:01.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 41,
-        "timestamp": "2025-07-09T02:14:01.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 21,
-        "timestamp": "2025-07-09T02:14:06.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 32,
-        "timestamp": "2025-07-09T02:14:06.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 22,
-        "timestamp": "2025-07-09T02:14:11.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 40,
-        "timestamp": "2025-07-09T02:14:11.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "value": 23,
-        "timestamp": "2025-07-09T02:14:16.000Z"
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "value": 59,
-        "timestamp": "2025-07-09T02:14:16.000Z"
-    }
-],
-    skipDuplicates: true
+      {
+        ls_sensor_id: 1,
+        ls_tipo_id: 2,
+        ls_valor: 24,
+        ls_fecha: "2025-07-09T02:02:34.000Z",
+      },
+      {
+        ls_sensor_id: 1,
+        ls_tipo_id: 1,
+        ls_valor: 46,
+        ls_fecha: "2025-07-09T02:02:34.000Z",
+      },
+      {
+        ls_sensor_id: 1,
+        ls_tipo_id: 2,
+        ls_valor: 25,
+        ls_fecha: "2025-07-09T02:02:39.000Z",
+      },
+      {
+        ls_sensor_id: 1,
+        ls_tipo_id: 1,
+        ls_valor: 53,
+        ls_fecha: "2025-07-09T02:02:39.000Z",
+      },
+      {
+        ls_sensor_id: 1,
+        ls_tipo_id: 2,
+        ls_valor: 30,
+        ls_fecha: "2025-07-09T02:02:44.000Z",
+      },
+      {
+        ls_sensor_id: 1,
+        ls_tipo_id: 1,
+        ls_valor: 39,
+        ls_fecha: "2025-07-09T02:02:44.000Z",
+      },
+      {
+        ls_sensor_id: 1,
+        ls_tipo_id: 2,
+        ls_valor: 27,
+        ls_fecha: "2025-07-09T02:02:49.000Z",
+      },
+      {
+        ls_sensor_id: 1,
+        ls_tipo_id: 1,
+        ls_valor: 54,
+        ls_fecha: "2025-07-09T02:02:49.000Z",
+      },
+      {
+        ls_sensor_id: 1,
+        ls_tipo_id: 2,
+        ls_valor: 23,
+        ls_fecha: "2025-07-09T02:02:54.000Z",
+      },
+      {
+        ls_sensor_id: 1,
+        ls_tipo_id: 1,
+        ls_valor: 37,
+        ls_fecha: "2025-07-09T02:02:54.000Z",
+      },
+      {
+        ls_sensor_id: 1,
+        ls_tipo_id: 2,
+        ls_valor: 20,
+        ls_fecha: "2025-07-09T02:02:59.000Z",
+      },
+      {
+        ls_sensor_id: 1,
+        ls_tipo_id: 1,
+        ls_valor: 41,
+        ls_fecha: "2025-07-09T02:02:59.000Z",
+      },
+      {
+        ls_sensor_id: 1,
+        ls_tipo_id: 2,
+        ls_valor: 21,
+        ls_fecha: "2025-07-09T02:03:04.000Z",
+      },
+      {
+        ls_sensor_id: 1,
+        ls_tipo_id: 1,
+        ls_valor: 33,
+        ls_fecha: "2025-07-09T02:03:04.000Z",
+      },
+      {
+        ls_sensor_id: 1,
+        ls_tipo_id: 2,
+        ls_valor: 31,
+        ls_fecha: "2025-07-09T02:03:09.000Z",
+      },
+      {
+        ls_sensor_id: 1,
+        ls_tipo_id: 1,
+        ls_valor: 40,
+        ls_fecha: "2025-07-09T02:03:09.000Z",
+      },
+      {
+        ls_sensor_id: 1,
+        ls_tipo_id: 2,
+        ls_valor: 24,
+        ls_fecha: "2025-07-09T02:03:14.000Z",
+      },
+      {
+        ls_sensor_id: 1,
+        ls_tipo_id: 1,
+        ls_valor: 44,
+        ls_fecha: "2025-07-09T02:03:14.000Z",
+      },
+      {
+        ls_sensor_id: 1,
+        ls_tipo_id: 2,
+        ls_valor: 20,
+        ls_fecha: "2025-07-09T02:03:19.000Z",
+      },
+      {
+        ls_sensor_id: 1,
+        ls_tipo_id: 1,
+        ls_valor: 40,
+        ls_fecha: "2025-07-09T02:03:19.000Z",
+      },
+      {
+        ls_sensor_id: 1,
+        ls_tipo_id: 2,
+        ls_valor: 28,
+        ls_fecha: "2025-07-09T02:03:24.000Z",
+      },
+      {
+        ls_sensor_id: 1,
+        ls_tipo_id: 1,
+        ls_valor: 34,
+        ls_fecha: "2025-07-09T02:03:24.000Z",
+      },
+      {
+        ls_sensor_id: 1,
+        ls_tipo_id: 2,
+        ls_valor: 29,
+        ls_fecha: "2025-07-09T02:03:30.000Z",
+      },
+      {
+        ls_sensor_id: 1,
+        ls_tipo_id: 1,
+        ls_valor: 31,
+        ls_fecha: "2025-07-09T02:03:30.000Z",
+      },
+      {
+        ls_sensor_id: 1,
+        ls_tipo_id: 2,
+        ls_valor: 20,
+        ls_fecha: "2025-07-09T02:03:35.000Z",
+      },
+      {
+        ls_sensor_id: 1,
+        ls_tipo_id: 1,
+        ls_valor: 38,
+        ls_fecha: "2025-07-09T02:03:35.000Z",
+      },
+      {
+        ls_sensor_id: 1,
+        ls_tipo_id: 2,
+        ls_valor: 26,
+        ls_fecha: "2025-07-09T02:03:40.000Z",
+      },
+      {
+        ls_sensor_id: 1,
+        ls_tipo_id: 1,
+        ls_valor: 41,
+        ls_fecha: "2025-07-09T02:03:40.000Z",
+      },
+      {
+        ls_sensor_id: 1,
+        ls_tipo_id: 2,
+        ls_valor: 26,
+        ls_fecha: "2025-07-09T02:03:45.000Z",
+      },
+      {
+        ls_sensor_id: 1,
+        ls_tipo_id: 1,
+        ls_valor: 34,
+        ls_fecha: "2025-07-09T02:03:45.000Z",
+      },
+      {
+        ls_sensor_id: 1,
+        ls_tipo_id: 2,
+        ls_valor: 32,
+        ls_fecha: "2025-07-09T02:03:50.000Z",
+      },
+      {
+        ls_sensor_id: 1,
+        ls_tipo_id: 1,
+        ls_valor: 39,
+        ls_fecha: "2025-07-09T02:03:50.000Z",
+      },
+      {
+        ls_sensor_id: 1,
+        ls_tipo_id: 2,
+        ls_valor: 33,
+        ls_fecha: "2025-07-09T02:03:55.000Z",
+      },
+      {
+        ls_sensor_id: 1,
+        ls_tipo_id: 1,
+        ls_valor: 53,
+        ls_fecha: "2025-07-09T02:03:55.000Z",
+      },
+      {
+        ls_sensor_id: 1,
+        ls_tipo_id: 2,
+        ls_valor: 32,
+        ls_fecha: "2025-07-09T02:04:00.000Z",
+      },
+      {
+        ls_sensor_id: 1,
+        ls_tipo_id: 1,
+        ls_valor: 56,
+        ls_fecha: "2025-07-09T02:04:00.000Z",
+      },
+      {
+        ls_sensor_id: 1,
+        ls_tipo_id: 2,
+        ls_valor: 33,
+        ls_fecha: "2025-07-09T02:04:05.000Z",
+      },
+      {
+        ls_sensor_id: 1,
+        ls_tipo_id: 1,
+        ls_valor: 42,
+        ls_fecha: "2025-07-09T02:04:05.000Z",
+      },
+      {
+        ls_sensor_id: 1,
+        ls_tipo_id: 2,
+        ls_valor: 29,
+        ls_fecha: "2025-07-09T02:04:10.000Z",
+      },
+      {
+        ls_sensor_id: 1,
+        ls_tipo_id: 1,
+        ls_valor: 41,
+        ls_fecha: "2025-07-09T02:04:10.000Z",
+      },
+      {
+        ls_sensor_id: 1,
+        ls_tipo_id: 2,
+        ls_valor: 20,
+        ls_fecha: "2025-07-09T02:04:15.000Z",
+      },
+    ],
+    skipDuplicates: true,
   });
 
-  await prisma.thresholds.createMany({
+  await prisma.umbrales.createMany({
     data: [
-    {
-        "sensor_id": 1,
-        "type_id": 1,
-        "min_value": 18,
-        "max_value": 26
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2,
-        "min_value": 30,
-        "max_value": 60
-    },
-    {
-        "sensor_id": 2,
-        "type_id": 3,
-        "min_value": 0,
-        "max_value": 10000
-    },
-    {
-        "sensor_id": 3,
-        "type_id": 4,
-        "min_value": 0,
-        "max_value": 10
-    },
-    {
-        "sensor_id": 4,
-        "type_id": 5,
-        "min_value": 0,
-        "max_value": 250
-    },
-    {
-        "sensor_id": 5,
-        "type_id": 6,
-        "min_value": 0,
-        "max_value": 1200
-    }
-],
-    skipDuplicates: true
+      {
+        u_sensor_id: 1,
+        u_tipo_id: 1,
+        u_valor_min: 18,
+        u_valor_max: 26,
+      },
+      {
+        u_sensor_id: 1,
+        u_tipo_id: 2,
+        u_valor_min: 30,
+        u_valor_max: 60,
+      },
+      {
+        u_sensor_id: 2,
+        u_tipo_id: 3,
+        u_valor_min: 0,
+        u_valor_max: 10000,
+      },
+      {
+        u_sensor_id: 3,
+        u_tipo_id: 4,
+        u_valor_min: 0,
+        u_valor_max: 10,
+      },
+      {
+        u_sensor_id: 4,
+        u_tipo_id: 5,
+        u_valor_min: 0,
+        u_valor_max: 250,
+      },
+      {
+        u_sensor_id: 5,
+        u_tipo_id: 6,
+        u_valor_min: 0,
+        u_valor_max: 1200,
+      },
+    ],
+    skipDuplicates: true,
   });
 
-  await prisma.sensor_supported_types.createMany({
+  await prisma.tipos_sensor_soportados.createMany({
     data: [
-    {
-        "sensor_id": 1,
-        "type_id": 1
-    },
-    {
-        "sensor_id": 1,
-        "type_id": 2
-    },
-    {
-        "sensor_id": 2,
-        "type_id": 3
-    },
-    {
-        "sensor_id": 3,
-        "type_id": 4
-    },
-    {
-        "sensor_id": 4,
-        "type_id": 5
-    },
-    {
-        "sensor_id": 5,
-        "type_id": 6
-    }
-],
-    skipDuplicates: true
+      {
+        u_sensor_id: 1,
+        u_tipo_id: 1,
+      },
+      {
+        u_sensor_id: 1,
+        u_tipo_id: 2,
+      },
+      {
+        u_sensor_id: 2,
+        u_tipo_id: 3,
+      },
+      {
+        u_sensor_id: 3,
+        u_tipo_id: 4,
+      },
+      {
+        u_sensor_id: 4,
+        u_tipo_id: 5,
+      },
+      {
+        u_sensor_id: 5,
+        u_tipo_id: 6,
+      },
+    ],
+    skipDuplicates: true,
   });
 
   console.log("Base de datos reinicializada con éxito");
 }
 
-main().catch(console.error).finally(() => prisma.$disconnect());
+main()
+  .catch(console.error)
+  .finally(() => prisma.$disconnect());
