@@ -69,7 +69,7 @@ async function main() {
         n_estado: "MAINTENANCE",
       },
       {
-        n_nombre: "Sistema foltovoltaico",
+        n_nombre: "Sistema fotovoltaico",
         n_ubicacion: "loc node1",
         n_proyecto_id: 1,
         n_estado: "MAINTENANCE",
