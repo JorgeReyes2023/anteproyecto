@@ -47,8 +47,8 @@ async function main() {
           s_creado_en, // sensores
           ls_id,
           ls_creado_en, // lecturas_sensores
-          u_id: umbral_id,
-          u_creado_en: umbral_creado_en, // umbrales (evitar conflicto con usuarios)
+          um_id,
+          um_creado_en, // umbrales (evitar conflicto con usuarios)
           a_id,
           a_creado_en, // alertas
           au_id,
