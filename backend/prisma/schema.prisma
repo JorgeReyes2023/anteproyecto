@@ -172,8 +172,8 @@ model umbrales {
   um_modificado_en DateTime?
   um_borrado_en DateTime?
 
-  sensores              sensores?              @relation(fields: [u_sensor_id], references: [s_id], onDelete: NoAction, onUpdate: NoAction)
-  tipos_lectura_sensor  tipos_lectura_sensor   @relation(fields: [u_tipo_id], references: [tls_id], onDelete: NoAction, onUpdate: NoAction)
+  sensores              sensores?              @relation(fields: [um_sensor_id], references: [s_id], onDelete: NoAction, onUpdate: NoAction)
+  tipos_lectura_sensor  tipos_lectura_sensor   @relation(fields: [um_tipo_id], references: [tls_id], onDelete: NoAction, onUpdate: NoAction)
 
   @@schema("iot")
 }
