@@ -1,4 +1,4 @@
-import { sensors, $transaction } from "../prisma"; //Se importa el cliente Prisma para interactuar con la base de datos
+const { sensors, $transaction } = require("../prisma"); //Se importa el cliente Prisma para interactuar con la base de datos
 
 class SensorModel {
   static async createSensor(name, nodeId = null, status = "INACTIVE") {
@@ -90,4 +90,4 @@ class SensorModel {
   }
 }
 
-export default { SensorModel };
+module.exports = { SensorModel };

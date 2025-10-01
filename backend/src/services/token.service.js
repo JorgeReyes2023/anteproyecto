@@ -25,7 +25,7 @@ function verifyToken(token) {
   }
 }
 
-export default {
+module.exports = {
   generateToken,
   verifyToken,
 };

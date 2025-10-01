@@ -69,16 +69,18 @@ app.get("/sse/alerts", authenticate, (req, res) => {
 });
 
 // Redis - subscriber
-const redisSubscriber = createClient();
+const client = createClient({
+  url: process.env.REDIS_URL || "redis://localhost:6379",
+});
 
-redisSubscriber.on("error", (err) => {
+client.on("error", (err) => {
   console.error("Redis connection error:", err);
 });
 
-redisSubscriber
+client
   .connect()
   .then(() => {
-    redisSubscriber.subscribe("alerts", (message) => {
+    client.subscribe("alerts", (message) => {
       const alert = JSON.parse(message);
       const data = `data: ${JSON.stringify(alert)}\n\n`;
       clients.forEach((client, i) => {
@@ -98,7 +100,7 @@ redisSubscriber
 
 process.on("SIGINT", async () => {
   console.log("Shutting down gracefully...");
-  await redisSubscriber.quit();
+  await client.quit();
   process.exit(0);
 });
 

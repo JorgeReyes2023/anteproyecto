@@ -1,0 +1,90 @@
+# ===== DOCKER COMPOSE POUR DÉVELOPPEMENT =====
+# Utiliser avec: docker-compose -f docker-compose.yml -f docker-compose.dev.yml up
+
+services:
+  # ===== BACKEND EN MODE DÉVELOPPEMENT =====
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+      target: dev
+    env_file:
+      - ./backend/.env
+    environment:
+      NODE_ENV: development
+      # Override pour Docker
+      DB_HOST: postgres
+      DATABASE_URL: "${DATABASE_URL}"
+      JWT_SECRET: ${JWT_SECRET}
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+      REDIS_URL: "redis://:${REDIS_PASSWORD}@redis:6379"
+      MQTTSERVER: ${MQTTSERVER}
+      MQTTPORT: ${MQTTPORT}
+      MQTT_USERNAME: ${MQTT_USERNAME}
+      PASSWORD_MQ: ${PASSWORD_MQ}
+    volumes:
+      # Mount source code pour hot-reload
+      - ./backend/src:/app/src:ro
+      - ./backend/package.json:/app/package.json:ro
+      - ./backend/prisma:/app/prisma:ro
+      # Exclure node_modules du host
+      - /app/node_modules
+    depends_on:
+      - postgres
+      - redis
+    command: ["dumb-init", "npm", "run", "dev"]
+
+  # ===== FRONTEND EN MODE DÉVELOPPEMENT =====
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      target: dev
+    environment:
+      NODE_ENV: development
+    volumes:
+      # Mount source code pour hot-reload
+      - ./frontend/src:/app/src:ro
+      - ./frontend/angular.json:/app/angular.json:ro
+      - ./frontend/package.json:/app/package.json:ro
+      - ./frontend/tsconfig.json:/app/tsconfig.json:ro
+      # Exclure node_modules du host
+      - /app/node_modules
+      - /app/dist
+    ports:
+      - "4200:4200"  # Port Angular dev server
+    command: ["npm", "start", "--", "--host", "0.0.0.0", "--poll", "2000"]
+
+  # ===== PROCESSEUR MQTT EN MODE DEV =====
+  mqtt_processor:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+      target: dev
+    environment:
+      NODE_ENV: development
+      # Override pour Docker
+      DB_HOST: postgres  
+      DATABASE_URL: "${DATABASE_URL}"
+      REDIS_URL: ${REDIS_URL}
+      MQTTSERVER: ${MQTTSERVER}
+      MQTTPORT: ${MQTTPORT}
+      CLIENTID: ${CLIENTID}
+      MQTT_USERNAME: ${MQTT_USERNAME}
+      PASSWORD_MQ: ${PASSWORD_MQ}
+    volumes:
+      - ./backend/src:/app/src:ro
+      - ./backend/package.json:/app/package.json:ro
+      - /app/node_modules
+    depends_on:
+      - postgres
+      - redis
+    command: ["npm", "run", "mqtt"]
+
+# ===== VOLUMES SUPPLÉMENTAIRES POUR DEV =====
+volumes:
+  # Cache pour node_modules
+  backend_node_modules:
+  frontend_node_modules:

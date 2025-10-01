@@ -1,0 +1,46 @@
+# ===== FRONTEND DOCKERIGNORE =====
+
+# Node modules
+node_modules/
+npm-debug.log*
+
+# Build artifacts
+dist/
+build/
+.angular/
+
+# Coverage and tests
+coverage/
+*.test.ts
+*.spec.ts
+e2e/
+
+# Logs
+logs/
+*.log
+
+# Environment files
+.env
+.env.local
+src/environments/environment.ts
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Git
+.git/
+.gitignore
+
+# Documentation
+README.md
+
+# Temporary files
+tmp/
+temp/

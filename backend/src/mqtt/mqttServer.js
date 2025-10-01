@@ -60,11 +60,4 @@ client.on("offline", () => {
   console.warn("⚠️ Cliente fuera de línea");
 });
 
-// Cerrar después de 30 segundos
-setTimeout(() => {
-  console.log("🛑 Fin de la prueba");
-  client.end();
-  process.exit(0);
-}, 30000);
-
 console.log("⏳ Intentando conectar...");

@@ -1,4 +1,4 @@
-const { SensorModel } = require("../models/sensor.model.js").default;
+const { SensorModel } = require("../models/sensor.model.js");
 const {
   SensorReadingTypeModel,
 } = require("../models/sensor-reading-type.model.js");
@@ -12,7 +12,7 @@ const {
   SensorReadingTypeSchemaWithoutId,
   attachingSensorsToNodeSchema,
   getReadingsBySensorIdAndType,
-} = require("../validators/sensor.validator.js").default;
+} = require("../validators/sensor.validator.js");
 
 /**
  * Servicio para la gestión de sensores y sus tipos.
