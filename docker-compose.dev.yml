@@ -9,7 +9,7 @@ services:
       dockerfile: Dockerfile
       target: dev
     env_file:
-      - ./backend/.env
+      - .env
     environment:
       NODE_ENV: development
       # Override para Docker
@@ -36,12 +36,17 @@ services:
       - redis
     command: >
       sh -c "
-        echo 'Esperando la base de datos...' &&
+        echo '🔍 Vérification du schema Prisma...' &&
+        npx prisma validate &&
+        echo '🔧 Génération du client Prisma...' &&
+        npx prisma generate &&
+        echo '🚀 Application des migrations...' &&
         npx prisma migrate deploy &&
-        npm run seed &&
-        echo 'Iniciando el servidor backend en modo desarrollo...' &&
+        echo '🌱 Exécution du seed...' &&
+        npx prisma db seed &&
+        echo '✅ Démarrage du serveur...' &&
         npm run dev
-      " # agregar npx prisma db seed después de verificar que funciona
+      "
     ports:
       - "3000:3000"  # Puerto backend
 

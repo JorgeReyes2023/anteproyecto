@@ -1,28 +1,46 @@
--- Extensions de base
+-- Extensiones de base
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 
--- PostgreSQL crée automatiquement jorge via POSTGRES_USER
--- Nous devons juste donner les permissions
+-- ✅ AJOUT : Créer tous les schémas nécessaires
+CREATE SCHEMA IF NOT EXISTS organization;
+CREATE SCHEMA IF NOT EXISTS auth;
+CREATE SCHEMA IF NOT EXISTS iot;
+CREATE SCHEMA IF NOT EXISTS alerts;
+CREATE SCHEMA IF NOT EXISTS raw_data;
 
--- Permissions par défaut pour les futurs objets créés par Prisma
-ALTER DEFAULT PRIVILEGES GRANT ALL ON TABLES TO jorge;
-ALTER DEFAULT PRIVILEGES GRANT ALL ON SEQUENCES TO jorge;
-ALTER DEFAULT PRIVILEGES GRANT ALL ON FUNCTIONS TO jorge;
+-- Permissions pour jorge sur tous les schémas
+GRANT ALL ON SCHEMA public, organization, auth, iot, alerts, raw_data TO jorge;
 
--- Permissions sur le schéma public
-GRANT ALL ON SCHEMA public TO jorge;
-GRANT ALL ON ALL TABLES IN SCHEMA public TO jorge;
-GRANT ALL ON ALL SEQUENCES IN SCHEMA public TO jorge;
+-- Permissions par défaut pour les futures tables
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON TABLES TO jorge;
+ALTER DEFAULT PRIVILEGES IN SCHEMA organization GRANT ALL ON TABLES TO jorge;
+ALTER DEFAULT PRIVILEGES IN SCHEMA auth GRANT ALL ON TABLES TO jorge;
+ALTER DEFAULT PRIVILEGES IN SCHEMA iot GRANT ALL ON TABLES TO jorge;
+ALTER DEFAULT PRIVILEGES IN SCHEMA alerts GRANT ALL ON TABLES TO jorge;
+ALTER DEFAULT PRIVILEGES IN SCHEMA raw_data GRANT ALL ON TABLES TO jorge;
+
+-- Permissions pour les séquences
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON SEQUENCES TO jorge;
+ALTER DEFAULT PRIVILEGES IN SCHEMA organization GRANT ALL ON SEQUENCES TO jorge;
+ALTER DEFAULT PRIVILEGES IN SCHEMA auth GRANT ALL ON SEQUENCES TO jorge;
+ALTER DEFAULT PRIVILEGES IN SCHEMA iot GRANT ALL ON SEQUENCES TO jorge;
+ALTER DEFAULT PRIVILEGES IN SCHEMA alerts GRANT ALL ON SEQUENCES TO jorge;
+ALTER DEFAULT PRIVILEGES IN SCHEMA raw_data GRANT ALL ON SEQUENCES TO jorge;
+
+-- Permissions pour les fonctions
+ALTER DEFAULT PRIVILEGES IN SCHEMA public GRANT ALL ON FUNCTIONS TO jorge;
+ALTER DEFAULT PRIVILEGES IN SCHEMA organization GRANT ALL ON FUNCTIONS TO jorge;
+ALTER DEFAULT PRIVILEGES IN SCHEMA auth GRANT ALL ON FUNCTIONS TO jorge;
+ALTER DEFAULT PRIVILEGES IN SCHEMA iot GRANT ALL ON FUNCTIONS TO jorge;
+ALTER DEFAULT PRIVILEGES IN SCHEMA alerts GRANT ALL ON FUNCTIONS TO jorge;
+ALTER DEFAULT PRIVILEGES IN SCHEMA raw_data GRANT ALL ON FUNCTIONS TO jorge;
 
 -- Message de confirmation
 DO $$
 BEGIN
-    RAISE NOTICE '=== INIT.SQL EXECUTED SUCCESSFULLY ===';
-    RAISE NOTICE 'User: jorge (created by Docker)';
-    RAISE NOTICE 'Database: TesisIot (created by Docker)';  
-    RAISE NOTICE 'Extensions: uuid-ossp, pgcrypto loaded';
-    RAISE NOTICE 'Permissions granted to jorge';
-    RAISE NOTICE 'Ready for Prisma migrations!';
-    RAISE NOTICE '=====================================';
+    RAISE NOTICE '=== INIT.SQL EJECUTADO EXITOSAMENTE ===';
+    RAISE NOTICE 'Schémas créés: public, organization, auth, iot, alerts, raw_data';
+    RAISE NOTICE '¡Listo para migraciones de Prisma!';
+    RAISE NOTICE '====================================='; 
 END $$;

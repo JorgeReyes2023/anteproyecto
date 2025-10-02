@@ -1,64 +1,57 @@
 FROM node:18-alpine AS base
 
-# Install dependencies for Prisma
+# Instalar dependencias para Prisma
 RUN apk add --no-cache openssl curl dumb-init
 
-# Create non-root user
+# Crear usuario no root
 RUN addgroup -g 1001 -S nodejs && \
   adduser -S nodeclient -u 1001 -G nodejs
 
 WORKDIR /app
 
-# Stage dev
+# Etapa de desarrollo
 FROM base AS dev
 
 ENV NODE_ENV=development
 
-# Copy package files
+# Copiar archivos de paquetes
 COPY package*.json ./
 
-# Install dependencies
+# Instalar dependencias
 RUN npm ci --silent
 
-# Copy prisma schema AVANT de générer le client
+# Copiar el esquema de Prisma ANTES de generar el cliente
 COPY prisma ./prisma
 
-# CORRECTION: Générer Prisma Client pour Linux Alpine
-RUN npx prisma generate
+# CORRECCIÓN: Generar Prisma Client para Linux Alpine
+RUN npx prisma reset
 
-# Copy source code
+# Copiar el código fuente
 COPY . .
-
-# Change ownership
-RUN chown -R nodeclient:nodejs /app
-
-USER nodeclient
-
-EXPOSE 3000
 
 CMD ["dumb-init", "npm", "run", "dev"]
 
-# Stage production
+# Etapa de producción
 FROM base AS production
 
 ENV NODE_ENV=production
 
-# Copy package files
+# Copiar archivos de paquetes
 COPY package*.json ./
 
-# Install production dependencies
+# Instalar dependencias de producción
 RUN npm ci --only=production --silent && npm cache clean --force
 
-# Copy prisma schema
+# Copiar el esquema de Prisma
 COPY prisma ./prisma
 
-# CORRECTION: Générer Prisma Client pour production
+# CORRECCIÓN: Generar Prisma Client para producción
 RUN npx prisma generate
 
-# Copy built application
+# Copiar la aplicación compilada
 COPY dist ./dist
 
-# Change ownership
+# Cambiar la propiedad
 RUN chown -R nodeclient:nodejs /app
 
 USER nodeclient

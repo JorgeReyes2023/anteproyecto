@@ -78,7 +78,7 @@ services:
       retries: 3
     command: >
       sh -c "
-        echo 'Waiting for database...' &&
+        echo 'Waiting for database loooooool...' &&
         npx prisma migrate deploy &&
         npx prisma db seed &&
         npm start
