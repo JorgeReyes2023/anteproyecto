@@ -1,68 +1,68 @@
-# ===== DOCKERFILE MULTI-STAGE POUR BACKEND NODE.JS =====
-
-# Stage 1: Base image with dependencies
 FROM node:18-alpine AS base
 
-# Update Alpine packages and install dumb-init for proper signal handling
-RUN apk update && apk upgrade && apk add --no-cache dumb-init
+# Install dependencies for Prisma
+RUN apk add --no-cache openssl curl dumb-init
 
-# Create app directory with proper user
-RUN addgroup -g 1001 -S nodejs && \ 
-  adduser -S nodeclient -u 1001
+# Create non-root user
+RUN addgroup -g 1001 -S nodejs && \
+  adduser -S nodeclient -u 1001 -G nodejs
 
 WORKDIR /app
 
-# Copy package files and install dependencies
-COPY package*.json ./
-RUN npm ci --only=production && npm cache clean --force
-
-# Stage 2: Development build
+# Stage dev
 FROM base AS dev
 
 ENV NODE_ENV=development
 
-# Install dev dependencies
-RUN npm ci
+# Copy package files
+COPY package*.json ./
 
-# Copy source code
-COPY --chown=nodeclient:nodejs . .
+# Install dependencies
+RUN npm ci --silent
 
-# Generate Prisma client
+# Copy prisma schema AVANT de générer le client
+COPY prisma ./prisma
+
+# CORRECTION: Générer Prisma Client pour Linux Alpine
 RUN npx prisma generate
 
-# Create seed script
-COPY --chown=nodeclient:nodejs prisma/seed.js ./prisma/
+# Copy source code
+COPY . .
 
-#RUN npx prisma db seed
+# Change ownership
+RUN chown -R nodeclient:nodejs /app
 
 USER nodeclient
 
 EXPOSE 3000
 
-# Start with nodemon for development
 CMD ["dumb-init", "npm", "run", "dev"]
 
-# Stage 3: Production build
+# Stage production
 FROM base AS production
 
 ENV NODE_ENV=production
 
-# Copy source code
-COPY --chown=nodeclient:nodejs . .
+# Copy package files
+COPY package*.json ./
 
-# Generate Prisma client for production
+# Install production dependencies
+RUN npm ci --only=production --silent && npm cache clean --force
+
+# Copy prisma schema
+COPY prisma ./prisma
+
+# CORRECTION: Générer Prisma Client pour production
 RUN npx prisma generate
 
-# Remove unnecessary files
-RUN rm -rf tests/ docs/ coverage/ prisma/migrations/
+# Copy built application
+COPY dist ./dist
+
+# Change ownership
+RUN chown -R nodeclient:nodejs /app
 
 USER nodeclient
 
 EXPOSE 3000
 
-# Health check
-HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
-  CMD node --version || exit 1
-
-# Start application
 CMD ["dumb-init", "npm", "start"]

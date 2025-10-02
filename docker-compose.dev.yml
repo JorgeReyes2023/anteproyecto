@@ -1,8 +1,8 @@
-# ===== DOCKER COMPOSE POUR DÉVELOPPEMENT =====
-# Utiliser avec: docker-compose -f docker-compose.yml -f docker-compose.dev.yml up
+# ===== DOCKER COMPOSE PARA DESARROLLO =====
+# Usar con: docker-compose -f docker-compose.yml -f docker-compose.dev.yml up
 
 services:
-  # ===== BACKEND EN MODE DÉVELOPPEMENT =====
+  # ===== BACKEND EN MODO DESARROLLO =====
   backend:
     build:
       context: ./backend
@@ -12,7 +12,7 @@ services:
       - ./backend/.env
     environment:
       NODE_ENV: development
-      # Override pour Docker
+      # Override para Docker
       DB_HOST: postgres
       DATABASE_URL: "${DATABASE_URL}"
       JWT_SECRET: ${JWT_SECRET}
@@ -25,26 +25,27 @@ services:
       MQTT_USERNAME: ${MQTT_USERNAME}
       PASSWORD_MQ: ${PASSWORD_MQ}
     volumes:
-      # Mount source code pour hot-reload
+      # Montar código fuente para hot-reload
       - ./backend/src:/app/src:ro
       - ./backend/package.json:/app/package.json:ro
       - ./backend/prisma:/app/prisma:ro
-      # Exclure node_modules du host
+      # Excluir node_modules del host
       - /app/node_modules
     depends_on:
       - postgres
       - redis
     command: >
       sh -c "
-        echo 'Waiting for database...' &&
+        echo 'Esperando la base de datos...' &&
         npx prisma migrate deploy &&
-        echo 'Starting backend dev server...' &&
+        npm run seed &&
+        echo 'Iniciando el servidor backend en modo desarrollo...' &&
         npm run dev
-      " # add npx prisma db seed after verifying it works
+      " # agregar npx prisma db seed después de verificar que funciona
     ports:
-      - "3000:3000"  # Port backend
+      - "3000:3000"  # Puerto backend
 
-  # ===== FRONTEND EN MODE DÉVELOPPEMENT =====
+  # ===== FRONTEND EN MODO DESARROLLO =====
   frontend:
     build:
       context: ./frontend
@@ -53,19 +54,19 @@ services:
     environment:
       NODE_ENV: development
     volumes:
-      # Mount source code pour hot-reload
+      # Montar código fuente para hot-reload
       - ./frontend/src:/app/src:ro
       - ./frontend/angular.json:/app/angular.json:ro
       - ./frontend/package.json:/app/package.json:ro
       - ./frontend/tsconfig.json:/app/tsconfig.json:ro
-      # Exclure node_modules du host
+      # Excluir node_modules del host
       - /app/node_modules
       - /app/dist
     ports:
-      - "4200:4200"  # Port Angular dev server
+      - "4200:4200"  # Puerto del servidor de desarrollo Angular
     command: ["npm", "start", "--", "--host", "0.0.0.0", "--poll", "2000"]
 
-  # ===== PROCESSEUR MQTT EN MODE DEV =====
+  # ===== PROCESADOR MQTT EN MODO DESARROLLO =====
   mqtt_processor:
     build:
       context: ./backend
@@ -73,7 +74,7 @@ services:
       target: dev
     environment:
       NODE_ENV: development
-      # Override pour Docker
+      # Override para Docker
       DB_HOST: postgres  
       DATABASE_URL: "${DATABASE_URL}"
       REDIS_URL: ${REDIS_URL}
@@ -91,8 +92,8 @@ services:
       - redis
     command: ["npm", "run", "mqtt"]
 
-# ===== VOLUMES SUPPLÉMENTAIRES POUR DEV =====
+# ===== VOLUMENES ADICIONALES PARA DESARROLLO =====
 volumes:
-  # Cache pour node_modules
+  # Caché para node_modules
   backend_node_modules:
   frontend_node_modules:
