@@ -34,7 +34,15 @@ services:
     depends_on:
       - postgres
       - redis
-    command: ["dumb-init", "npm", "run", "dev"]
+    command: >
+      sh -c "
+        echo 'Waiting for database...' &&
+        npx prisma migrate deploy &&
+        echo 'Starting backend dev server...' &&
+        npm run dev
+      " # add npx prisma db seed after verifying it works
+    ports:
+      - "3000:3000"  # Port backend
 
   # ===== FRONTEND EN MODE DÉVELOPPEMENT =====
   frontend:

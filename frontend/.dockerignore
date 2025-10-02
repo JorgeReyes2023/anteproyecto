@@ -1,46 +1,70 @@
-# ===== FRONTEND DOCKERIGNORE =====
-
-# Node modules
+# Node modules et caches
 node_modules/
 npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.npm/
+.yarn/
 
 # Build artifacts
 dist/
 build/
-.angular/
+*.tgz
 
-# Coverage and tests
+# Tests et coverage
 coverage/
-*.test.ts
-*.spec.ts
-e2e/
+.nyc_output/
+tests/
+*.test.js
+*.spec.js
+__tests__/
 
 # Logs
 logs/
 *.log
+pids/
+*.pid
+*.seed
+*.pid.lock
 
-# Environment files
-.env
-.env.local
-src/environments/environment.ts
+# Environment et config sensibles
+.env*
+!.env.example
+.config/
 
-# IDE files
+# IDE et éditeurs
 .vscode/
 .idea/
 *.swp
 *.swo
+*~
 
 # OS files
 .DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
 Thumbs.db
 
-# Git
+# Git et VCS
 .git/
 .gitignore
+.gitattributes
+.hg/
+.svn/
 
-# Documentation
-README.md
+# Documentation et assets
+docs/
+README*
+LICENSE*
+CHANGELOG*
+*.md
+!package.json
 
-# Temporary files
+# Temporary et runtime
 tmp/
 temp/
+.tmp/
+*.tmp

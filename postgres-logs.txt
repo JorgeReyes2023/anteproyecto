@@ -1,0 +1,61 @@
+Attaching to nodalis_postgres
+nodalis_postgres  | The files belonging to this database system will be owned by user "postgres".
+nodalis_postgres  | This user must also own the server process.
+nodalis_postgres  | 
+nodalis_postgres  | The database cluster will be initialized with locale "en_US.utf8".
+nodalis_postgres  | The default database encoding has accordingly been set to "UTF8".
+nodalis_postgres  | The default text search configuration will be set to "english".
+nodalis_postgres  | 
+nodalis_postgres  | Data page checksums are disabled.
+nodalis_postgres  | 
+nodalis_postgres  | fixing permissions on existing directory /var/lib/postgresql/data ... ok
+nodalis_postgres  | creating subdirectories ... ok
+nodalis_postgres  | selecting dynamic shared memory implementation ... posix
+nodalis_postgres  | selecting default max_connections ... 100
+nodalis_postgres  | selecting default shared_buffers ... 128MB
+nodalis_postgres  | selecting default time zone ... UTC
+nodalis_postgres  | creating configuration files ... ok
+nodalis_postgres  | running bootstrap script ... ok
+nodalis_postgres  | performing post-bootstrap initialization ... ok
+nodalis_postgres  | syncing data to disk ... ok
+nodalis_postgres  | 
+nodalis_postgres  | 
+nodalis_postgres  | Success. You can now start the database server using:
+nodalis_postgres  | 
+nodalis_postgres  |     pg_ctl -D /var/lib/postgresql/data -l logfile start
+nodalis_postgres  | 
+nodalis_postgres  | waiting for server to start....2025-10-01 23:41:57.338 UTC [41] LOG:  starting PostgreSQL 15.14 on x86_64-pc-linux-musl, compiled by gcc (Alpine 14.2.0) 14.2.0, 64-bit
+nodalis_postgres  | 2025-10-01 23:41:57.340 UTC [41] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+nodalis_postgres  | 2025-10-01 23:41:57.346 UTC [44] LOG:  database system was shut down at 2025-10-01 23:41:57 UTC
+nodalis_postgres  | 2025-10-01 23:41:57.351 UTC [41] LOG:  database system is ready to accept connections
+nodalis_postgres  |  done
+nodalis_postgres  | server started
+nodalis_postgres  | CREATE DATABASE
+nodalis_postgres  | 
+nodalis_postgres  | 
+nodalis_postgres  | /usr/local/bin/docker-entrypoint.sh: running /docker-entrypoint-initdb.d/init.sql
+nodalis_postgres  | CREATE EXTENSION
+nodalis_postgres  | CREATE EXTENSION
+nodalis_postgres  | ALTER DEFAULT PRIVILEGES
+nodalis_postgres  | ALTER DEFAULT PRIVILEGES
+nodalis_postgres  | ALTER DEFAULT PRIVILEGES
+nodalis_postgres  | GRANT
+nodalis_postgres  | GRANT
+nodalis_postgres  | GRANT
+nodalis_postgres  | CREATE TABLE
+nodalis_postgres  | INSERT 0 1
+nodalis_postgres  | DO
+nodalis_postgres  | 
+nodalis_postgres  | 
+nodalis_postgres  | waiting for server to shut down....2025-10-01 23:41:57.506 UTC [41] LOG:  received fast shutdown request
+nodalis_postgres  | 2025-10-01 23:41:57.508 UTC [41] LOG:  aborting any active transactions
+nodalis_postgres  | 2025-10-01 23:41:57.510 UTC [41] LOG:  background worker "logical replication launcher" (PID 47) exited with exit code 1
+nodalis_postgres  | 2025-10-01 23:41:57.510 UTC [42] LOG:  shutting down
+nodalis_postgres  | 2025-10-01 23:41:57.512 UTC [42] LOG:  checkpoint starting: shutdown immediate
+nodalis_postgres  | 2025-10-01 23:41:57.588 UTC [42] LOG:  checkpoint complete: wrote 935 buffers (5.7%); 0 WAL file(s) added, 0 removed, 0 recycled; write=0.014 s, sync=0.057 s, total=0.078 s; sync files=306, longest=0.003 s, average=0.001 s; distance=4317 kB, estimate=4317 kB
+nodalis_postgres  | 2025-10-01 23:41:57.593 UTC [41] LOG:  database system is shut down
+nodalis_postgres  |  done
+nodalis_postgres  | server stopped
+nodalis_postgres  | 
+nodalis_postgres  | PostgreSQL init process complete; ready for start up.
+nodalis_postgres  | 

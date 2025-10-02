@@ -32,9 +32,8 @@ RUN npx prisma generate
 
 # Create seed script
 COPY --chown=nodeclient:nodejs prisma/seed.js ./prisma/
-RUN chmod +x ./prisma/seed.js
 
-RUN npx prisma db seed
+#RUN npx prisma db seed
 
 USER nodeclient
 
