@@ -6,8 +6,8 @@ const { createClient } = require("redis");
 dotenv.config();
 const prisma = new PrismaClient();
 const client = mqtt.connect(process.env.MQTTSERVER, {
-  username: process.env.MQTTUSER,
-  password: process.env.MQTTPASSWORD,
+  username: process.env.MQTT_USERNAME,
+  password: process.env.PASSWORD_MQ,
   port: parseInt(process.env.MQTTPORT, 10),
   keepalive: 60,
   reconnectPeriod: 1000,
