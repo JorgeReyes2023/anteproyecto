@@ -49,7 +49,7 @@ healthRoutes.get("/health", async (req, res) => {
 
   let isHealthy = true;
 
-  // Vérifier la base de données
+  // Check base de datos
   try {
     await prisma.$queryRaw`SELECT 1`;
     health.services.database = "connected";
@@ -58,15 +58,18 @@ healthRoutes.get("/health", async (req, res) => {
     isHealthy = false;
   }
 
-  // Vérifier Redis
+  // Check Redis
   try {
     const redisClient = createClient({
       url: process.env.REDIS_URL,
     });
-    await redisClient.connect();
-    await redisClient.ping();
-    health.services.redis = "connected";
-    await redisClient.quit();
+    try {
+      await redisClient.connect();
+      await redisClient.ping();
+      health.services.redis = "connected";
+    } finally {
+      await redisClient.quit();
+    }
   } catch {
     health.services.redis = "error";
     isHealthy = false;

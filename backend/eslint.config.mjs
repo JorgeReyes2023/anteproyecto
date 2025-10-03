@@ -11,8 +11,8 @@ export default defineConfig([
       "coverage/**",
       "docs/**",
       "prisma/migrations/**",
-      "*/**/*.test.js",
-      "*/**/*.spec.js",
+      "**/*.test.js",
+      "**/*.spec.js",
     ],
   },
   {
