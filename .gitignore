@@ -13,7 +13,6 @@ yarn-error.log
 
 /frontend/node_modules
 /backend/node_modules
-/backend/prisma/init.sql
 /sensor-service/node_modules
 /sensor-service/.env
 /backend/.env
