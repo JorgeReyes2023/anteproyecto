@@ -9,7 +9,7 @@ services:
       dockerfile: Dockerfile
       target: dev
     env_file:
-      - .env
+      - backend/.env
     environment:
       NODE_ENV: development
       # Override para Docker
@@ -17,9 +17,9 @@ services:
       DATABASE_URL: "${DATABASE_URL}"
       JWT_SECRET: ${JWT_SECRET}
       REDIS_HOST: redis
-      REDIS_PORT: 6379
+      REDIS_PORT: ${REDIS_PORT}
       REDIS_PASSWORD: ${REDIS_PASSWORD}
-      REDIS_URL: "redis://:${REDIS_PASSWORD}@redis:6379"
+      REDIS_URL: ${REDIS_URL}
       MQTTSERVER: ${MQTTSERVER}
       MQTTPORT: ${MQTTPORT}
       MQTT_USERNAME: ${MQTT_USERNAME}
@@ -31,21 +31,19 @@ services:
       - ./backend/prisma:/app/prisma:ro
       # Excluir node_modules del host
       - /app/node_modules
+    networks:
+      - nodalis_network
     depends_on:
       - postgres
       - redis
     command: >
       sh -c "
-        echo '🔍 Vérification du schema Prisma...' &&
-        npx prisma validate &&
-        echo '🔧 Génération du client Prisma...' &&
-        npx prisma generate &&
-        echo '🚀 Application des migrations...' &&
-        npx prisma migrate deploy &&
-        echo '🌱 Exécution du seed...' &&
-        npx prisma db seed &&
-        echo '✅ Démarrage du serveur...' &&
-        npm run dev
+        echo 'DB...' &&
+        npx prisma db push &&
+        echo 'Base de datos actualizada.' &&
+        npm run seed &&
+        echo 'Lanzando backend...' &&
+        exec npm run dev
       "
     ports:
       - "3000:3000"  # Puerto backend
@@ -70,6 +68,8 @@ services:
     ports:
       - "4200:4200"  # Puerto del servidor de desarrollo Angular
     command: ["npm", "start", "--", "--host", "0.0.0.0", "--poll", "2000"]
+    networks:
+      - nodalis_network
 
   # ===== PROCESADOR MQTT EN MODO DESARROLLO =====
   mqtt_processor:
@@ -96,6 +96,8 @@ services:
       - postgres
       - redis
     command: ["npm", "run", "mqtt"]
+    networks:
+      - nodalis_network
 
 # ===== VOLUMENES ADICIONALES PARA DESARROLLO =====
 volumes:
