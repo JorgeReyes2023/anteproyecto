@@ -84,7 +84,7 @@ services:
       sh -c "
         echo '⏳ Waiting for PostgreSQL to be fully ready...' &&
         
-        until pg_isready -h postgres -p 5432 -U jorge; do
+        until pg_isready -h postgres -p 5432 -U ${DB_USER}; do
           echo 'PostgreSQL is unavailable - sleeping 2s' &&
           sleep 2
         done &&
