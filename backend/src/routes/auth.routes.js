@@ -169,7 +169,7 @@ authRoutes.get("/verify", async (req, res) => {
       message: "Token válido",
       user: decoded.user,
     });
-  } catch (error) {
+  } catch {
     res.status(401).json({ error: "Token inválido o expirado" });
   }
 });

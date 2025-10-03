@@ -1,4 +1,4 @@
-const jwt = require("jsonwebtoken");
+const { sign, verify } = require("jsonwebtoken");
 
 /**
  * Genera un token para un usuario dado.
@@ -6,7 +6,7 @@ const jwt = require("jsonwebtoken");
  * @returns {string} El token firmado.
  */
 function generateToken(payload) {
-  return jwt.sign(payload, process.env.JWT_SECRET, {
+  return sign(payload, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRATION,
   });
 }
@@ -19,8 +19,8 @@ function generateToken(payload) {
  */
 function verifyToken(token) {
   try {
-    return jwt.verify(token, process.env.JWT_SECRET);
-  } catch (err) {
+    return verify(token, process.env.JWT_SECRET);
+  } catch {
     throw new Error("Token inválido o expirado");
   }
 }

@@ -11,13 +11,10 @@ const statusMap = {
 const SensorReadingTypeSchema = Joi.object({
   id: Joi.number().integer().positive().required(),
   name: Joi.string()
-    .custom((value, helpers) => {
+    .custom((value) => {
       const normalized = value
         .normalize("NFD")
-        .replace(
-          /[\u0300-\u036f\u1AB0-\u1AFF\u1DC0-\u1DFF\u20D0-\u20FF\uFE20-\uFE2F]/g,
-          "",
-        )
+        .replace(/[\u0300-\u036f]/g, "")
         .toLowerCase()
         .trim();
       return normalized;
@@ -31,13 +28,10 @@ const SensorReadingTypeSchema = Joi.object({
 
 const SensorReadingTypeSchemaWithoutId = Joi.object({
   name: Joi.string()
-    .custom((value, helpers) => {
+    .custom((value) => {
       const normalized = value
         .normalize("NFD")
-        .replace(
-          /[\u0300-\u036f\u1AB0-\u1AFF\u1DC0-\u1DFF\u20D0-\u20FF\uFE20-\uFE2F]/g,
-          "",
-        )
+        .replace(/[\u0300-\u036f]/g, "")
         .toLowerCase()
         .trim();
       return normalized;

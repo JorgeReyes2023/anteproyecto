@@ -1,4 +1,3 @@
-const { Status } = require("@prisma/client");
 const prisma = require("../prisma");
 
 const NodeModel = {

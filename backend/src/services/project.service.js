@@ -157,7 +157,7 @@ class ProjectService {
         return await ProjectService.getAllProjects();
       }
 
-      const { value, error } = deleteProjectSchema.validate(
+      const { value } = deleteProjectSchema.validate(
         { id: companyId },
         { convert: true },
       );

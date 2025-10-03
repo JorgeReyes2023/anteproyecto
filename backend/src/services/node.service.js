@@ -1,7 +1,6 @@
 const { NodeModel } = require("../models/node.model");
 const { State } = require("../constants/states");
 const { nodeSchema, nodeSchemaId } = require("../validators/node.validator");
-const { sensors } = require("../prisma");
 
 /**
  * Servicio para la gestión de nodos.

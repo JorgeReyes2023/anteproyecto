@@ -15,6 +15,7 @@ const nodeRoutes = require("./routes/node.routes");
 const alertRoutes = require("./routes/alert.routes");
 const sensorRoutes = require("./routes/sensor.routes");
 const thresholdRoutes = require("./routes/threshold.routes");
+const healthRoutes = require("./routes/health.routes");
 const { authenticate } = require("./middlewares/auth.middleware");
 
 dotenv.config();
@@ -29,6 +30,7 @@ app.use("/docs", express.static(path.join(__dirname, "..", "docs")));
 app.use("/coverage", express.static(path.join(__dirname, "..", "coverage")));
 
 // Rutas
+app.use("/api", healthRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/companies", companyRoutes);
@@ -39,7 +41,7 @@ app.use("/api/sensors", sensorRoutes);
 app.use("/api/thresholds", thresholdRoutes);
 
 // Manejo de errores
-app.use((err, req, res, next) => {
+app.use((err, req, res) => {
   console.error(err.stack);
   res.status(500).json({ error: "Algo salió mal" });
 });
@@ -67,16 +69,18 @@ app.get("/sse/alerts", authenticate, (req, res) => {
 });
 
 // Redis - subscriber
-const redisSubscriber = createClient();
+const client = createClient({
+  url: process.env.REDIS_URL || "redis://localhost:6379",
+});
 
-redisSubscriber.on("error", (err) => {
+client.on("error", (err) => {
   console.error("Redis connection error:", err);
 });
 
-redisSubscriber
+client
   .connect()
   .then(() => {
-    redisSubscriber.subscribe("alerts", (message) => {
+    client.subscribe("alerts", (message) => {
       const alert = JSON.parse(message);
       const data = `data: ${JSON.stringify(alert)}\n\n`;
       clients.forEach((client, i) => {
@@ -96,7 +100,7 @@ redisSubscriber
 
 process.on("SIGINT", async () => {
   console.log("Shutting down gracefully...");
-  await redisSubscriber.quit();
+  await client.quit();
   process.exit(0);
 });
 

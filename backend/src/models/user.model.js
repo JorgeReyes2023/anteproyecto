@@ -3,10 +3,10 @@ const prisma = require("../prisma");
 class UserModel {
   static async getAllUsers() {
     try {
-      const users = await prisma.users.findMany({
+      const users = await prisma.usuarios.findMany({
         include: {
-          user_roles: true,
-          companies: true,
+          roles_usuario: true,
+          empresas: true,
         },
       });
       return users;
@@ -16,23 +16,23 @@ class UserModel {
   }
 
   static async createUser(username, email, password, role, company = null) {
-    const roleId = await prisma.user_roles
+    const roleId = await prisma.roles_usuario
       .findFirst({
         where: { name: role },
       })
       .then((role) => (role ? role.id : null));
 
-    return prisma.users.create({
+    return prisma.usuarios.create({
       data: {
-        name: username,
-        email: email,
-        password: password,
-        companies: company
+        u_nombre: username,
+        u_email: email,
+        u_contrasena: password,
+        empresas: company
           ? {
               connect: { id: company },
             }
           : undefined,
-        user_roles: {
+        roles_usuario: {
           connect: { id: roleId },
         },
       },
@@ -41,11 +41,11 @@ class UserModel {
 
   static async getUserByEmail(email) {
     try {
-      const user = await prisma.users.findUnique({
-        where: { email: email },
+      const user = await prisma.usuarios.findUnique({
+        where: { u_email: email },
         include: {
-          user_roles: true,
-          companies: true,
+          roles_usuario: true,
+          empresas: true,
         },
       });
       return user;
@@ -60,10 +60,10 @@ class UserModel {
       if (isNaN(numericId)) {
         throw new Error("Invalid user ID");
       }
-      const user = await prisma.users.findUnique({
+      const user = await prisma.usuarios.findUnique({
         where: { id: numericId },
         include: {
-          user_roles: true,
+          roles_usuario: true,
         },
       });
       return user;
@@ -76,12 +76,12 @@ class UserModel {
     try {
       const data = { ...updates };
 
-      const user = await prisma.users.update({
+      const user = await prisma.usuarios.update({
         where: { id },
         data,
         include: {
-          user_roles: true,
-          companies: true,
+          roles_usuario: true,
+          empresas: true,
         },
       });
 
@@ -94,7 +94,7 @@ class UserModel {
 
   static async deleteUser(id) {
     try {
-      const user = await prisma.users.delete({
+      const user = await prisma.usuarios.delete({
         where: { id: id },
       });
       return user;

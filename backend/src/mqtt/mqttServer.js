@@ -3,14 +3,14 @@ const dotenv = require("dotenv");
 
 dotenv.config();
 
-console.log("MQTT CONNECTION TEST");
+console.log("🧪 PRUEBA DE CONEXIÓN MQTT");
 console.log("========================");
-console.log(`Server: ${process.env.MQTTSERVER}`);
-console.log(`Username: ${process.env.MQTT_USERNAME}`);
+console.log(`Servidor: ${process.env.MQTTSERVER}`);
+console.log(`Usuario: ${process.env.MQTT_USERNAME}`);
 console.log(`ClientID: ${process.env.CLIENTID}`);
-console.log(`Password: ${process.env.PASSWORD_MQ ? "[DEFINED]" : "[MISSING]"}`);
-console.log("========================");
-
+console.log(
+  `Contraseña: ${process.env.PASSWORD_MQ ? "[DEFINIDA]" : "[FALTA]"}`,
+);
 console.log("========================");
 
 const client = mqtt.connect(process.env.MQTTSERVER, {
@@ -22,39 +22,42 @@ const client = mqtt.connect(process.env.MQTTSERVER, {
   connectTimeout: 10000,
 });
 
-// Connection test
+// Prueba de conexión
 client.on("connect", () => {
-  console.log("Connection OK!");
-  console.log("Credentials are correct");
+  console.log("✅ ¡CONEXIÓN OK!");
+  console.log("🎯 Los datos son correctos");
 
-  // Test subscription to a simple topic
+  // Prueba de suscripción a un topic simple
   client.subscribe("Extensometer/get", (err) => {
     if (!err) {
-      console.log("Subscribed to topic Extensometer/get");
+      console.log("📡 Suscrito al topic Extensometer/get");
     }
   });
 });
 
-// Test message reception
+// Prueba de recepción
 client.on("message", (topic, message) => {
-  console.log(`Message received on ${topic}: ${message.toString()}`);
+  console.log(`📨 Mensaje recibido en ${topic}: ${message.toString()}`);
 });
 
+// Gestión de errores
 client.on("error", (error) => {
-  console.error("❌ CONNECTION ERROR!");
-  console.error("Details:", error.message);
+  console.error("❌ ¡ERROR DE CONEXIÓN!");
+  console.error("Detalles:", error.message);
 
   if (error.code === 4) {
-    console.error("Credentials rejected (incorrect username/password)");
+    console.error(
+      "🚫 Credenciales rechazadas (usuario/contraseña incorrectos)",
+    );
   } else if (error.code === 5) {
-    console.error("Connection not authorized");
+    console.error("🚫 Conexión no autorizada");
   } else {
-    console.error("Network error or server inaccessible");
+    console.error("🚫 Error de red o servidor inaccesible");
   }
 });
 
 client.on("offline", () => {
-  console.warn("Client offline");
+  console.warn("⚠️ Cliente fuera de línea");
 });
 
-console.log("Attempting to connect...");
+console.log("⏳ Intentando conectar...");

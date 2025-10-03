@@ -1,7 +1,6 @@
 const { AlertModel } = require("../models/alert.model");
 const { AlertUserModel } = require("../models/alert-user.model");
 const {
-  alertSchema,
   alertSchemaId,
   updateReadSchema,
 } = require("../validators/alert.validator");

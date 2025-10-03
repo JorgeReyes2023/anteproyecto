@@ -1,0 +1,189 @@
+# ===== DOCKER COMPOSE PARA SISTEMA IOT COMPLETO =====
+
+services:
+  # ===== BASE DE DATOS PostgreSQL =====
+  postgres:
+    image: postgres:15-alpine
+    container_name: nodalis_postgres
+    restart: unless-stopped
+    environment:
+      # CORRECTION: Utiliser vos variables existantes
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_INITDB_ARGS: "--auth-host=scram-sha-256"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./backend/prisma/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    ports:
+      - "5432:5432"
+    networks:
+      - nodalis_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  # ===== CACHE REDIS =====
+  redis:
+    image: redis:7-alpine
+    container_name: nodalis_redis
+    restart: unless-stopped
+    command: redis-server --requirepass ${REDIS_PASSWORD}
+    volumes:
+      - redis_data:/data
+    ports:
+      - "6380:6379"  # Port externe 6380, interne 6379
+    networks:
+      - nodalis_network
+    healthcheck:
+      test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
+  # ===== BACKEND NODE.JS =====
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+      target: production
+    container_name: nodalis_backend
+    restart: unless-stopped
+    env_file:
+      - backend/.env
+    environment:
+      NODE_ENV: development
+      # Override para Docker
+      DB_HOST: postgres
+      DATABASE_URL: "${DATABASE_URL}"
+      JWT_SECRET: ${JWT_SECRET}
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+      REDIS_URL: "redis://:${REDIS_PASSWORD}@redis:6379"
+      MQTTSERVER: ${MQTTSERVER}
+      MQTTPORT: ${MQTTPORT}
+      MQTT_USERNAME: ${MQTT_USERNAME}
+      PASSWORD_MQ: ${PASSWORD_MQ}
+    volumes:
+      # Montar código fuente para hot-reload
+      - ./backend/src:/app/src:ro
+      - ./backend/package.json:/app/package.json:ro
+      - ./backend/prisma:/app/prisma:ro
+      # Excluir node_modules del host
+      - /app/node_modules
+    networks:
+      - nodalis_network
+    depends_on:
+      - postgres
+      - redis
+    command: >
+      sh -c "
+        echo '⏳ Waiting for PostgreSQL to be fully ready...' &&
+        
+        until pg_isready -h postgres -p 5432 -U ${DB_USER}; do
+          echo 'PostgreSQL is unavailable - sleeping 2s' &&
+          sleep 2
+        done &&
+        
+        echo '✅ PostgreSQL is ready!' &&
+        echo '🔍 Testing database connection...' &&
+        
+        until npx prisma db ping; do
+          echo 'Database not ready yet - waiting 3s...' &&
+          sleep 3
+        done &&
+        
+        echo '🔧 Generating Prisma client...' &&
+        npx prisma generate &&
+        
+        echo '🚀 Running migrations...' &&
+        npx prisma migrate deploy &&
+        
+        echo '🌱 Running seed...' &&
+        npx prisma db seed &&
+        
+        echo '✅ Starting backend server...' &&
+        npm run dev
+      "
+    ports:
+      - "3000:3000"  # Puerto backend
+
+  # ===== FRONTEND ANGULAR =====
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      target: production
+    container_name: nodalis_frontend
+    restart: unless-stopped
+    environment:
+      API_URL: http://backend:3000
+      MQTT_WS_URL: ws://mosquitto:9001
+    ports:
+      - "80:80"
+    networks:
+      - nodalis_network
+    depends_on:
+      - backend
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost/ || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # ===== SERVEUR MQTT (Process separado para el backend) =====
+  mqtt_processor:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+      target: production
+    container_name: nodalis_mqtt_processor
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      DATABASE_URL: "${DATABASE_URL}"
+      REDIS_URL: redis://:${REDIS_PASSWORD:-redis123}@redis:6379
+      MQTTSERVER: ${MQTTSERVER:-mqtt://mosquitto:1883}
+      MQTTPORT: ${MQTTPORT:-1883}
+    volumes:
+      - mqtt_logs:/app/logs
+    networks:
+      - nodalis_network
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    command: ["npm", "run", "mqtt"]
+    healthcheck:
+      test: ["CMD-SHELL", "pgrep -f 'npm run mqtt' >/dev/null || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+# ===== VOLUMES PERSISTENTES =====
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+  mosquitto_data:
+    driver: local
+  mosquitto_logs:
+    driver: local
+  backend_logs:
+    driver: local
+  mqtt_logs:
+    driver: local
+
+# ===== REDES =====
+networks:
+  nodalis_network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.30.0.0/16

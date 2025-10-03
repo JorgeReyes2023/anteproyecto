@@ -9,7 +9,6 @@ const { SensorReadingModel } = require("../models/sensor-reading.model.js");
 const {
   sensorSchemaId,
   sensorSupportedTypeSchema,
-  SensorReadingTypeSchema,
   SensorReadingTypeSchemaWithoutId,
   attachingSensorsToNodeSchema,
   getReadingsBySensorIdAndType,
