@@ -42,8 +42,8 @@ describe("NodeService", () => {
         location: "Quito",
         status: State.ONLINE,
         projectId: 1,
-        proyectos: null,
-        sensores: [],
+        projects: null,
+        sensors: [],
       });
     });
 

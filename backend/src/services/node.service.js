@@ -47,8 +47,8 @@ class NodeService {
         location: node.n_ubicacion,
         status: State[node.n_estado],
         projectId: node.n_proyecto_id,
-        proyectos: node.proyectos,
-        sensores: node.sensores,
+        projects: node.proyectos,
+        sensors: node.sensores,
       };
     } catch (error) {
       throw new Error(`Error al crear el nodo: ${error.message}`);
