@@ -48,12 +48,12 @@ class AlertService {
   static async getAllAlerts() {
     try {
       return (await AlertModel.getAllAlerts()).map((alert) => ({
-        id: alert.id,
-        message: alert.message,
-        level: alert.level,
-        isRead: alert.alerts_users.some((user) => user.is_read),
-        sensorId: alert.sensor_id,
-        createdAt: alert.created_at,
+        id: alert.a_id,
+        message: alert.a_mensaje,
+        level: alert.a_nivel,
+        isRead: alert.alertas_usuarios.some((user) => user.au_leido),
+        sensorId: alert.a_sensor_id,
+        createdAt: alert.a_creado_en,
       }));
     } catch (error) {
       throw new Error(`Error fetching all alerts: ${error.message}`);
@@ -156,12 +156,12 @@ class AlertService {
 
       const alerts = (await AlertModel.getAlertsByCompanyId(value.id)).map(
         (alert) => ({
-          id: alert.id,
-          message: alert.message,
-          level: alert.level,
-          isRead: alert.alerts_users.some((user) => user.is_read),
-          sensorId: alert.sensor_id,
-          createdAt: alert.created_at,
+          id: alert.a_id,
+          message: alert.a_mensaje,
+          level: alert.a_nivel,
+          isRead: alert.alertas_usuarios.some((user) => user.au_leido),
+          sensorId: alert.a_sensor_id,
+          createdAt: alert.a_creado_en,
         }),
       );
       return alerts;

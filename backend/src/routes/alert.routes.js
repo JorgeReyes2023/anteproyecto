@@ -31,7 +31,7 @@ alertRoutes.use(authenticate);
 alertRoutes.post("/", async (req, res) => {
   try {
     const alertData = req.body;
-    if (!alertData.name || !alertData.type) {
+    if (!alertData.message || !alertData.level) {
       return res.status(400).json({ error: "Faltan datos requeridos" });
     }
     const alert = await AlertService.createAlert(alertData);
@@ -78,7 +78,7 @@ alertRoutes.put("/:id", async (req, res) => {
   try {
     const { id } = req.params;
     const alertData = req.body;
-    if (!alertData.name || !alertData.type) {
+    if (!alertData.message || !alertData.level) {
       return res.status(400).json({ error: "Faltan datos requeridos" });
     }
     const alert = await AlertService.updateAlert(id, alertData);
@@ -179,9 +179,9 @@ alertRoutes.get("/", async (req, res) => {
  *               properties:
  *                 id:
  *                   type: integer
- *                 name:
+ *                 message:
  *                   type: string
- *                 type:
+ *                 level:
  *                   type: string
  *       404:
  *         description: Alerta no encontrada

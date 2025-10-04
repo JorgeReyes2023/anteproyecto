@@ -18,11 +18,11 @@ class UserService {
     try {
       const users = await UserModel.getAllUsers();
       return users.map((user) => ({
-        id: user.id,
-        name: user.name,
-        email: user.email,
-        role: user.user_roles.name,
-        company: user.companies?.name || null,
+        id: user.u_id,
+        name: user.u_nombre,
+        email: user.u_email,
+        role: user.roles_usuario?.ru_nombre || null,
+        company: user.empresas?.e_nombre || null,
       }));
     } catch (error) {
       throw new Error(`Error fetching users: ${error.message}`);
@@ -100,7 +100,7 @@ class UserService {
         if (!role) {
           throw new Error("Invalid role specified");
         }
-        updates.user_roles = { connect: { id: role.id } };
+        updates.user_roles = { connect: { ru_id: role.ru_id } };
         updates.role = undefined; // Remove role from updates to avoid conflicts
       }
 
@@ -110,7 +110,7 @@ class UserService {
         if (!company) {
           throw new Error("Company not found");
         }
-        updates.companies = { connect: { id: company.id } };
+        updates.companies = { connect: { e_id: company.e_id } };
         updates.company = undefined; // Remove company from updates to avoid conflicts
       }
 
@@ -171,7 +171,7 @@ class UserService {
       if (!user) {
         throw new Error("User not found");
       }
-      const isMatch = await bcrypt.compare(currentPassword, user.password);
+      const isMatch = await bcrypt.compare(currentPassword, user.u_contrasena);
       if (!isMatch) {
         throw new Error("Old password is incorrect");
       }
@@ -179,16 +179,16 @@ class UserService {
       const hashedNewPassword = await bcrypt.hash(newPassword, salt);
       const numericId = parseInt(id, 10);
       const updatedUser = await UserModel.updateUser(numericId, {
-        password: hashedNewPassword,
+        u_contrasena: hashedNewPassword,
       });
 
       return {
         message: "Password changed successfully",
         user: {
-          id: updatedUser.id,
-          name: updatedUser.name,
-          email: updatedUser.email,
-          role: updatedUser.user_roles.name,
+          id: updatedUser.u_id,
+          name: updatedUser.u_nombre,
+          email: updatedUser.u_email,
+          role: updatedUser.roles_usuario?.ru_nombre || null,
         },
       };
     } catch (error) {

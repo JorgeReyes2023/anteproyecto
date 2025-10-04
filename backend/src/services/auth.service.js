@@ -58,27 +58,27 @@ class AuthService {
         throw new Error("Email and password are required");
       }
       const user = await UserModel.getUserByEmail(email);
-      if (!user || !this.checkPassword(password, user.password)) {
+      if (!user || !this.checkPassword(password, user.u_contrasena)) {
         throw new Error("Invalid email or password");
       }
 
       const userDto = {
-        id: user.id,
-        name: user.name,
-        email: user.email,
-        role: user.user_roles?.name || user.user_roles,
-        company: user.companies?.name || null,
-        companyId: user.companies?.id || null,
+        id: user.u_id,
+        name: user.u_nombre,
+        email: user.u_email,
+        role: user.roles_usuario?.ru_nombre || null,
+        company: user.empresas?.e_nombre || null,
+        companyId: user.empresas?.e_id || null,
       };
 
       // generar token
       const token = generateToken({
-        id: user.id,
-        name: user.name,
-        role: user.user_roles?.name || user.user_roles,
-        email: user.email,
-        company: user.companies?.name || null,
-        companyId: user.companies?.id || null,
+        id: user.u_id,
+        name: user.u_nombre,
+        role: user.roles_usuario?.ru_nombre || null,
+        email: user.u_email,
+        company: user.empresas?.e_nombre || null,
+        companyId: user.empresas?.e_id || null,
       });
 
       return { user: userDto, token };
@@ -115,11 +115,12 @@ class AuthService {
         company,
       );
       const token = generateToken({
-        id: user.id,
-        name: user.name,
-        role: user.role,
-        email: user.email,
-        company: user.company,
+        id: user.u_id,
+        name: user.u_nombre,
+        role: user.roles_usuario?.ru_nombre || null,
+        email: user.u_email,
+        company: user.empresas?.e_nombre || null,
+        companyId: user.empresas?.e_id || null,
       });
       return { user, token };
     } catch (error) {
