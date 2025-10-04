@@ -15,26 +15,34 @@ class UserModel {
     }
   }
 
-  static async createUser(username, email, password, role, company = null) {
+  static async createUser(username, email, password, role, companyId = null) {
     const roleId = await prisma.roles_usuario
       .findFirst({
         where: { ru_nombre: role },
       })
       .then((role) => (role ? role.ru_id : null));
 
+    if (!roleId) {
+      throw new Error(`Role '${role}' does not exist`);
+    }
+
     return prisma.usuarios.create({
       data: {
         u_nombre: username,
         u_email: email,
         u_contrasena: password,
-        empresas: company
+        empresas: companyId
           ? {
-              connect: { e_id: company },
+              connect: { e_id: companyId },
             }
           : undefined,
         roles_usuario: {
           connect: { ru_id: roleId },
         },
+      },
+      include: {
+        roles_usuario: true,
+        empresas: true,
       },
     });
   }

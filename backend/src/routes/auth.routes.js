@@ -20,7 +20,7 @@ const authRoutes = Router();
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/User'
+ *             $ref: '#/components/schemas/UserRegister'
  *     responses:
  *       201:
  *         description: Usuario registrado exitosamente
@@ -39,12 +39,12 @@ const authRoutes = Router();
  */
 authRoutes.post("/register", authenticate, authorizeAdmin, async (req, res) => {
   try {
-    const { name, email, password, role, company } = req.body;
+    const { name, email, password, role, companyId } = req.body;
     if (!name || !email || !password) {
       return res.status(400).json({ error: "Faltan datos requeridos" });
     }
 
-    if (role && ["user"].includes(role) && !company) {
+    if (role && ["user"].includes(role) && !companyId) {
       return res
         .status(400)
         .json({ error: "El rol 'user' requiere una empresa asociada" });
@@ -55,7 +55,7 @@ authRoutes.post("/register", authenticate, authorizeAdmin, async (req, res) => {
       email,
       password,
       role,
-      company,
+      companyId,
     );
     res.status(201).json(user);
   } catch (error) {
@@ -75,17 +75,7 @@ authRoutes.post("/register", authenticate, authorizeAdmin, async (req, res) => {
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             required:
- *               - email
- *               - password
- *             properties:
- *               email:
- *                 type: string
- *                 example: "juan.perez@email.com"
- *               password:
- *                 type: string
- *                 example: "securePassword123"
+ *             $ref: '#/components/schemas/UserLogin'
  *     responses:
  *       200:
  *         description: Inicio de sesión exitoso

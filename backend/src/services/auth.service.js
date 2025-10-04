@@ -58,27 +58,28 @@ class AuthService {
         throw new Error("Email and password are required");
       }
       const user = await UserModel.getUserByEmail(email);
+
       if (!user || !this.checkPassword(password, user.u_contrasena)) {
         throw new Error("Invalid email or password");
       }
 
       const userDto = {
-        id: user.u_id,
+        id: this.handleIdBigInt(user.u_id),
         name: user.u_nombre,
         email: user.u_email,
         role: user.roles_usuario?.ru_nombre || null,
         company: user.empresas?.e_nombre || null,
-        companyId: user.empresas?.e_id || null,
+        companyId: this.handleIdBigInt(user.empresas?.e_id) || null,
       };
 
       // generar token
       const token = generateToken({
-        id: user.u_id,
+        id: this.handleIdBigInt(user.u_id),
         name: user.u_nombre,
         role: user.roles_usuario?.ru_nombre || null,
         email: user.u_email,
         company: user.empresas?.e_nombre || null,
-        companyId: user.empresas?.e_id || null,
+        companyId: this.handleIdBigInt(user.empresas?.e_id) || null,
       });
 
       return { user: userDto, token };
@@ -103,7 +104,7 @@ class AuthService {
     email,
     password,
     role = "user",
-    company = null,
+    companyId = null,
   ) {
     try {
       const hashedPassword = await this.hashPassword(password);
@@ -112,17 +113,32 @@ class AuthService {
         email,
         hashedPassword,
         role,
-        company,
+        companyId,
       );
+
       const token = generateToken({
-        id: user.u_id,
+        id: this.handleIdBigInt(user.u_id),
         name: user.u_nombre,
         role: user.roles_usuario?.ru_nombre || null,
         email: user.u_email,
         company: user.empresas?.e_nombre || null,
-        companyId: user.empresas?.e_id || null,
+        companyId: user.empresas?.e_id
+          ? this.handleIdBigInt(user.empresas?.e_id)
+          : null,
       });
-      return { user, token };
+
+      const safeUser = {
+        id: this.handleIdBigInt(user.u_id),
+        name: user.u_nombre,
+        email: user.u_email,
+        role: user.roles_usuario?.ru_nombre || null,
+        company: user.empresas?.e_nombre || null,
+        companyId: user.empresas?.e_id
+          ? this.handleIdBigInt(user.empresas?.e_id)
+          : null,
+      };
+
+      return { user: safeUser, token };
     } catch (error) {
       throw new Error(`Registration failed: ${error.message}`);
     }
@@ -151,6 +167,13 @@ class AuthService {
     } catch (error) {
       throw new Error(`Token verification failed: ${error.message}`);
     }
+  }
+
+  static handleIdBigInt(obj) {
+    if (typeof obj === "bigint") {
+      return obj.toString();
+    }
+    return obj;
   }
 }
 module.exports = { AuthService };

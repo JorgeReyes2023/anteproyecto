@@ -68,6 +68,56 @@ const options = {
           },
           required: ["email", "name", "role"],
         },
+        UserLogin: {
+          type: "object",
+          properties: {
+            email: {
+              type: "string",
+              format: "email",
+              description: "Correo electrónico del usuario",
+              example: "juan.perez@email.com",
+            },
+            password: {
+              type: "string",
+              description: "Contraseña del usuario",
+              example: "password123",
+            },
+          },
+          required: ["email", "password"],
+        },
+        UserRegister: {
+          type: "object",
+          properties: {
+            email: {
+              type: "string",
+              format: "email",
+              description: "Correo electrónico del usuario",
+              example: "juan.perez@email.com",
+            },
+            password: {
+              type: "string",
+              description: "Contraseña del usuario",
+              example: "password123",
+            },
+            name: {
+              type: "string",
+              description: "Nombre del usuario",
+              example: "Juan Pérez",
+            },
+            role: {
+              type: "string",
+              enum: ["user", "admin"],
+              description: "Rol del usuario",
+              example: "user",
+            },
+            company: {
+              type: "string",
+              description: "Nombre de la empresa asociada al usuario",
+              example: "Empresa XYZ",
+            },
+          },
+          required: ["email", "password", "name", "role"],
+        },
         Project: {
           type: "object",
           properties: {
