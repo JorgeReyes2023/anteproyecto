@@ -2,31 +2,31 @@ const prisma = require("../prisma");
 
 class ThresholdModel {
   static async createThreshold(thresholdData) {
-    return prisma.thresholds.create({
+    return prisma.umbrales.create({
       data: thresholdData,
     });
   }
 
   static async getThresholdById(id) {
-    return prisma.thresholds.findUnique({
-      where: { id: id },
+    return prisma.umbrales.findUnique({
+      where: { um_id: id },
     });
   }
 
   static async getAllThresholds() {
-    return prisma.thresholds.findMany();
+    return prisma.umbrales.findMany();
   }
 
   static async updateThreshold(id, thresholdData) {
-    return prisma.thresholds.update({
-      where: { id: id },
+    return prisma.umbrales.update({
+      where: { um_id: id },
       data: thresholdData,
     });
   }
 
   static async deleteThreshold(id) {
-    return prisma.thresholds.delete({
-      where: { id: id },
+    return prisma.umbrales.delete({
+      where: { um_id: id },
     });
   }
 }

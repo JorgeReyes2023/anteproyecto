@@ -2,29 +2,29 @@ const prisma = require("../prisma");
 
 class SensorReadingModel {
   static async getAllSensorReadings() {
-    return prisma.sensor_readings.findMany();
+    return prisma.lecturas_sensores.findMany();
   }
 
   static async getReadingsBySensorTypeId(sensorTypeId) {
-    return prisma.sensor_readings.findMany({
+    return prisma.lecturas_sensores.findMany({
       where: {
-        type_id: sensorTypeId,
+        ls_tipo_id: sensorTypeId,
       },
       orderBy: {
-        timestamp: "desc",
+        ls_fecha: "desc",
       },
       take: 100,
     });
   }
 
   static async getReadingsBySensorIdAndType(sensorId, typeId) {
-    return prisma.sensor_readings.findMany({
+    return prisma.lecturas_sensores.findMany({
       where: {
-        sensor_id: sensorId,
-        type_id: typeId,
+        ls_sensor_id: sensorId,
+        ls_tipo_id: typeId,
       },
       orderBy: {
-        timestamp: "desc",
+        ls_fecha: "desc",
       },
       take: 100,
     });

@@ -2,12 +2,12 @@ const prisma = require("../prisma");
 
 class ProjectModel {
   static async createProject(name, description, companyId, nodes = []) {
-    return prisma.projects.create({
+    return prisma.proyectos.create({
       data: {
-        name: name,
-        description: description,
-        company_id: companyId,
-        nodes: {
+        p_nombre: name,
+        p_descripcion: description,
+        p_empresa_id: companyId,
+        nodos: {
           create: nodes,
         },
       },
@@ -15,13 +15,13 @@ class ProjectModel {
   }
 
   static async updateProject(id, name, description, companyId, nodes = []) {
-    return prisma.projects.update({
-      where: { id: id },
+    return prisma.proyectos.update({
+      where: { p_id: id },
       data: {
-        name: name,
-        description: description,
-        company_id: companyId,
-        nodes: {
+        p_nombre: name,
+        p_descripcion: description,
+        p_empresa_id: companyId,
+        nodos: {
           create: nodes,
         },
       },
@@ -29,17 +29,17 @@ class ProjectModel {
   }
 
   static async deleteProject(id) {
-    return prisma.projects.delete({
-      where: { id: id },
+    return prisma.proyectos.delete({
+      where: { p_id: id },
     });
   }
 
   static async getAllProjects() {
     try {
-      const projects = await prisma.projects.findMany({
+      const projects = await prisma.proyectos.findMany({
         include: {
-          nodes: true,
-          companies: true,
+          nodos: true,
+          empresas: true,
         },
       });
       return projects;
@@ -50,8 +50,8 @@ class ProjectModel {
 
   static async getProjectById(id) {
     try {
-      const project = await prisma.projects.findUnique({
-        where: { id: id },
+      const project = await prisma.proyectos.findUnique({
+        where: { p_id: id },
       });
       return project;
     } catch (error) {
@@ -61,8 +61,8 @@ class ProjectModel {
 
   static async getProjectByName(name) {
     try {
-      const project = await prisma.projects.findFirst({
-        where: { name: name },
+      const project = await prisma.proyectos.findFirst({
+        where: { p_nombre: name },
       });
       return project;
     } catch (error) {
@@ -72,10 +72,10 @@ class ProjectModel {
 
   static async getProjectsByCompanyId(companyId) {
     try {
-      const projects = await prisma.projects.findMany({
-        where: { company_id: companyId },
+      const projects = await prisma.proyectos.findMany({
+        where: { p_empresa_id: companyId },
         include: {
-          companies: true,
+          empresas: true,
         },
       });
       return projects;
