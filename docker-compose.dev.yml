@@ -14,7 +14,7 @@ services:
       NODE_ENV: development
       # Override para Docker
       DB_HOST: postgres
-      DATABASE_URL: ${DATABASE_URL}
+      DATABASE_URL: "${DATABASE_URL}"
       JWT_SECRET: ${JWT_SECRET}
       REDIS_HOST: redis
       REDIS_PORT: ${REDIS_PORT}
