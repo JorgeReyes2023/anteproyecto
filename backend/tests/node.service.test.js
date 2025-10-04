@@ -26,13 +26,25 @@ describe("NodeService", () => {
         },
       });
       NodeModel.createNode.mockResolvedValue({
-        id: 1,
-        name: "N1",
-        status: "ONLINE",
+        n_id: 1,
+        n_nombre: "N1",
+        n_ubicacion: "Quito",
+        n_estado: "ONLINE",
+        n_proyecto_id: 1,
+        proyectos: null,
+        sensores: [],
       });
 
       const result = await NodeService.createNode("N1", "Quito", "ONLINE", 1);
-      expect(result).toEqual({ id: 1, name: "N1", status: State.ONLINE });
+      expect(result).toEqual({
+        id: 1,
+        name: "N1",
+        location: "Quito",
+        status: State.ONLINE,
+        projectId: 1,
+        proyectos: null,
+        sensores: [],
+      });
     });
 
     it("should throw validation error", async () => {
@@ -47,30 +59,36 @@ describe("NodeService", () => {
     it("should return node by id with formatted status", async () => {
       nodeSchemaId.validate.mockReturnValue({ value: { id: 1 } });
       NodeModel.getNodeById.mockResolvedValue({
-        id: 1,
-        name: "NodeX",
-        status: "ACTIVE",
-        project_id: 4,
-        projects: ["P1"],
+        n_id: 1,
+        n_nombre: "NodeX",
+        n_ubicacion: "Quito",
+        n_estado: "ACTIVO",
+        n_proyecto_id: 4,
+        proyectos: { p_id: 4, p_nombre: "P1" },
+        sensores: [],
       });
 
       const result = await NodeService.getNodeById(1);
       expect(result).toEqual({
         id: 1,
         name: "NodeX",
+        location: "Quito",
         status: "activo",
         projectId: 4,
-        project: ["P1"],
+        project: { p_id: 4, p_nombre: "P1" },
+        sensors: [],
       });
     });
 
     it("should return node with empty project array if projects is undefined", async () => {
       const mockNode = {
-        id: 1,
-        name: "Node A",
-        project_id: 101,
-        projects: undefined, // simulate no project linked
-        status: "INACTIVE",
+        n_id: 1,
+        n_nombre: "Node A",
+        n_ubicacion: "Loja",
+        n_proyecto_id: 101,
+        proyectos: undefined, // simulate no project linked
+        n_estado: "INACTIVO",
+        sensores: [],
       };
 
       NodeModel.getNodeById.mockResolvedValue(mockNode);
@@ -80,9 +98,11 @@ describe("NodeService", () => {
       expect(result).toEqual({
         id: 1,
         name: "Node A",
+        location: "Loja",
         status: "inactivo",
         projectId: 101,
-        project: [],
+        project: null,
+        sensors: [],
       });
     });
 
@@ -101,32 +121,36 @@ describe("NodeService", () => {
           id: 2,
           name: "Updated",
           location: "Loja",
-          status: "MAINTENANCE",
+          status: "MANTENIMIENTO",
           projectId: 3,
         },
       });
       NodeModel.updateNode.mockResolvedValue({
-        id: 2,
-        name: "Updated",
-        status: "MAINTENANCE",
-        project_id: 3,
-        projects: [],
+        n_id: 2,
+        n_nombre: "Updated",
+        n_ubicacion: "Loja",
+        n_estado: "MANTENIMIENTO",
+        n_proyecto_id: 3,
+        proyectos: null,
+        sensores: [],
       });
 
       const result = await NodeService.updateNode(
         2,
         "Updated",
         "Loja",
-        "MAINTENANCE",
+        "MANTENIMIENTO",
         3,
       );
 
       expect(result).toEqual({
         id: 2,
         name: "Updated",
-        status: State.MAINTENANCE,
+        location: "Loja",
+        status: State.MANTENIMIENTO,
         projectId: 3,
-        project: [],
+        project: null,
+        sensors: [],
       });
     });
 
@@ -159,20 +183,22 @@ describe("NodeService", () => {
     it("should return all nodes formatted", async () => {
       NodeModel.getAllNodes.mockResolvedValue([
         {
-          id: 1,
-          name: "N1",
-          status: "ACTIVE",
-          sensors: [],
-          project_id: 2,
-          projects: [],
+          n_id: 1,
+          n_nombre: "N1",
+          n_ubicacion: "Quito",
+          n_estado: "ACTIVO",
+          sensores: [],
+          n_proyecto_id: 2,
+          proyectos: null,
         },
         {
-          id: 2,
-          name: "N2",
-          status: "INACTIVE",
-          sensors: [],
-          project_id: 3,
-          projects: [],
+          n_id: 2,
+          n_nombre: "N2",
+          n_ubicacion: "Loja",
+          n_estado: "INACTIVO",
+          sensores: [],
+          n_proyecto_id: 3,
+          proyectos: null,
         },
       ]);
 
@@ -182,17 +208,19 @@ describe("NodeService", () => {
         {
           id: 1,
           name: "N1",
-          status: State.ACTIVE,
+          location: "Quito",
+          status: State.ACTIVO,
           projectId: 2,
-          project: [],
+          project: null,
           sensors: [],
         },
         {
           id: 2,
           name: "N2",
-          status: State.INACTIVE,
+          location: "Loja",
+          status: State.INACTIVO,
           projectId: 3,
-          project: [],
+          project: null,
           sensors: [],
         },
       ]);
