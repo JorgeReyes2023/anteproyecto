@@ -2,63 +2,63 @@ const prisma = require("../prisma");
 
 const NodeModel = {
   async createNode(name, location, status, projectId) {
-    return prisma.nodes.create({
+    return prisma.nodos.create({
       data: {
-        name: name,
-        location: location,
-        status: status,
-        project_id: projectId,
+        n_nombre: name,
+        n_ubicacion: location,
+        n_estado: status,
+        n_proyecto_id: projectId,
       },
       include: {
-        projects: true,
-        sensors: true,
+        proyectos: true,
+        sensores: true,
       },
     });
   },
 
   async getNodeById(id) {
-    return prisma.nodes.findUnique({
-      where: { id: id },
+    return prisma.nodos.findUnique({
+      where: { n_id: id },
     });
   },
 
   async updateNode(id, name, location, status, projectId) {
-    return prisma.nodes.update({
-      where: { id: id },
+    return prisma.nodos.update({
+      where: { n_id: id },
       data: {
-        name: name,
-        location: location,
-        status: status,
-        project_id: projectId,
+        n_nombre: name,
+        n_ubicacion: location,
+        n_estado: status,
+        n_proyecto_id: projectId,
       },
       include: {
-        projects: true,
-        sensors: true,
+        proyectos: true,
+        sensores: true,
       },
     });
   },
 
   async deleteNode(id) {
-    return prisma.nodes.delete({
-      where: { id: id },
+    return prisma.nodos.delete({
+      where: { n_id: id },
     });
   },
 
   async getAllNodes() {
-    return prisma.nodes.findMany({
+    return prisma.nodos.findMany({
       include: {
-        projects: true,
-        sensors: true,
+        proyectos: true,
+        sensores: true,
       },
     });
   },
 
   async getNodesByProjectId(projectId) {
-    return prisma.nodes.findMany({
-      where: { project_id: projectId },
+    return prisma.nodos.findMany({
+      where: { n_proyecto_id: projectId },
       include: {
-        projects: true,
-        sensors: true,
+        proyectos: true,
+        sensores: true,
       },
     });
   },

@@ -2,56 +2,54 @@ const prisma = require("../prisma");
 
 class AlertModel {
   static async createAlert(alertData) {
-    return prisma.alerts.create({
+    return prisma.alertas.create({
       data: alertData,
     });
   }
 
   static async getAlertById(id) {
-    return prisma.alerts.findUnique({
-      where: { id: id },
+    return prisma.alertas.findUnique({
+      where: { a_id: id },
     });
   }
 
   static async getAllAlerts() {
-    return prisma.alerts.findMany({
+    return prisma.alertas.findMany({
       include: {
-        alerts_users: true,
+        alertas_usuarios: true,
       },
-      orderBy: { created_at: "desc" },
+      orderBy: { a_creado_en: "desc" },
     });
   }
 
   static async updateAlert(id, alertData) {
-    return prisma.alerts.update({
-      where: { id: id },
+    return prisma.alertas.update({
+      where: { a_id: id },
       data: alertData,
     });
   }
 
   static async deleteAlert(id) {
-    return prisma.alerts.delete({
-      where: { id: id },
+    return prisma.alertas.delete({
+      where: { a_id: id },
     });
   }
 
   static async getAlertsByCompanyId(companyId) {
-    return prisma.alerts.findMany({
+    return prisma.alertas.findMany({
       where: {
-        sensors: {
-          some: {
-            projects: {
-              some: {
-                company_id: companyId,
-              },
+        sensores: {
+          nodos: {
+            proyectos: {
+              p_empresa_id: companyId,
             },
           },
         },
       },
       include: {
-        alerts_users: true,
+        alertas_usuarios: true,
       },
-      orderBy: { created_at: "desc" },
+      orderBy: { a_creado_en: "desc" },
     });
   }
 }

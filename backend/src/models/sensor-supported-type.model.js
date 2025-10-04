@@ -2,34 +2,34 @@ const prisma = require("../prisma");
 
 class SensorSupportedTypeModel {
   static async createSensorSupportedType(sensorSupportedTypeData) {
-    return prisma.sensor_supported_types.create({
+    return prisma.tipos_sensor_soportados.create({
       data: sensorSupportedTypeData,
     });
   }
 
   static async getAllSensorSupportedTypes() {
-    return prisma.sensor_supported_types.findMany();
+    return prisma.tipos_sensor_soportados.findMany();
   }
 
   static async getSensorSupportedTypeBySensorId(sensorId) {
-    return prisma.sensor_supported_types.findMany({
-      where: { sensor_id: sensorId },
+    return prisma.tipos_sensor_soportados.findMany({
+      where: { tss_sensor_id: sensorId },
       include: {
-        type: true,
+        tipo: true,
       },
     });
   }
 
   static async updateSensorSupportedType(id, sensorSupportedTypeData) {
-    return prisma.sensor_supported_types.update({
-      where: { id: id },
+    return prisma.tipos_sensor_soportados.update({
+      where: { tss_sensor_id_tss_tipo_id: id },
       data: sensorSupportedTypeData,
     });
   }
 
   static async deleteSensorSupportedType(id) {
-    return prisma.sensor_supported_types.delete({
-      where: { id: id },
+    return prisma.tipos_sensor_soportados.delete({
+      where: { tss_sensor_id_tss_tipo_id: id },
     });
   }
 }

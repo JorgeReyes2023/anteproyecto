@@ -18,9 +18,9 @@ class UserModel {
   static async createUser(username, email, password, role, company = null) {
     const roleId = await prisma.roles_usuario
       .findFirst({
-        where: { name: role },
+        where: { ru_nombre: role },
       })
-      .then((role) => (role ? role.id : null));
+      .then((role) => (role ? role.ru_id : null));
 
     return prisma.usuarios.create({
       data: {
@@ -29,11 +29,11 @@ class UserModel {
         u_contrasena: password,
         empresas: company
           ? {
-              connect: { id: company },
+              connect: { e_id: company },
             }
           : undefined,
         roles_usuario: {
-          connect: { id: roleId },
+          connect: { ru_id: roleId },
         },
       },
     });
@@ -61,7 +61,7 @@ class UserModel {
         throw new Error("Invalid user ID");
       }
       const user = await prisma.usuarios.findUnique({
-        where: { id: numericId },
+        where: { u_id: numericId },
         include: {
           roles_usuario: true,
         },
@@ -77,7 +77,7 @@ class UserModel {
       const data = { ...updates };
 
       const user = await prisma.usuarios.update({
-        where: { id },
+        where: { u_id: id },
         data,
         include: {
           roles_usuario: true,
@@ -95,7 +95,7 @@ class UserModel {
   static async deleteUser(id) {
     try {
       const user = await prisma.usuarios.delete({
-        where: { id: id },
+        where: { u_id: id },
       });
       return user;
     } catch (error) {

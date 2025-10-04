@@ -2,28 +2,28 @@ const prisma = require("../prisma");
 
 class AlertUserModel {
   static async getAlertUserById(id) {
-    return prisma.alerts_users.findUnique({
-      where: { id: id },
+    return prisma.alertas_usuarios.findUnique({
+      where: { au_id: id },
     });
   }
 
   static async getAllAlertUsers() {
-    return prisma.alerts_users.findMany({
-      orderBy: { created_at: "desc" },
+    return prisma.alertas_usuarios.findMany({
+      orderBy: { au_creado_en: "desc" },
     });
   }
 
   static async markAlertAsRead(read, id, userId) {
-    return prisma.alerts_users.update({
-      where: { alert_id_user_id: { alert_id: id, user_id: userId } },
-      data: { is_read: read },
+    return prisma.alertas_usuarios.update({
+      where: { au_alerta_id_au_usuario_id: { au_alerta_id: id, au_usuario_id: userId } },
+      data: { au_leido: read },
     });
   }
 
   static async markAllAlertsAsRead(userId) {
-    return prisma.alerts_users.updateMany({
-      where: { is_read: false, user_id: userId },
-      data: { is_read: true },
+    return prisma.alertas_usuarios.updateMany({
+      where: { au_leido: false, au_usuario_id: userId },
+      data: { au_leido: true },
     });
   }
 }

@@ -3,8 +3,8 @@ const prisma = require("../prisma");
 class RoleModel {
   static async getRoleByName(name) {
     try {
-      const role = await prisma.user_roles.findFirst({
-        where: { name: name },
+      const role = await prisma.roles_usuario.findFirst({
+        where: { ru_nombre: name },
       });
       return role;
     } catch (error) {
@@ -14,7 +14,7 @@ class RoleModel {
 
   static async getAllRoles() {
     try {
-      const roles = await prisma.user_roles.findMany();
+      const roles = await prisma.roles_usuario.findMany();
       return roles;
     } catch (error) {
       throw new Error(`Error fetching roles: ${error.message}`);
