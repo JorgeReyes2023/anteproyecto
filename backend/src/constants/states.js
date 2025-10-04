@@ -1,7 +1,7 @@
 const State = {
-  ACTIVE: "activo",
-  INACTIVE: "inactivo",
-  MAINTENANCE: "en Mantenimiento",
+  ACTIVO: "activo",
+  INACTIVO: "inactivo",
+  MANTENIMIENTO: "en Mantenimiento",
   ERROR: "error",
 };
 

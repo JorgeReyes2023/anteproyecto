@@ -127,15 +127,15 @@ class ProjectService {
     try {
       const projects = await ProjectModel.getAllProjects();
       const projectsDto = projects.map((project) => ({
-        id: project.id,
-        name: project.name,
-        description: project.description,
-        companyId: project.company_id,
-        nodes: project.nodes,
-        company: project.companies
+        id: project.p_id,
+        name: project.p_nombre,
+        description: project.p_descripcion,
+        companyId: project.p_empresa_id,
+        nodes: project.nodos,
+        company: project.empresas
           ? {
-              id: project.companies.id,
-              name: project.companies.name,
+              id: project.empresas.e_id,
+              name: project.empresas.e_nombre,
             }
           : null,
       }));
@@ -163,14 +163,14 @@ class ProjectService {
       );
       const projects = await ProjectModel.getProjectsByCompanyId(value.id);
       return projects.map((project) => ({
-        id: project.id,
-        name: project.name,
-        description: project.description,
-        companyId: project.company_id,
-        company: project.companies
+        id: project.p_id,
+        name: project.p_nombre,
+        description: project.p_descripcion,
+        companyId: project.p_empresa_id,
+        company: project.empresas
           ? {
-              id: project.companies.id,
-              name: project.companies.name,
+              id: project.empresas.e_id,
+              name: project.empresas.e_nombre,
             }
           : null,
       }));

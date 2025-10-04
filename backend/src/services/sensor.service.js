@@ -52,8 +52,8 @@ class SensorService {
         value.typeIds && Array.isArray(value.typeIds)
           ? value.typeIds.map((typeId) =>
               SensorSupportedTypeModel.createSensorSupportedType({
-                sensor_id: newSensor.id,
-                type_id: typeId,
+                tss_sensor_id: newSensor.s_id,
+                tss_tipo_id: typeId,
               }),
             )
           : [],
@@ -85,20 +85,20 @@ class SensorService {
       if (!sensor) return null;
 
       const sensorDto = {
-        id: sensor.id,
-        name: sensor.name,
-        nodeId: sensor.node_id,
-        status: sensor.status,
-        types: sensor.supported_types.map((supportedType) => ({
-          id: supportedType.id,
-          name: supportedType.type.name,
-          unit: supportedType.type.unit,
-          description: supportedType.type.description || "No disponible",
+        id: sensor.s_id,
+        name: sensor.s_nombre,
+        nodeId: sensor.s_nodo_id,
+        status: sensor.s_estado,
+        types: sensor.tipos_soportados.map((supportedType) => ({
+          id: supportedType.tss_tipo_id,
+          name: supportedType.tipo.tls_nombre,
+          unit: supportedType.tipo.tls_unidad,
+          description: supportedType.tipo.tls_descripcion || "No disponible",
         })),
-        node: sensor.nodes
+        node: sensor.nodos
           ? {
-              id: sensor.nodes.id,
-              name: sensor.nodes.name,
+              id: sensor.nodos.n_id,
+              name: sensor.nodos.n_nombre,
             }
           : null,
       };
@@ -120,10 +120,10 @@ class SensorService {
       const sensors = await SensorModel.getAllSensors();
       return sensors.map((sensor) => {
         return {
-          id: sensor.id,
-          name: sensor.name,
-          nodeId: sensor.node_id,
-          status: sensor.status,
+          id: sensor.s_id,
+          name: sensor.s_nombre,
+          nodeId: sensor.s_nodo_id,
+          status: sensor.s_estado,
         };
       });
     } catch (error) {
