@@ -25,6 +25,20 @@ RUN npm run build -- \
   --extract-licenses \
   --source-map=false
 
+  # Dev stage
+FROM node:18-alpine AS dev
+
+WORKDIR /app
+
+COPY package*.json ./
+RUN npm ci --silent
+
+COPY . .
+
+EXPOSE 4200
+
+CMD ["npm", "start"]
+
 # Production stage
 FROM nginx:alpine AS production
 

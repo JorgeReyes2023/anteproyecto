@@ -9,12 +9,12 @@ services:
       dockerfile: Dockerfile
       target: dev
     env_file:
-      - backend/.env
+      - .env
     environment:
       NODE_ENV: development
       # Override para Docker
       DB_HOST: postgres
-      DATABASE_URL: "${DATABASE_URL}"
+      DATABASE_URL: ${DATABASE_URL}
       JWT_SECRET: ${JWT_SECRET}
       REDIS_HOST: redis
       REDIS_PORT: ${REDIS_PORT}
@@ -95,6 +95,7 @@ services:
     depends_on:
       - postgres
       - redis
+      - backend
     command: ["npm", "run", "mqtt"]
     networks:
       - nodalis_network
@@ -104,3 +105,11 @@ volumes:
   # Caché para node_modules
   backend_node_modules:
   frontend_node_modules:
+
+  # ===== REDES =====
+networks:
+  nodalis_network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.30.0.0/16

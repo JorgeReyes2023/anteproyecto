@@ -24,7 +24,7 @@ RUN npm ci --silent
 COPY prisma ./prisma
 
 # CORRECCIÓN: Generar Prisma Client para Linux Alpine
-RUN npx prisma generate && npx prisma db push --skip-generate
+RUN npx prisma generate
 
 # Copiar el código fuente
 COPY . .
