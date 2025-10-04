@@ -9,7 +9,7 @@ services:
       dockerfile: Dockerfile
       target: dev
     env_file:
-      - backend/.env
+      - .env
     environment:
       NODE_ENV: development
       # Override para Docker
@@ -104,3 +104,11 @@ volumes:
   # Caché para node_modules
   backend_node_modules:
   frontend_node_modules:
+
+  # ===== REDES =====
+networks:
+  nodalis_network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.30.0.0/16
