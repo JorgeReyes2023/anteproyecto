@@ -1,8 +1,10 @@
 const { ProjectModel } = require("../models/project.model");
 const {
-  projectSchema,
+  createProjectSchema,
+  updateProjectSchema,
   deleteProjectSchema,
 } = require("../validators/project.validator");
+const { Utils } = require("../utils/utils");
 
 /**
  * @typedef {Object} NodeInput
@@ -28,10 +30,10 @@ class ProjectService {
    *
    * @throws {Error} Si los datos son inválidos o el proyecto ya existe.
    */
-  static async createProject(name, description, companyId, nodes = []) {
+  static async createProject(name, description, companyId) {
     try {
-      const { value, error } = projectSchema.validate(
-        { name, description, companyId, nodes },
+      const { value, error } = createProjectSchema.validate(
+        { name, description, companyId },
         { convert: true },
       );
 
@@ -41,12 +43,19 @@ class ProjectService {
       if (existingProject) {
         throw new Error(`El proyecto con el nombre ${value.name} ya existe`);
       }
-      return await ProjectModel.createProject(
+
+      const createdProject = await ProjectModel.createProject(
         value.name,
         value.description,
         value.companyId,
-        value.nodes,
       );
+
+      return {
+        id: Utils.convertBigIntToString(createdProject.p_id),
+        name: createdProject.p_nombre,
+        description: createdProject.p_descripcion,
+        companyId: Utils.convertBigIntToString(createdProject.p_empresa_id),
+      };
     } catch (error) {
       throw new Error(`Error al crear el proyecto: ${error.message}`);
     }
@@ -65,28 +74,53 @@ class ProjectService {
    *
    * @throws {Error} Si los datos son inválidos o ocurre un error en la base de datos.
    */
-  static async updateProject(id, name, description, companyId, nodes = []) {
+  static async updateProject(id, name, description, companyId) {
     try {
-      const { value, error } = projectSchema.validate(
+      const { value, error } = updateProjectSchema.validate(
         {
           id,
           name,
           description,
           companyId,
-          nodes,
         },
         { convert: true },
       );
 
       if (error) throw new Error(`Datos inválidos: ${error.message}`);
 
-      return await ProjectModel.updateProject(
+      const updatedProject = await ProjectModel.updateProject(
         value.id,
         value.name,
         value.description,
         value.companyId,
-        value.nodes,
       );
+
+      console.log(updatedProject);
+
+      return {
+        id: Utils.convertBigIntToString(updatedProject.p_id),
+        name: updatedProject.p_nombre,
+        description: updatedProject.p_descripcion,
+        company: Array.isArray(updatedProject.empresas)
+          ? updatedProject.empresas.map((c) => ({
+              id: Utils.convertBigIntToString(c.e_id),
+              name: c.e_nombre,
+            }))
+          : updatedProject.empresas
+            ? [
+                {
+                  id: Utils.convertBigIntToString(updatedProject.empresas.e_id),
+                  name: updatedProject.empresas.e_nombre,
+                },
+              ]
+            : [],
+        nodes: updatedProject.nodos.map((node) => ({
+          id: Utils.convertBigIntToString(node.n_id),
+          name: node.n_nombre,
+          location: node.n_ubicacion,
+          state: node.n_estado,
+        })),
+      };
     } catch (error) {
       throw new Error(`Error al actualizar el proyecto: ${error.message}`);
     }
@@ -126,15 +160,20 @@ class ProjectService {
   static async getAllProjects() {
     try {
       const projects = await ProjectModel.getAllProjects();
+      console.log(projects[0].nodos);
       const projectsDto = projects.map((project) => ({
-        id: project.p_id,
+        id: Utils.convertBigIntToString(project.p_id),
         name: project.p_nombre,
         description: project.p_descripcion,
-        companyId: project.p_empresa_id,
-        nodes: project.nodos,
+        nodes: project.nodos.map((node) => ({
+          id: Utils.convertBigIntToString(node.n_id),
+          name: node.n_nombre,
+          location: node.n_ubicacion,
+          state: node.n_estado,
+        })),
         company: project.empresas
           ? {
-              id: project.empresas.e_id,
+              id: Utils.convertBigIntToString(project.empresas.e_id),
               name: project.empresas.e_nombre,
             }
           : null,

@@ -1,30 +1,26 @@
 const prisma = require("../prisma");
 
 class ProjectModel {
-  static async createProject(name, description, companyId, nodes = []) {
+  static async createProject(name, description, companyId) {
     return prisma.proyectos.create({
       data: {
         p_nombre: name,
         p_descripcion: description,
         p_empresa_id: companyId,
-        nodos: {
-          create: nodes,
-        },
       },
     });
   }
 
-  static async updateProject(id, name, description, companyId, nodes = []) {
+  // No actualiza nodos asociados -> manejar aparte
+  static async updateProject(id, name, description, companyId) {
     return prisma.proyectos.update({
       where: { p_id: id },
       data: {
         p_nombre: name,
         p_descripcion: description,
         p_empresa_id: companyId,
-        nodos: {
-          create: nodes,
-        },
       },
+      include: { nodos: true, empresas: true },
     });
   }
 

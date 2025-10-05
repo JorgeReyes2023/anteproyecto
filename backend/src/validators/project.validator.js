@@ -10,8 +10,26 @@ const projectSchema = Joi.object({
   nodes: Joi.array().items(nodeSchema).default([]),
 });
 
+const createProjectSchema = Joi.object({
+  name: Joi.string().min(2).max(255).required(),
+  description: Joi.string().allow("", null),
+  companyId: Joi.number().integer().positive().required(),
+});
+
+const updateProjectSchema = Joi.object({
+  id: Joi.number().integer().positive().required(),
+  name: Joi.string().min(2).max(255).required(),
+  description: Joi.string().allow("", null),
+  companyId: Joi.number().integer().positive().required(),
+});
+
 const deleteProjectSchema = Joi.object({
   id: Joi.number().required(),
 });
 
-module.exports = { projectSchema, deleteProjectSchema };
+module.exports = {
+  projectSchema,
+  createProjectSchema,
+  updateProjectSchema,
+  deleteProjectSchema,
+};

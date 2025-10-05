@@ -21,20 +21,7 @@ projectRoutes.use(authenticate);
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             required:
- *               - name
- *             properties:
- *               name:
- *                 type: string
- *               description:
- *                 type: string
- *               companyId:
- *                 type: integer
- *               nodes:
- *                 type: array
- *                 items:
- *                   type: integer
+ *             $ref: '#/components/schemas/CreateProject'
  *     responses:
  *       201:
  *         description: Proyecto creado exitosamente
@@ -49,15 +36,14 @@ projectRoutes.use(authenticate);
  */
 projectRoutes.post("/", async (req, res) => {
   try {
-    const { name, description, companyId, nodes } = req.body;
-    if (!name) {
+    const { name, description, companyId } = req.body;
+    if (!name || !companyId) {
       return res.status(400).json({ error: "Faltan datos requeridos" });
     }
     const project = await ProjectService.createProject(
       name,
       description,
       companyId,
-      nodes,
     );
     res.status(201).json(project);
   } catch (error) {
@@ -83,20 +69,7 @@ projectRoutes.post("/", async (req, res) => {
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             required:
- *               - name
- *             properties:
- *               name:
- *                 type: string
- *               description:
- *                 type: string
- *               companyId:
- *                 type: integer
- *               nodes:
- *                 type: array
- *                 items:
- *                   type: integer
+ *             $ref: '#/components/schemas/UpdateProject'
  *     responses:
  *       200:
  *         description: Proyecto actualizado exitosamente
@@ -112,8 +85,8 @@ projectRoutes.post("/", async (req, res) => {
 projectRoutes.put("/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    const { name, description, companyId, nodes } = req.body;
-    if (!name) {
+    const { name, description, companyId } = req.body;
+    if ((!name, !companyId)) {
       return res.status(400).json({ error: "Faltan datos requeridos" });
     }
     const project = await ProjectService.updateProject(
@@ -121,7 +94,6 @@ projectRoutes.put("/:id", async (req, res) => {
       name,
       description,
       companyId,
-      nodes,
     );
     res.status(200).json(project);
   } catch (error) {
@@ -180,44 +152,6 @@ projectRoutes.get("/", authorizeAdmin, async (req, res) => {
   try {
     const projects = await ProjectService.getAllProjects();
     res.status(200).json(projects);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
-
-/**
- * @swagger
- * /api/projects/{id}:
- *   get:
- *     summary: Obtiene un proyecto por su ID
- *     tags: [Projects]
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         schema:
- *           type: integer
- *         description: ID del proyecto
- *     responses:
- *       200:
- *         description: Proyecto encontrado
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Project'
- *       404:
- *         description: Proyecto no encontrado
- *       500:
- *         description: Error interno del servidor
- */
-projectRoutes.get("/:id", async (req, res) => {
-  try {
-    const { id } = req.params;
-    const project = await ProjectService.getProjectById(id);
-    if (!project) {
-      return res.status(404).json({ error: "Proyecto no encontrado" });
-    }
-    res.status(200).json(project);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

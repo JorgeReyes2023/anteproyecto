@@ -141,7 +141,7 @@ const options = {
               description: "ID de la empresa asociada al proyecto",
               example: 2,
             },
-            nodes: {
+            nodesIds: {
               type: "array",
               items: {
                 type: "integer",
@@ -151,6 +151,48 @@ const options = {
             },
           },
           required: ["name"],
+        },
+        CreateProject: {
+          type: "object",
+          properties: {
+            name: {
+              type: "string",
+              description: "Nombre del proyecto",
+              example: "Proyecto A",
+            },
+            description: {
+              type: "string",
+              description: "Descripción del proyecto",
+              example: "Sistema de monitoreo ambiental",
+            },
+            companyId: {
+              type: "integer",
+              description: "ID de la empresa asociada al proyecto",
+              example: 2,
+            },
+          },
+          required: ["name", "companyId"],
+        },
+        UpdateProject: {
+          type: "object",
+          properties: {
+            name: {
+              type: "string",
+              description: "Nombre del proyecto",
+              example: "Proyecto A",
+            },
+            description: {
+              type: "string",
+              description: "Descripción del proyecto",
+              example: "Sistema de monitoreo ambiental",
+            },
+            companyId: {
+              type: "integer",
+              description: "ID de la empresa asociada al proyecto",
+              example: 2,
+            },
+          },
+          required: ["name", "companyId"],
         },
         Alert: {
           type: "object",
